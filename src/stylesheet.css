@@ -1,0 +1,15 @@
+.running-cat {
+    background-size: 30px;
+    min-width: 36px;
+}
+
+.frequency-label {
+    font-family: monospace;
+    color: #bebebe;
+
+    text-align: center; 
+
+    width: 2.5em; 
+    padding-top: 1px; 
+    padding-left: 2px;    
+}
