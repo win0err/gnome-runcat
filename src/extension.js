@@ -1,3 +1,5 @@
+'use strict';
+
 const Main = imports.ui.main;
 const St = imports.gi.St;
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -17,13 +19,14 @@ let extensionButton, frequencyLabel, catIcon;
 let currentSprite = 0;
 
 function init() {
-    // do nothing
+    log(`initializing ${Extension.metadata.name} version ${Extension.metadata.version}`);
 }
 
 function enable() {
+    log(`enabling ${Extension.metadata.name} version ${Extension.metadata.version}`);
+
     extensionButton = new St.Bin({ style_class: 'panel-status-button' });
     
-
     cpu = new Cpu();
     cpuRefreshTimer = new Timer(() => cpu.refresh(), 250); 
 
@@ -55,6 +58,8 @@ function enable() {
 }
 
 function disable() {
+    log(`disabling ${Extension.metadata.name} version ${Extension.metadata.version}`);
+
     if(animationTimer) {
         animationTimer.stop();
     }
