@@ -14,7 +14,7 @@ const getIntervalByUtilization = utilization => 5000/Math.sqrt(utilization + 30)
 const SPRITES_COUNT = 5;
 
 let cpu;
-let animationTimer, freqLabelTimer, cpuRefreshTimer;
+let animationTimer, cpuRefreshTimer;
 let extensionButton, frequencyLabel, catIcon;
 let currentSprite = 0;
 
@@ -28,25 +28,27 @@ function enable() {
     extensionButton = new St.Bin({ style_class: 'panel-status-button' });
     
     cpu = new Cpu();
-    cpuRefreshTimer = new Timer(() => cpu.refresh(), 250); 
+    cpuRefreshTimer = new Timer(() => cpu.refresh(), 3000);
 
+    catIcon = new St.DrawingArea({ style_class: 'system-status-icon running-cat' });
+    frequencyLabel = new St.Label({ style_class: 'frequency-label', text: "--" });
 
-    catIcon = new St.Bin({ style_class: 'system-status-icon running-cat' });
     animationTimer  = new Timer(() => {
         if (animationTimer) {
             animationTimer.interval = getIntervalByUtilization(cpu.utilization);
         }
 
-        catIcon.set_style(`background-image: url("${Extension.path}/assets/cat/${currentSprite}.png");`);
-        currentSprite++;
-        
-        if (currentSprite > SPRITES_COUNT - 1) {
+        if (cpu.utilization > 0) {
+            currentSprite = currentSprite === SPRITES_COUNT - 1 ? 0 : currentSprite + 1;
+            catIcon.set_style(`background-image: url("${Extension.path}/assets/cat/running/${currentSprite}.svg");`);
+        } else {
             currentSprite = 0;
+            catIcon.set_style(`background-image: url("${Extension.path}/assets/cat/sleeping.svg");`);
         }
-    }, 250);
 
-    frequencyLabel = new St.Label({ style_class: 'frequency-label', text: "--" });
-    freqLabelTimer  = new Timer(() => frequencyLabel.set_text(Math.ceil(cpu.utilization) + '%'), 1000);
+        const utilization = Math.ceil(cpu.utilization || 0);
+        frequencyLabel.set_text(`${utilization}%`);
+    }, 250);
     
     const box = new St.BoxLayout();
     box.add(catIcon);
@@ -62,10 +64,6 @@ function disable() {
 
     if(animationTimer) {
         animationTimer.stop();
-    }
-
-    if(freqLabelTimer) {
-        freqLabelTimer.stop();
     }
 
     if(cpuRefreshTimer) {
