@@ -4,12 +4,13 @@
 }
 
 .frequency-label {
-    font-family: monospace;
     color: #bebebe;
+    display: inline-block;
 
+    font-size: 13px;
+    line-height: 30px;
     text-align: center; 
 
-    width: 2.5em; 
-    padding-top: 1px; 
+    width: 2.75em; 
     padding-left: 2px;    
 }
