@@ -9,6 +9,8 @@ Animation speed changes depending on the CPU usage.
 
 This is the recommended method for installation, as it doesn't require the build dependencies for installation. You can install this extension by visiting [the GNOME Shell Extensions page](https://extensions.gnome.org/extension/2986/runcat/) for this extension.
 
+[<img src="assets/get-it-on-ego.png" height="100">](https://extensions.gnome.org/extension/2986/runcat/)
+
 ### Manual installation from source code
 If you want to install the extension from sources, clone [the RunCat repository](https://github.com/win0err/gnome-runcat), navigate to cloned directory and run:
 ```bash
