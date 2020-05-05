@@ -1,6 +1,6 @@
 const { Shell } = imports.gi;
 
-class Cpu {
+var Cpu = class Cpu {
     constructor() {
         this.lastActive = 0;
         this.lastTotal = 0;

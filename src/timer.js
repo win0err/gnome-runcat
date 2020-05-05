@@ -4,7 +4,7 @@ const {
     PRIORITY_DEFAULT,
 } = imports.gi.GLib;
 
-class Timer {
+var Timer = class Timer {
     constructor(fn, interval = 1000, autostart = true) {
         this.callback = fn;
         this.interval = interval;
@@ -44,4 +44,4 @@ class Timer {
             this.timeout = null;
         }
     }
-};
+}
