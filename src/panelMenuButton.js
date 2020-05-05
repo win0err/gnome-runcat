@@ -1,5 +1,5 @@
 const PanelMenu = imports.ui.panelMenu;
-const { St, Clutter, GObject } = imports.gi;
+const { St, Clutter, GObject, Gio } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Extension = ExtensionUtils.getCurrentExtension();
@@ -32,9 +32,13 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initUi() {
-            const box = new St.BoxLayout({style_class: 'panel-status-menu-box'});
+            const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
 
-            this.ui.set('icon', new St.Icon({style_class: 'system-status-icon runcat-menu__icon', gicon: this.iconProvider.sleeping}));
+            this.ui.set('icon', new St.Icon({
+                style_class: 'system-status-icon runcat-menu__icon',
+                gicon: this.iconProvider.sleeping,
+            }));
+
             this.ui.set(
                 'label',
                 new St.Label({
