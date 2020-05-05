@@ -1,9 +1,10 @@
 const {
     timeout_add: setTimeout,
     source_remove: clearTimeout,
-} = imports.mainloop;
+    PRIORITY_DEFAULT,
+} = imports.gi.GLib;
 
-var Timer = class Timer {
+class Timer {
     constructor(fn, interval = 1000, autostart = true) {
         this.callback = fn;
         this.interval = interval;
@@ -33,7 +34,7 @@ var Timer = class Timer {
 
     _addTimeout() {
         if (this.isStarted) {
-            this.timeout = setTimeout(this.interval, () => this._tick());
+            this.timeout = setTimeout(PRIORITY_DEFAULT, this.interval, () => this._tick());
         }
     }
 
@@ -43,4 +44,4 @@ var Timer = class Timer {
             this.timeout = null;
         }
     }
-}
+};
