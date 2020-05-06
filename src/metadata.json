@@ -3,7 +3,6 @@
   "description": "The cat tells you the CPU usage by running speed",
   "uuid": "runcat@kolesnikov.se",
   "shell-version": [
-    "3.32",
     "3.34",
     "3.36"
   ],
