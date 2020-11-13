@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema
+			id="org.gnome.shell.extensions.se.kolesnikov.runcat"
+			path="/org/gnome/shell/extensions/se/kolesnikov/runcat/"
+	>
+
+		<key type="d" name="cat-sleeping">
+			<default>0</default>
+			<summary>Cat sleep before</summary>
+			<description/>
+		</key>
+
+	</schema>
+</schemalist>
