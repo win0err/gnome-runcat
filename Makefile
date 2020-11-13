@@ -7,8 +7,9 @@ UUID = "runcat@kolesnikov.se"
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
 build: clean
-	mkdir -p dist build
+	mkdir -p dist build/schemas
 	cp -r src/* build/
+	cp -r schemas/* build/schemas/
 	cp LICENSE build
 	(cd build; zip -qr ../dist/$(UUID).zip .)
 
