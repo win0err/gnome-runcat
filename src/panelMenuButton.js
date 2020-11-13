@@ -3,6 +3,7 @@ const { St, Clutter, GObject, Gio } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Extension = ExtensionUtils.getCurrentExtension();
+let Settings = Extension.imports.settings;
 
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
@@ -55,6 +56,8 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
+            let prefs = (new Settings.Prefs());
+
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
             this.timers.set('ui', new Timer(() => {
@@ -63,7 +66,7 @@ var PanelMenuButton = GObject.registerClass(
                     }
 
                     this.ui.get('icon').set_gicon(
-                        this.cpu.utilization > 0 ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                        this.cpu.utilization > prefs.CATSLEEPING.get() ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
                     );
 
                     const utilization = Math.ceil(this.cpu.utilization || 0);
