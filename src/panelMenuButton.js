@@ -8,6 +8,7 @@ const { Cpu } = Extension.imports.cpu;
 const { IconProvider } = Extension.imports.iconProvider;
 
 var PanelMenuButton = GObject.registerClass(
+    { GTypeName: 'PanelMenuButton' },
     class PanelMenuButton extends PanelMenu.Button {
         _init() {
             super._init(null, Extension.metadata.name);

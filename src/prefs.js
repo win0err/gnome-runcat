@@ -4,6 +4,7 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const { Settings } = Extension.imports.settings;
 
 const RuncatSettingsWidget = GObject.registerClass(
+    { GTypeName: 'RuncatSettingsWidget' },
     class RuncatSettingsWidget extends Gtk.Box {
         _init() {
             super._init({
