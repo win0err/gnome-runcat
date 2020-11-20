@@ -18,7 +18,7 @@ clean:
 	rm -rf dist
 
 install: uninstall build
-	gnome-extensions install dist/$(UUID).zip
+	gnome-extensions install dist/$(UUID).zip --force
 	echo "You need to restart GNOME Shell to apply changes"
 
 uninstall:
