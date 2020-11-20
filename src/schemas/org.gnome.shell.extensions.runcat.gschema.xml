@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<schema
-			id="org.gnome.shell.extensions.se.kolesnikov.runcat"
-			path="/org/gnome/shell/extensions/se/kolesnikov/runcat/"
+			id="org.gnome.shell.extensions.runcat"
+			path="/org/gnome/shell/extensions/runcat/"
 	>
 
 		<key type="i" name="sleeping-threshold">
