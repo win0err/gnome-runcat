@@ -1,14 +1,16 @@
 const Gtk = imports.gi.Gtk;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const Settings = Extension.imports.settings;
+const { Settings } = Extension.imports.settings;
+const settings = new Settings();
 
 let sleepingThresholdSlider = null;
 
 function init() { }
 
 function buildPrefsWidget() {
-    const config = new Settings.Prefs();
+
+    const config = settings.sleepingThreshold;
 
     const frame = new Gtk.Box({
         orientation: Gtk.Orientation.VERTICAL,
@@ -16,7 +18,7 @@ function buildPrefsWidget() {
         spacing: 20
     });
 
-    sleepingThresholdSlider = addSlider(frame, "Sleeping Threshold", config.SLEEPINGTHRESHOLD, 0, 99, 0);
+    sleepingThresholdSlider = addSlider(frame, "Sleeping Threshold", config, 0, 99, 0);
 
     addDefaultButton(frame, config);
 
@@ -28,8 +30,8 @@ function buildPrefsWidget() {
 function addDefaultButton(frame, config) {
     const button = new Gtk.Button({label: "Reset to default"});
     button.connect('clicked', function () {
-        config.SLEEPINGTHRESHOLD.set(0);
-        sleepingThresholdSlider.set_value(config.SLEEPINGTHRESHOLD.get());
+        config.set(0);
+        sleepingThresholdSlider.set_value(config.get());
     });
 
     frame.pack_end(button, false, false, 0);
