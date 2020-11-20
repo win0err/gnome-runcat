@@ -7,7 +7,7 @@ const SCHEMA_PATH = 'org.gnome.shell.extensions.se.kolesnikov.runcat';
 function get_local_gsettings(schema_path) {
     const GioSSS = Gio.SettingsSchemaSource;
 
-    let schemaDir = Extension.dir.get_child('schemas');
+    const schemaDir = Extension.dir.get_child('schemas');
 
     let schemaSource = GioSSS.get_default();
     if (schemaDir.query_exists(null)) {
@@ -18,7 +18,7 @@ function get_local_gsettings(schema_path) {
         );
     }
 
-    let schemaObj = schemaSource.lookup(schema_path, true);
+    const schemaObj = schemaSource.lookup(schema_path, true);
     if (!schemaObj) {
         throw new Error('Schema ' + schema_path + ' could not be found for extension ' + Extension.metadata.uuid);
     }
@@ -27,10 +27,10 @@ function get_local_gsettings(schema_path) {
 };
 
 function Prefs() {
-    var settings = this.settings = get_local_gsettings(SCHEMA_PATH);
+    const settings = this.settings = get_local_gsettings(SCHEMA_PATH);
 
-    this.CATSLEEPING = {
-        key: 'cat-sleeping',
+    this.SLEEPINGTHRESHOLD = {
+        key: 'sleeping-threshold',
         get: function () { return settings.get_double(this.key); },
         set: function (v) { settings.set_double(this.key, v); },
         changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
