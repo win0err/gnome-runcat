@@ -1,22 +1,22 @@
 const Gtk = imports.gi.Gtk;
 
-let Extension = imports.misc.extensionUtils.getCurrentExtension();
-let Settings = Extension.imports.settings;
+const Extension = imports.misc.extensionUtils.getCurrentExtension();
+const Settings = Extension.imports.settings;
 
-let catSleepingSlider = null;
+let sleepingThresholdSlider = null;
 
 function init() { }
 
 function buildPrefsWidget() {
-    let config = new Settings.Prefs();
+    const config = new Settings.Prefs();
 
-    let frame = new Gtk.Box({
+    const frame = new Gtk.Box({
         orientation: Gtk.Orientation.VERTICAL,
         border_width: 20,
         spacing: 20
     });
 
-    catSleepingSlider = addSlider(frame, "Cat sleep before", config.CATSLEEPING, 0, 99, 0);
+    sleepingThresholdSlider = addSlider(frame, "Sleeping Threshold", config.SLEEPINGTHRESHOLD, 0, 99, 0);
 
     addDefaultButton(frame, config);
 
@@ -26,10 +26,10 @@ function buildPrefsWidget() {
 }
 
 function addDefaultButton(frame, config) {
-    let button = new Gtk.Button({label: "Reset to default"});
+    const button = new Gtk.Button({label: "Reset to default"});
     button.connect('clicked', function () {
-        config.CATSLEEPING.set(0);
-        catSleepingSlider.set_value(config.CATSLEEPING.get());
+        config.SLEEPINGTHRESHOLD.set(0);
+        sleepingThresholdSlider.set_value(config.SLEEPINGTHRESHOLD.get());
     });
 
     frame.pack_end(button, false, false, 0);
@@ -38,7 +38,7 @@ function addDefaultButton(frame, config) {
 }
 
 function addSlider(frame, labelText, prefConfig, lower, upper, decimalDigits) {
-    let scale = new Gtk.HScale({
+    const scale = new Gtk.HScale({
         digits: decimalDigits,
         adjustment: new Gtk.Adjustment({lower: lower, upper: upper}),
         value_pos: Gtk.PositionType.RIGHT,
@@ -47,14 +47,14 @@ function addSlider(frame, labelText, prefConfig, lower, upper, decimalDigits) {
     });
     scale.set_value(prefConfig.get());
     scale.connect('value-changed', function (sw) {
-        var newval = sw.get_value();
+        const newval = sw.get_value();
         if (newval !== prefConfig.get()) {
             prefConfig.set(newval);
         }
     });
     scale.set_size_request(400, 15);
 
-    let hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 20});
+    const hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 20});
     hbox.add(new Gtk.Label({label: labelText, use_markup: true}));
     hbox.add(scale);
 

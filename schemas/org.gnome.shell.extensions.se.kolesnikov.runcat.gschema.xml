@@ -5,9 +5,9 @@
 			path="/org/gnome/shell/extensions/se/kolesnikov/runcat/"
 	>
 
-		<key type="d" name="cat-sleeping">
+		<key type="i" name="sleeping-threshold">
 			<default>0</default>
-			<summary>Cat sleep before</summary>
+			<summary>Sleeping Threshold</summary>
 			<description/>
 		</key>
 
