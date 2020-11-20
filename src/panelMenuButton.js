@@ -14,6 +14,8 @@ var PanelMenuButton = GObject.registerClass(
 
             this.cpu = new Cpu();
             this.iconProvider = new IconProvider();
+            this.settings = new Settings();
+            this.sleepingThreshold = this.settings.sleepingThreshold.get();
 
             this.ui = new Map();
             this.timers = new Map();
@@ -53,7 +55,10 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
-            const prefs = (new Settings.Prefs());
+            // listener
+            this.settings.sleepingThreshold.addListener(() => {
+                this.sleepingThreshold = this.settings.sleepingThreshold.get();
+            })
 
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
@@ -63,7 +68,7 @@ var PanelMenuButton = GObject.registerClass(
                     }
 
                     this.ui.get('icon').set_gicon(
-                        this.cpu.utilization > prefs.CATSLEEPING.get() ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                        this.cpu.utilization > this.sleepingThreshold ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
                     );
 
                     const utilization = Math.ceil(this.cpu.utilization || 0);
