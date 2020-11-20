@@ -55,7 +55,6 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
-            // listener
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
             })
