@@ -9,6 +9,7 @@ LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 build: clean
 	mkdir -p dist build
 	cp -r src/* build/
+	glib-compile-schemas build/schemas
 	cp LICENSE build
 	(cd build; zip -qr ../dist/$(UUID).zip .)
 

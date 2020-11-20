@@ -1,13 +1,11 @@
 const PanelMenu = imports.ui.panelMenu;
 const { St, Clutter, GObject, Gio } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
-
 const Extension = ExtensionUtils.getCurrentExtension();
-
+const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
 const { IconProvider } = Extension.imports.iconProvider;
-
 
 var PanelMenuButton = GObject.registerClass(
     class PanelMenuButton extends PanelMenu.Button {
@@ -16,6 +14,8 @@ var PanelMenuButton = GObject.registerClass(
 
             this.cpu = new Cpu();
             this.iconProvider = new IconProvider();
+            this.settings = new Settings();
+            this.sleepingThreshold = this.settings.sleepingThreshold.get();
 
             this.ui = new Map();
             this.timers = new Map();
@@ -55,6 +55,10 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
+            this.settings.sleepingThreshold.addListener(() => {
+                this.sleepingThreshold = this.settings.sleepingThreshold.get();
+            })
+
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
             this.timers.set('ui', new Timer(() => {
@@ -63,7 +67,7 @@ var PanelMenuButton = GObject.registerClass(
                     }
 
                     this.ui.get('icon').set_gicon(
-                        this.cpu.utilization > 0 ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                        this.cpu.utilization > this.sleepingThreshold ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
                     );
 
                     const utilization = Math.ceil(this.cpu.utilization || 0);
