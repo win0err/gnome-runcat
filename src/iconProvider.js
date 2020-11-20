@@ -3,8 +3,11 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const Extension = ExtensionUtils.getCurrentExtension();
 
-const getGIcon = (name, pack = 'cat') => Gio.icon_new_for_string(`${Extension.path}/icons/${pack}/my-${name}-symbolic.svg`);
+const getGIcon = (name, pack = 'cat') => Gio.icon_new_for_string(
+    `${Extension.path}/icons/${pack}/my-${name}-symbolic.svg`,
+);
 
+// eslint-disable-next-line
 var IconProvider = class IconProvider {
     constructor(spritesCount = 5) {
         this.spritesCount = spritesCount;
@@ -35,4 +38,4 @@ var IconProvider = class IconProvider {
     reset() {
         this.currentSprite = 0;
     }
-}
+};

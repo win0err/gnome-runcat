@@ -1,0 +1,17 @@
+{
+  "name": "runcat",
+  "private": true,
+  "scripts": {
+    "generate:types": "ts-for-gir generate",
+    "lint": "eslint *.js"
+  },
+  "repository": "win0err/gnome-runcat",
+  "author": "Sergei Kolesnikov <sergei@kolesnikov.se>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "ts-for-gir": "^1.0.1"
+  }
+}

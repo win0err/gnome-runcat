@@ -4,6 +4,7 @@ const {
     PRIORITY_DEFAULT,
 } = imports.gi.GLib;
 
+// eslint-disable-next-line
 var Timer = class Timer {
     constructor(fn, interval = 1000, autostart = true) {
         this.callback = fn;
@@ -44,4 +45,4 @@ var Timer = class Timer {
             this.timeout = null;
         }
     }
-}
+};

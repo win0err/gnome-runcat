@@ -1,0 +1,41 @@
+{
+    "env": {
+        "es2021": true
+    },
+    "extends": "airbnb/base",
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
+    "ignorePatterns": ["@types/", "node_modules/", "build/"],
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "arrow-parens": ["error", "as-needed"],
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allowAfterThis": true,
+                "allowAfterSuper": true
+            }
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "^(init|enable|disable|buildPrefsWidget)$"
+            }
+        ],
+        "eol-last": ["error", "never"],
+        "strict": "off",
+        "no-plusplus": "off",
+        "max-len": [
+            "error",
+            120
+        ]
+    },
+    "globals": {
+        "imports": "readonly",
+        "log": "readonly"
+    }
+}

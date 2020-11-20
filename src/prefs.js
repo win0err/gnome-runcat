@@ -10,7 +10,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
                 border_width: 20,
-                spacing: 20
+                spacing: 20,
             });
 
             this._settings = new Settings();
@@ -40,12 +40,12 @@ const RuncatSettingsWidget = GObject.registerClass(
                 }),
                 value_pos: Gtk.PositionType.RIGHT,
                 hexpand: true,
-                halign: Gtk.Align.END
+                halign: Gtk.Align.END,
             });
             scale.set_size_request(400, 15);
             scale.set_value(this._settings.sleepingThreshold.get());
 
-            this._settings.sleepingThreshold.addListener (() => {
+            this._settings.sleepingThreshold.addListener(() => {
                 const updatedValue = this._settings.sleepingThreshold.get();
                 if (updatedValue !== scale.get_value()) {
                     scale.set_value(updatedValue);
@@ -66,9 +66,7 @@ const RuncatSettingsWidget = GObject.registerClass(
         }
 
         _initBottomButtons() {
-            const resetButton = new Gtk.Button({
-                label: 'Reset to default',
-            });
+            const resetButton = new Gtk.Button({ label: 'Reset to default' });
 
             resetButton.connect('clicked', () => {
                 this._settings.sleepingThreshold.set(0);
@@ -76,7 +74,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             this.pack_end(resetButton, false, false, 0);
         }
-    }
+    },
 );
 
 function buildPrefsWidget() {

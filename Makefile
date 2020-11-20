@@ -14,8 +14,7 @@ build: clean
 	(cd build; zip -qr ../dist/$(UUID).zip .)
 
 clean:
-	rm -rf build
-	rm -rf dist
+	rm -rf build dist @types
 
 install: uninstall build
 	gnome-extensions install dist/$(UUID).zip --force

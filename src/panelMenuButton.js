@@ -1,12 +1,14 @@
 const PanelMenu = imports.ui.panelMenu;
-const { St, Clutter, GObject, Gio } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
+const { St, Clutter, GObject } = imports.gi;
+
 const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
 const { IconProvider } = Extension.imports.iconProvider;
 
+// eslint-disable-next-line
 var PanelMenuButton = GObject.registerClass(
     { GTypeName: 'PanelMenuButton' },
     class PanelMenuButton extends PanelMenu.Button {
@@ -58,17 +60,20 @@ var PanelMenuButton = GObject.registerClass(
         _initTimers() {
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
-            })
+            });
 
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
-            this.timers.set('ui', new Timer(() => {
+            this.timers.set(
+                'ui',
+                new Timer(() => {
                     if (this.timers.has('ui')) {
                         this.timers.get('ui').interval = this.animationInterval;
                     }
 
+                    const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
                     this.ui.get('icon').set_gicon(
-                        this.cpu.utilization > this.sleepingThreshold ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                        isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
                     );
 
                     const utilization = Math.ceil(this.cpu.utilization || 0);
@@ -83,5 +88,5 @@ var PanelMenuButton = GObject.registerClass(
 
             super.destroy();
         }
-    }
+    },
 );

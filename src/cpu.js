@@ -1,5 +1,6 @@
 const { Shell } = imports.gi;
 
+// eslint-disable-next-line
 var Cpu = class Cpu {
     constructor() {
         this.lastActive = 0;
@@ -17,31 +18,29 @@ var Cpu = class Cpu {
             .shift()
             .trim()
             .split(/[\s]+/)
-            .map(
-                n => parseInt(n)
-            );
+            .map(n => parseInt(n, 10));
 
         const [
-            ,
+            , // eslint-disable-line
             user,
             nice,
             system,
             idle,
             iowait,
-            irq,
+            irq, // eslint-disable-line
             softirq,
             steal,
-            guest,
+            guest, // eslint-disable-line
         ] = cpuInfo;
 
         const active = user + system + nice + softirq + steal;
         const total = user + system + nice + softirq + steal + idle + iowait;
 
-        this.utilization = 100 * (active - this.lastActive) / (total - this.lastTotal);
+        this.utilization = 100 * ((active - this.lastActive) / (total - this.lastTotal));
 
         this.lastActive = active;
         this.lastTotal = total;
 
         return this.utilization;
     }
-}
+};

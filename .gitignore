@@ -3,3 +3,6 @@ dist/
 .idea/
 .vscode/
 @types/
+node_modules/
+yarn.lock
+package-lock.json

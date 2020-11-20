@@ -1,4 +1,5 @@
-const Gio = imports.gi.Gio;
+/* eslint-disable max-classes-per-file */
+const { Gio } = imports.gi;
 const GioSSS = Gio.SettingsSchemaSource;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
@@ -10,8 +11,9 @@ const valueTypes = {
     BOOLEAN: 'boolean',
     STRING: 'string',
     DOUBLE: 'double',
-}
+};
 
+// eslint-disable-next-line
 var Settings = class Settings {
     constructor(schemaPath = SCHEMA_PATH) {
         const schemaDir = Extension.dir.get_child('schemas');
@@ -21,7 +23,7 @@ var Settings = class Settings {
             schemaSource = GioSSS.new_from_directory(
                 schemaDir.get_path(),
                 schemaSource,
-                false
+                false,
             );
         }
 
@@ -35,6 +37,7 @@ var Settings = class Settings {
 
     get sleepingThreshold() {
         if (!this._sleepingThreshold) {
+            // eslint-disable-next-line no-use-before-define
             this._sleepingThreshold = new Value(
                 this._gioSettings,
                 'sleeping-threshold',
@@ -44,7 +47,7 @@ var Settings = class Settings {
 
         return this._sleepingThreshold;
     }
-}
+};
 
 class Value {
     constructor(gioSettings, key, type) {
@@ -70,7 +73,7 @@ class Value {
 
     removeListener(id) {
         this._gioSettings.disconnect(id);
-        this._connectedCallbacks = this._connectedCallbacks.filter(item => item !== id)
+        this._connectedCallbacks = this._connectedCallbacks.filter(item => item !== id);
     }
 
     removeAllListeners() {
