@@ -1,14 +1,11 @@
 const PanelMenu = imports.ui.panelMenu;
 const { St, Clutter, GObject, Gio } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
-
 const Extension = ExtensionUtils.getCurrentExtension();
-let Settings = Extension.imports.settings;
-
+const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
 const { IconProvider } = Extension.imports.iconProvider;
-
 
 var PanelMenuButton = GObject.registerClass(
     class PanelMenuButton extends PanelMenu.Button {
@@ -56,7 +53,7 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
-            let prefs = (new Settings.Prefs());
+            const prefs = (new Settings.Prefs());
 
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
