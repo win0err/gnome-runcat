@@ -11,5 +11,17 @@
 			<description/>
 		</key>
 
+			<key type="b" name="hide-runner">
+			<default>false</default>
+			<summary>Hide Runner</summary>
+			<description/>
+		</key>
+
+		<key type="b" name="hide-percentage">
+			<default>false</default>
+			<summary>Hide Percentage</summary>
+			<description/>
+		</key>
+
 	</schema>
 </schemalist>

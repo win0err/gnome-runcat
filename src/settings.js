@@ -47,6 +47,32 @@ var Settings = class Settings {
 
         return this._sleepingThreshold;
     }
+
+    get hideRunner() {
+        if (!this._hideRunner) {
+            // eslint-disable-next-line no-use-before-define
+            this._hideRunner = new Value(
+                this._gioSettings,
+                'hide-runner',
+                valueTypes.BOOLEAN,
+            );
+        }
+
+        return this._hideRunner;
+    }
+
+    get hidePercentage() {
+        if (!this._hidePercentage) {
+            // eslint-disable-next-line no-use-before-define
+            this._hidePercentage = new Value(
+                this._gioSettings,
+                'hide-percentage',
+                valueTypes.BOOLEAN,
+            );
+        }
+
+        return this._hidePercentage;
+    }
 };
 
 class Value {

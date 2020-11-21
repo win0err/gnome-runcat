@@ -17,15 +17,15 @@ var PanelMenuButton = GObject.registerClass(
 
             this.cpu = new Cpu();
             this.iconProvider = new IconProvider();
-            this.settings = new Settings();
-            this.sleepingThreshold = this.settings.sleepingThreshold.get();
 
             this.ui = new Map();
             this.timers = new Map();
 
             this.currentSprite = 0;
 
+            this._initSettings();
             this._initUi();
+            this._initListeners();
             this._initTimers();
         }
 
@@ -34,13 +34,25 @@ var PanelMenuButton = GObject.registerClass(
             return 5000 / Math.sqrt(this.cpu.utilization + 30) - 400;
         }
 
+        _initSettings() {
+            this.settings = new Settings();
+
+            this.sleepingThreshold = this.settings.sleepingThreshold.get();
+            this.isRunnerHidden = this.settings.hideRunner.get();
+            this.isPercentageHidden = this.settings.hidePercentage.get();
+        }
+
         _initUi() {
             const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
 
-            this.ui.set('icon', new St.Icon({
-                style_class: 'system-status-icon runcat-menu__icon',
-                gicon: this.iconProvider.sleeping,
-            }));
+            this.ui.set(
+                'icon',
+                new St.Icon({
+                    style_class: 'system-status-icon runcat-menu__icon',
+                    gicon: this.iconProvider.sleeping,
+                }),
+            );
+            this._manageUiElementVisibility('icon', this.isRunnerHidden);
 
             this.ui.set(
                 'label',
@@ -50,6 +62,7 @@ var PanelMenuButton = GObject.registerClass(
                     y_align: Clutter.ActorAlign.CENTER,
                 }),
             );
+            this._manageUiElementVisibility('label', this.isPercentageHidden);
 
             this.ui.forEach(element => box.add_child(element));
             this.ui.set('box', box);
@@ -57,11 +70,34 @@ var PanelMenuButton = GObject.registerClass(
             this.add_child(box);
         }
 
-        _initTimers() {
+        _manageUiElementVisibility(elementName, isHidden) {
+            const action = isHidden ? 'hide' : 'show';
+            this.ui.get(elementName)[action]();
+        }
+
+        _initListeners() {
+            this.settings.hideRunner.addListener(() => {
+                this.isRunnerHidden = this.settings.hideRunner.get();
+                this._manageUiElementVisibility('icon', this.isRunnerHidden);
+            });
+
+            this.settings.hidePercentage.addListener(() => {
+                this.isPercentageHidden = this.settings.hidePercentage.get();
+                this._manageUiElementVisibility('label', this.isPercentageHidden);
+            });
+
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
             });
 
+            this.connect('destroy', () => {
+                this.settings.hideRunner.removeAllListeners();
+                this.settings.hidePercentage.removeAllListeners();
+                this.settings.sleepingThreshold.removeAllListeners();
+            });
+        }
+
+        _initTimers() {
             this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
 
             this.timers.set(
@@ -71,13 +107,17 @@ var PanelMenuButton = GObject.registerClass(
                         this.timers.get('ui').interval = this.animationInterval;
                     }
 
-                    const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                    this.ui.get('icon').set_gicon(
-                        isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
-                    );
+                    if (!this.isRunnerHidden) {
+                        const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
+                        this.ui.get('icon').set_gicon(
+                            isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                        );
+                    }
 
-                    const utilization = Math.ceil(this.cpu.utilization || 0);
-                    this.ui.get('label').set_text(`${utilization}%`);
+                    if (!this.isPercentageHidden) {
+                        const utilization = Math.ceil(this.cpu.utilization || 0);
+                        this.ui.get('label').set_text(`${utilization}%`);
+                    }
                 }, 250),
             );
         }
