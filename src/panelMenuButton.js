@@ -89,12 +89,6 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
             });
-
-            this.connect('destroy', () => {
-                this.settings.hideRunner.removeAllListeners();
-                this.settings.hidePercentage.removeAllListeners();
-                this.settings.sleepingThreshold.removeAllListeners();
-            });
         }
 
         _initTimers() {
@@ -125,6 +119,10 @@ var PanelMenuButton = GObject.registerClass(
         destroy() {
             this.timers.forEach(timer => timer.stop());
             this.ui.forEach(element => element.destroy());
+
+            this.settings.hideRunner.removeAllListeners();
+            this.settings.hidePercentage.removeAllListeners();
+            this.settings.sleepingThreshold.removeAllListeners();
 
             super.destroy();
         }
