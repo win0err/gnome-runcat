@@ -16,9 +16,9 @@ const RuncatSettingsWidget = GObject.registerClass(
             this._settings = new Settings();
 
             this._initSleepingThreshold();
-            this._initBottomButtons();
             this._initHideRunner();
             this._initHidePercentage();
+            this._initBottomButtons();
 
             this.show_all();
         }
@@ -74,15 +74,10 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             const label = new Gtk.Label({
                 label: 'Hide Runner',
-                halign: Gtk.Align.START,
                 use_markup: true,
             });
 
-            const toggle = new Gtk.Switch({
-                valign: Gtk.Align.END,
-                halign: Gtk.Align.END,
-                visible: true
-            });
+            const toggle = new Gtk.Switch();
             toggle.set_state(this._settings.hideRunner.get());
 
             this._settings.hideRunner.addListener(() => {
@@ -109,15 +104,10 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             const label = new Gtk.Label({
                 label: 'Hide Percentage',
-                halign: Gtk.Align.START,
                 use_markup: true,
             });
 
-            const toggle = new Gtk.Switch({
-                valign: Gtk.Align.END,
-                halign: Gtk.Align.END,
-                visible: true
-            });
+            const toggle = new Gtk.Switch();
             toggle.set_state(this._settings.hidePercentage.get());
 
             this._settings.hidePercentage.addListener(() => {
