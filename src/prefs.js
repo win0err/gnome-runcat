@@ -17,6 +17,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             this._initSleepingThreshold();
             this._initBottomButtons();
+            this._initHideRunner();
             this._initHidePercentage();
 
             this.show_all();
@@ -66,11 +67,44 @@ const RuncatSettingsWidget = GObject.registerClass(
             this.add(hbox);
         }
 
+        _initHideRunner() {
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
+            });
+
+            const label = new Gtk.Label({
+                label: 'Hide Runner',
+                halign: Gtk.Align.START,
+                use_markup: true,
+            });
+
+            const toggle = new Gtk.Switch({
+                valign: Gtk.Align.END,
+                halign: Gtk.Align.END,
+                visible: true
+            });
+            toggle.set_state(this._settings.hideRunner.get());
+
+            this._settings.hideRunner.addListener(() => {
+                const updatedValue = this._settings.hideRunner.get();
+                if (updatedValue !== toggle.get_state()) {
+                    toggle.set_state(updatedValue);
+                }
+            });
+            toggle.connect('state-set', (toggle, newValue) => {
+                this._settings.hideRunner.set(newValue);
+            });
+            this.connect('destroy', () => this._settings.hideRunner.removeAllListeners());
+
+            hbox.add(label);
+            hbox.pack_end(toggle, false, false, 0);
+
+            this.add(hbox);
+        }
+
         _initHidePercentage() {
-            const grid = new Gtk.Grid({
-                //column_spacing: 12,
-                visible: true,
-                column_homogeneous: true,
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
             });
 
             const label = new Gtk.Label({
@@ -97,10 +131,10 @@ const RuncatSettingsWidget = GObject.registerClass(
             });
             this.connect('destroy', () => this._settings.hidePercentage.removeAllListeners());
 
-            grid.attach(label, 0, 0, 1, 1);
-            grid.attach(toggle, 1, 0, 1, 1);
+            hbox.add(label);
+            hbox.pack_end(toggle, false, false, 0);
 
-            this.add(grid);
+            this.add(hbox);
         }
 
         _initBottomButtons() {
@@ -108,6 +142,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             resetButton.connect('clicked', () => {
                 this._settings.sleepingThreshold.set(0);
+                this._settings.hideRunner.set(false);
                 this._settings.hidePercentage.set(false);
             });
 

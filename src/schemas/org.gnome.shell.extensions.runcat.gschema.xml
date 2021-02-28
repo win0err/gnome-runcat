@@ -11,7 +11,7 @@
 			<description/>
 		</key>
 
-			<key type="b" name="hide-runner">
+		<key type="b" name="hide-runner">
 			<default>false</default>
 			<summary>Hide Runner</summary>
 			<description/>
