@@ -17,6 +17,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             this._initSleepingThreshold();
             this._initBottomButtons();
+            this._initHidePercentage();
 
             this.show_all();
         }
@@ -65,11 +66,49 @@ const RuncatSettingsWidget = GObject.registerClass(
             this.add(hbox);
         }
 
+        _initHidePercentage() {
+            const grid = new Gtk.Grid({
+                //column_spacing: 12,
+                visible: true,
+                column_homogeneous: true,
+            });
+
+            const label = new Gtk.Label({
+                label: 'Hide Percentage',
+                halign: Gtk.Align.START,
+                use_markup: true,
+            });
+
+            const toggle = new Gtk.Switch({
+                valign: Gtk.Align.END,
+                halign: Gtk.Align.END,
+                visible: true
+            });
+            toggle.set_state(this._settings.hidePercentage.get());
+
+            this._settings.hidePercentage.addListener(() => {
+                const updatedValue = this._settings.hidePercentage.get();
+                if (updatedValue !== toggle.get_state()) {
+                    toggle.set_state(updatedValue);
+                }
+            });
+            toggle.connect('state-set', (toggle, newValue) => {
+                this._settings.hidePercentage.set(newValue);
+            });
+            this.connect('destroy', () => this._settings.hidePercentage.removeAllListeners());
+
+            grid.attach(label, 0, 0, 1, 1);
+            grid.attach(toggle, 1, 0, 1, 1);
+
+            this.add(grid);
+        }
+
         _initBottomButtons() {
             const resetButton = new Gtk.Button({ label: 'Reset to default' });
 
             resetButton.connect('clicked', () => {
                 this._settings.sleepingThreshold.set(0);
+                this._settings.hidePercentage.set(false);
             });
 
             this.pack_end(resetButton, false, false, 0);
