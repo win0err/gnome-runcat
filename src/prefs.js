@@ -84,21 +84,6 @@ const RuncatSettingsWidget = GObject.registerClass(
             const options = ['Runner and percentage', 'Percentage only', 'Runner only'];
             options.forEach(opt => combo.append(opt, opt));
 
-            /*const actions = [
-                function(settings) { // show runner & percentage
-                    settings.hideRunner.set(false);
-                    settings.hidePercentage.set(false);
-                },
-                function(settings) { // show percentage only
-                    settings.hideRunner.set(true);
-                    settings.hidePercentage.set(false);
-                },
-                function(settings) { // show runner only
-                    settings.hideRunner.set(false);
-                    settings.hidePercentage.set(true);
-                },
-            ];*/
-
             combo.set_active(this._getActiveShowIndex());
 
             this._settings.hideRunner.addListener(() => {
@@ -121,9 +106,6 @@ const RuncatSettingsWidget = GObject.registerClass(
                         this._settings.hideRunner.set(false);
                         this._settings.hidePercentage.set(true);
                 }
-               //const action = actions[widget.get_active()];
-                //if (action)
-                    //action(this._settings);
             });
 
             this.connect('destroy', () => {
@@ -148,7 +130,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             else if (hidePercentage)
                 return 2;
 
-            return 0; // default
+            return 0; // default show both
         }
 
         _initBottomButtons() {
