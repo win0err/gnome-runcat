@@ -16,8 +16,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             this._settings = new Settings();
 
             this._initSleepingThreshold();
-            this._initHideRunner();
-            this._initHidePercentage();
+            this._initShowComboBox();
             this._initBottomButtons();
 
             this.show_all();
@@ -67,64 +66,89 @@ const RuncatSettingsWidget = GObject.registerClass(
             this.add(hbox);
         }
 
-        _initHideRunner() {
+        _initShowComboBox() {
             const hbox = new Gtk.Box({
                 orientation: Gtk.Orientation.HORIZONTAL,
             });
 
             const label = new Gtk.Label({
-                label: 'Hide Runner',
+                label: 'Show',
                 use_markup: true,
             });
 
-            const toggle = new Gtk.Switch();
-            toggle.set_state(this._settings.hideRunner.get());
+            const combo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
+                visible: true
+            });
+
+            const options = ['Runner and percentage', 'Percentage only', 'Runner only'];
+            options.forEach(opt => combo.append(opt, opt));
+
+            /*const actions = [
+                function(settings) { // show runner & percentage
+                    settings.hideRunner.set(false);
+                    settings.hidePercentage.set(false);
+                },
+                function(settings) { // show percentage only
+                    settings.hideRunner.set(true);
+                    settings.hidePercentage.set(false);
+                },
+                function(settings) { // show runner only
+                    settings.hideRunner.set(false);
+                    settings.hidePercentage.set(true);
+                },
+            ];*/
+
+            combo.set_active(this._getActiveShowIndex());
 
             this._settings.hideRunner.addListener(() => {
-                const updatedValue = this._settings.hideRunner.get();
-                if (updatedValue !== toggle.get_state()) {
-                    toggle.set_state(updatedValue);
+                combo.set_active(this._getActiveShowIndex());
+            });
+            this._settings.hidePercentage.addListener(() => {
+                combo.set_active(this._getActiveShowIndex());
+            });
+            combo.connect('changed', (widget) => {
+                switch (widget.get_active()) {
+                    case 0: // show runner & percentage
+                        this._settings.hideRunner.set(false);
+                        this._settings.hidePercentage.set(false);
+                        break;
+                    case 1: // show percentage only
+                        this._settings.hideRunner.set(true);
+                        this._settings.hidePercentage.set(false);
+                        break;
+                    case 2: // show runner only
+                        this._settings.hideRunner.set(false);
+                        this._settings.hidePercentage.set(true);
                 }
+               //const action = actions[widget.get_active()];
+                //if (action)
+                    //action(this._settings);
             });
-            toggle.connect('state-set', (toggle, newValue) => {
-                this._settings.hideRunner.set(newValue);
+
+            this.connect('destroy', () => {
+                this._settings.hideRunner.removeAllListeners();
+                this._settings.hidePercentage.removeAllListeners();
             });
-            this.connect('destroy', () => this._settings.hideRunner.removeAllListeners());
 
             hbox.add(label);
-            hbox.pack_end(toggle, false, false, 0);
+            hbox.pack_end(combo, false, false, 0);
 
             this.add(hbox);
         }
 
-        _initHidePercentage() {
-            const hbox = new Gtk.Box({
-                orientation: Gtk.Orientation.HORIZONTAL,
-            });
+        _getActiveShowIndex() {
+            const hideRunner = this._settings.hideRunner.get();
+            const hidePercentage = this._settings.hidePercentage.get();
 
-            const label = new Gtk.Label({
-                label: 'Hide Percentage',
-                use_markup: true,
-            });
+            if (!hideRunner && !hidePercentage)
+                return 0;
+            else if (hideRunner)
+                return 1;
+            else if (hidePercentage)
+                return 2;
 
-            const toggle = new Gtk.Switch();
-            toggle.set_state(this._settings.hidePercentage.get());
-
-            this._settings.hidePercentage.addListener(() => {
-                const updatedValue = this._settings.hidePercentage.get();
-                if (updatedValue !== toggle.get_state()) {
-                    toggle.set_state(updatedValue);
-                }
-            });
-            toggle.connect('state-set', (toggle, newValue) => {
-                this._settings.hidePercentage.set(newValue);
-            });
-            this.connect('destroy', () => this._settings.hidePercentage.removeAllListeners());
-
-            hbox.add(label);
-            hbox.pack_end(toggle, false, false, 0);
-
-            this.add(hbox);
+            return 0; // default
         }
 
         _initBottomButtons() {
