@@ -16,6 +16,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             this._settings = new Settings();
 
             this._initSleepingThreshold();
+            this._initShowComboBox();
             this._initBottomButtons();
 
             this.show_all();
@@ -65,11 +66,80 @@ const RuncatSettingsWidget = GObject.registerClass(
             this.add(hbox);
         }
 
+        _initShowComboBox() {
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
+            });
+
+            const label = new Gtk.Label({
+                label: 'Show',
+                use_markup: true,
+            });
+
+            const combo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
+                visible: true
+            });
+
+            const options = ['Runner and percentage', 'Percentage only', 'Runner only'];
+            options.forEach(opt => combo.append(opt, opt));
+
+            combo.set_active(this._getActiveShowIndex());
+
+            this._settings.hideRunner.addListener(() => {
+                combo.set_active(this._getActiveShowIndex());
+            });
+            this._settings.hidePercentage.addListener(() => {
+                combo.set_active(this._getActiveShowIndex());
+            });
+            combo.connect('changed', (widget) => {
+                switch (widget.get_active()) {
+                    case 0: // show runner & percentage
+                        this._settings.hideRunner.set(false);
+                        this._settings.hidePercentage.set(false);
+                        break;
+                    case 1: // show percentage only
+                        this._settings.hideRunner.set(true);
+                        this._settings.hidePercentage.set(false);
+                        break;
+                    case 2: // show runner only
+                        this._settings.hideRunner.set(false);
+                        this._settings.hidePercentage.set(true);
+                }
+            });
+
+            this.connect('destroy', () => {
+                this._settings.hideRunner.removeAllListeners();
+                this._settings.hidePercentage.removeAllListeners();
+            });
+
+            hbox.add(label);
+            hbox.pack_end(combo, false, false, 0);
+
+            this.add(hbox);
+        }
+
+        _getActiveShowIndex() {
+            const hideRunner = this._settings.hideRunner.get();
+            const hidePercentage = this._settings.hidePercentage.get();
+
+            if (!hideRunner && !hidePercentage)
+                return 0;
+            else if (hideRunner)
+                return 1;
+            else if (hidePercentage)
+                return 2;
+
+            return 0; // default show both
+        }
+
         _initBottomButtons() {
             const resetButton = new Gtk.Button({ label: 'Reset to default' });
 
             resetButton.connect('clicked', () => {
                 this._settings.sleepingThreshold.set(0);
+                this._settings.hideRunner.set(false);
+                this._settings.hidePercentage.set(false);
             });
 
             this.pack_end(resetButton, false, false, 0);
