@@ -1,25 +1,55 @@
 const { GObject, Gtk } = imports.gi;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 
+const Config = imports.misc.config;
+const [major] = Config.PACKAGE_VERSION.split('.');
+const shellVersion = Number.parseInt(major);
+
+const isGtk4 = shellVersion >= 40;
+
 const { Settings } = Extension.imports.settings;
+
+const BaseComponent = isGtk4 ? Gtk.ScrolledWindow : Gtk.Box;
+
 
 const RuncatSettingsWidget = GObject.registerClass(
     { GTypeName: 'RuncatSettingsWidget' },
-    class RuncatSettingsWidget extends Gtk.Box {
+    class RuncatSettingsWidget extends BaseComponent {
         _init() {
-            super._init({
-                orientation: Gtk.Orientation.VERTICAL,
-                border_width: 20,
-                spacing: 20,
-            });
+            if (isGtk4) {
+                super._init({
+                    hscrollbar_policy: Gtk.PolicyType.NEVER,
+                });
+            } else {
+                super._init({
+                    orientation: Gtk.Orientation.VERTICAL,
+                    border_width: 20,
+                    spacing: 20,
+                });
+            }
 
             this._settings = new Settings();
+            if (isGtk4) {
+                this._box = new Gtk.Box({
+                    orientation: Gtk.Orientation.VERTICAL,
+                    halign: Gtk.Align.CENTER,
+                    spacing: 20,
+                    margin_top: 20,
+                    margin_bottom: 20,
+                    margin_start: 20,
+                    margin_end: 20,
+                });
+
+                this.set_child(this._box);
+            }
 
             this._initSleepingThreshold();
             this._initShowComboBox();
             this._initBottomButtons();
 
-            this.show_all();
+            if (!isGtk4) {
+                this.show_all();
+            }
         }
 
         _initSleepingThreshold() {
@@ -33,16 +63,28 @@ const RuncatSettingsWidget = GObject.registerClass(
                 use_markup: true,
             });
 
-            const scale = new Gtk.HScale({
+            const scaleConfig = {
                 digits: 0,
                 adjustment: new Gtk.Adjustment({
                     lower: 0,
                     upper: 100,
                 }),
-                value_pos: Gtk.PositionType.RIGHT,
                 hexpand: true,
                 halign: Gtk.Align.END,
-            });
+            };
+
+            let scale;
+            if (isGtk4) {
+                scale = new Gtk.Scale({
+                    ...scaleConfig,
+                    draw_value: true,
+                });
+            } else {
+                scale = new Gtk.HScale({
+                    ...scaleConfig,
+                    value_pos: Gtk.PositionType.RIGHT,
+                });
+            }
             scale.set_size_request(400, 15);
             scale.set_value(this._settings.sleepingThreshold.get());
 
@@ -60,10 +102,17 @@ const RuncatSettingsWidget = GObject.registerClass(
             });
             this.connect('destroy', () => this._settings.sleepingThreshold.removeAllListeners());
 
-            hbox.add(label);
-            hbox.add(scale);
+            if (isGtk4) {
+                hbox.append(label);
+                hbox.append(scale);
 
-            this.add(hbox);
+                this._box.append(hbox);
+            } else {
+                hbox.add(label);
+                hbox.add(scale);
+
+                this.add(hbox);
+            }
         }
 
         _initShowComboBox() {
@@ -74,6 +123,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             const label = new Gtk.Label({
                 label: 'Show',
                 use_markup: true,
+                margin_end: 20,
             });
 
             const combo = new Gtk.ComboBoxText({
@@ -113,10 +163,17 @@ const RuncatSettingsWidget = GObject.registerClass(
                 this._settings.hidePercentage.removeAllListeners();
             });
 
-            hbox.add(label);
-            hbox.pack_end(combo, false, false, 0);
+            if (isGtk4) {
+                hbox.append(label);
+                hbox.append(combo);
 
-            this.add(hbox);
+                this._box.append(hbox);
+            } else {
+                hbox.add(label);
+                hbox.pack_end(combo, false, false, 0);
+
+                this.add(hbox);
+            }
         }
 
         _getActiveShowIndex() {
@@ -142,7 +199,11 @@ const RuncatSettingsWidget = GObject.registerClass(
                 this._settings.hidePercentage.set(false);
             });
 
-            this.pack_end(resetButton, false, false, 0);
+            if (isGtk4) {
+                this._box.append(resetButton);
+            } else {
+                this.pack_end(resetButton, false, false, 0);
+            }
         }
     },
 );

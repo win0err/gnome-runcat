@@ -4,8 +4,9 @@
   "uuid": "runcat@kolesnikov.se",
   "shell-version": [
     "3.36",
-    "3.38"
+    "3.38",
+    "40.0"
   ],
   "url": "https://github.com/win0err/gnome-runcat",
-  "version": 10
+  "version": 11
 }
