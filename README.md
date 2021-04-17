@@ -1,7 +1,11 @@
+<img height="165" src="assets/se.kolesnikov.runcat.svg" alt="RunCat for GNOME Shell Logo" align="right" />
+
 # RunCat for GNOME Shell
 
-**RunCat** provides a key-frame animation to the GNOME Shell top bar.
+**RunCat** provides a key-frame animation to the GNOME Shell top bar. \
 Animation speed changes depending on CPU usage.
+
+<br />
 
 ![RunCat for GNOME Shell](assets/runcat-header.gif)
 
