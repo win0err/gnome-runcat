@@ -1,4 +1,5 @@
-const { Shell } = imports.gi;
+const { Gio } = imports.gi;
+const ByteArray = imports.byteArray;
 
 // eslint-disable-next-line
 var Cpu = class Cpu {
@@ -8,38 +9,52 @@ var Cpu = class Cpu {
 
         this.utilization = 0;
 
+        this.procStatFile = Gio.File.new_for_path('/proc/stat');
+
         this.refresh();
     }
 
     refresh() {
-        const prosStat = Shell.get_file_contents_utf8_sync('/proc/stat');
-        const cpuInfo = prosStat
-            .split('\n')
-            .shift()
-            .trim()
-            .split(/[\s]+/)
-            .map(n => parseInt(n, 10));
+        let utilization = 0;
 
-        const [
-            , // eslint-disable-line
-            user,
-            nice,
-            system,
-            idle,
-            iowait,
-            irq, // eslint-disable-line
-            softirq,
-            steal,
-            guest, // eslint-disable-line
-        ] = cpuInfo;
+        try {
+            const [success, contents] = this.procStatFile.load_contents(null);
+            if (!success) {
+                throw new Error('Can\'t load contents of stat file');
+            }
 
-        const active = user + system + nice + softirq + steal;
-        const total = user + system + nice + softirq + steal + idle + iowait;
+            const cpuInfo = ByteArray.toString(contents)
+                .split('\n')
+                .shift()
+                .trim()
+                .split(/[\s]+/)
+                .map(n => parseInt(n, 10));
 
-        this.utilization = 100 * ((active - this.lastActive) / (total - this.lastTotal));
+            const [
+                , // eslint-disable-line
+                user,
+                nice,
+                system,
+                idle,
+                iowait,
+                irq, // eslint-disable-line
+                softirq,
+                steal,
+                guest, // eslint-disable-line
+            ] = cpuInfo;
 
-        this.lastActive = active;
-        this.lastTotal = total;
+            const active = user + system + nice + softirq + steal;
+            const total = user + system + nice + softirq + steal + idle + iowait;
+
+            utilization = 100 * ((active - this.lastActive) / (total - this.lastTotal));
+
+            this.lastActive = active;
+            this.lastTotal = total;
+        } catch (e) {
+            logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
+        } finally {
+            this.utilization = utilization;
+        }
 
         return this.utilization;
     }
