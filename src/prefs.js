@@ -3,14 +3,13 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 
 const Config = imports.misc.config;
 const [major] = Config.PACKAGE_VERSION.split('.');
-const shellVersion = Number.parseInt(major);
+const shellVersion = Number.parseInt(major, 10);
 
 const isGtk4 = shellVersion >= 40;
 
 const { Settings } = Extension.imports.settings;
 
 const BaseComponent = isGtk4 ? Gtk.ScrolledWindow : Gtk.Box;
-
 
 const RuncatSettingsWidget = GObject.registerClass(
     { GTypeName: 'RuncatSettingsWidget' },
@@ -128,7 +127,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             const combo = new Gtk.ComboBoxText({
                 halign: Gtk.Align.END,
-                visible: true
+                visible: true,
             });
 
             const options = ['Runner and percentage', 'Percentage only', 'Runner only'];
@@ -142,19 +141,22 @@ const RuncatSettingsWidget = GObject.registerClass(
             this._settings.hidePercentage.addListener(() => {
                 combo.set_active(this._getActiveShowIndex());
             });
-            combo.connect('changed', (widget) => {
+            combo.connect('changed', widget => {
                 switch (widget.get_active()) {
-                    case 0: // show runner & percentage
-                        this._settings.hideRunner.set(false);
-                        this._settings.hidePercentage.set(false);
-                        break;
-                    case 1: // show percentage only
-                        this._settings.hideRunner.set(true);
-                        this._settings.hidePercentage.set(false);
-                        break;
-                    case 2: // show runner only
-                        this._settings.hideRunner.set(false);
-                        this._settings.hidePercentage.set(true);
+                case 0: // show runner & percentage
+                    this._settings.hideRunner.set(false);
+                    this._settings.hidePercentage.set(false);
+                    break;
+                case 1: // show percentage only
+                    this._settings.hideRunner.set(true);
+                    this._settings.hidePercentage.set(false);
+                    break;
+                case 2: // show runner only
+                    this._settings.hideRunner.set(false);
+                    this._settings.hidePercentage.set(true);
+                    break;
+                default:
+                    break;
                 }
             });
 
@@ -180,14 +182,16 @@ const RuncatSettingsWidget = GObject.registerClass(
             const hideRunner = this._settings.hideRunner.get();
             const hidePercentage = this._settings.hidePercentage.get();
 
-            if (!hideRunner && !hidePercentage)
+            switch (true) {
+            case !hideRunner && !hidePercentage:
                 return 0;
-            else if (hideRunner)
+            case hideRunner && !hidePercentage:
                 return 1;
-            else if (hidePercentage)
+            case !hideRunner && hidePercentage:
                 return 2;
-
-            return 0; // default show both
+            default:
+                return 0; // default show both
+            }
         }
 
         _initBottomButtons() {
