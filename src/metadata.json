@@ -5,8 +5,8 @@
   "shell-version": [
     "3.36",
     "3.38",
-    "40.0"
+    "40"
   ],
   "url": "https://github.com/win0err/gnome-runcat",
-  "version": 12
+  "version": 13
 }
