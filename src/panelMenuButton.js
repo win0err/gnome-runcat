@@ -43,28 +43,33 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initUi() {
-            const box = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
+            const box = new St.BoxLayout({
+                style_class: 'panel-status-menu-box runcat-menu',
+            });
 
-            this.ui.set(
-                'icon',
-                new St.Icon({
-                    style_class: 'system-status-icon runcat-menu__icon',
-                    gicon: this.iconProvider.sleeping,
-                }),
-            );
+            const icon = new St.Icon({
+                style_class: 'system-status-icon runcat-menu__icon',
+                gicon: this.iconProvider.sleeping,
+            });
+            this.ui.set('icon', icon);
             this._manageUiElementVisibility('icon', this.isRunnerHidden);
 
-            this.ui.set(
-                'label',
-                new St.Label({
-                    style_class: 'runcat-menu__label',
-                    y_expand: true,
-                    y_align: Clutter.ActorAlign.CENTER,
-                }),
-            );
-            this._manageUiElementVisibility('label', this.isPercentageHidden);
+            const labelBox = new St.BoxLayout({});
+            this.ui.set('labelBox', labelBox);
 
-            this.ui.forEach(element => box.add_child(element));
+            const label = new St.Label({
+                style_class: 'runcat-menu__label',
+                y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.FILL,
+                x_expand: true,
+            });
+            this.ui.set('label', label);
+            labelBox.add_child(label);
+            this._manageUiElementVisibility('labelBox', this.isPercentageHidden);
+
+            box.add_child(icon);
+            box.add_child(labelBox);
             this.ui.set('box', box);
 
             this.add_child(box);
@@ -83,7 +88,7 @@ var PanelMenuButton = GObject.registerClass(
 
             this.settings.hidePercentage.addListener(() => {
                 this.isPercentageHidden = this.settings.hidePercentage.get();
-                this._manageUiElementVisibility('label', this.isPercentageHidden);
+                this._manageUiElementVisibility('labelBox', this.isPercentageHidden);
             });
 
             this.settings.sleepingThreshold.addListener(() => {

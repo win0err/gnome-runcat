@@ -3,10 +3,10 @@
   "description": "The cat tells you the CPU usage by running speed",
   "uuid": "runcat@kolesnikov.se",
   "shell-version": [
-    "3.36",
     "3.38",
-    "40"
+    "40",
+    "41"
   ],
   "url": "https://github.com/win0err/gnome-runcat",
-  "version": 13
+  "version": 14
 }
