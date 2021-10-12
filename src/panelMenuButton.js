@@ -30,8 +30,10 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         get animationInterval() {
+            const utilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
+
             // y = 5000/sqrt(x+30) - 400
-            return 5000 / Math.sqrt(this.cpu.utilization + 30) - 400;
+            return Math.ceil(5000 / Math.sqrt(utilizationCoefficient + 30) - 400);
         }
 
         _initSettings() {
