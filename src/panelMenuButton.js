@@ -99,25 +99,35 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
-            this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
+            this.timers.set('cpu', new Timer(() => {
+                try {
+                    this.cpu.refresh();
+                } catch (e) {
+                    logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
+                }
+            }, 3000));
 
             this.timers.set(
                 'ui',
                 new Timer(() => {
-                    if (this.timers.has('ui')) {
-                        this.timers.get('ui').interval = this.animationInterval;
-                    }
+                    try {
+                        if (this.timers.has('ui')) {
+                            this.timers.get('ui').interval = this.animationInterval;
+                        }
 
-                    if (!this.isRunnerHidden) {
-                        const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                        this.ui.get('icon').set_gicon(
-                            isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
-                        );
-                    }
+                        if (!this.isRunnerHidden) {
+                            const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
+                            this.ui.get('icon').set_gicon(
+                                isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
+                            );
+                        }
 
-                    if (!this.isPercentageHidden) {
-                        const utilization = Math.ceil(this.cpu.utilization || 0);
-                        this.ui.get('label').set_text(`${utilization}%`);
+                        if (!this.isPercentageHidden) {
+                            const utilization = Math.ceil(this.cpu.utilization || 0);
+                            this.ui.get('label').set_text(`${utilization}%`);
+                        }
+                    } catch (e) {
+                        logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
                     }
                 }, 250),
             );
