@@ -5,6 +5,11 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 
 const { PanelMenuButton } = Extension.imports.panelMenuButton;
 
+const onSessionModeUpdate = () => {
+    // log(JSON.stringify(Main.sessionMode, null, 2));
+    log(`Should tick: ${!Main.sessionMode.isLocked && !Main.sessionMode.isGreeter}`);
+};
+
 class RunCatExtension {
     constructor() {
         this.extensionButton = null;
@@ -22,5 +27,7 @@ class RunCatExtension {
 }
 
 function init() {
+    Main.sessionMode.connect('updated', onSessionModeUpdate);
+    onSessionModeUpdate();
     return new RunCatExtension();
 }

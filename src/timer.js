@@ -1,3 +1,4 @@
+const Main = imports.ui.main;
 const Mainloop = imports.mainloop;
 
 const MAX_INTERVAL = 0xFFFFFFFF;
@@ -44,14 +45,24 @@ var Timer = class Timer {
     _tick() {
         this._clearTimeout();
 
-        this.callback();
+        const shouldTick = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
+        if (shouldTick) {
+            this.callback();
+        }
 
         this._addTimeout();
     }
 
     _addTimeout() {
         if (this.isStarted) {
-            this.timeout = Mainloop.timeout_add(this.interval, () => this._tick());
+            try {
+                this.timeout = Mainloop.timeout_add(this.interval, () => this._tick());
+            } catch (e) {
+                // eslint-disable-next-line no-undef
+                logError(e);
+                log(this.interval);
+                log(`Should tick: ${!Main.sessionMode.isLocked && !Main.sessionMode.isGreeter}`);
+            }
         }
     }
 
