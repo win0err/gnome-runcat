@@ -1,5 +1,8 @@
 const { Gio } = imports.gi;
 const ByteArray = imports.byteArray;
+const Config = imports.misc.config;
+const [major] = Config.PACKAGE_VERSION.split('.');
+const shellVersion = Number.parseInt(major, 10);
 
 // eslint-disable-next-line
 var Cpu = class Cpu {
@@ -23,7 +26,15 @@ var Cpu = class Cpu {
                 throw new Error('Can\'t load contents of stat file');
             }
 
-            const cpuInfo = ByteArray.toString(contents)
+            let procTextData = '';
+            if (shellVersion >= 41) {
+                const decoder = new TextDecoder('utf-8');
+                procTextData = decoder.decode(contents);
+            } else {
+                procTextData = ByteArray.toString(contents);
+            }
+
+            const cpuInfo = procTextData
                 .split('\n')
                 .shift()
                 .trim()
@@ -48,12 +59,24 @@ var Cpu = class Cpu {
 
             utilization = 100 * ((active - this.lastActive) / (total - this.lastTotal));
 
+            if (Number.isNaN(utilization)) {
+                log(procTextData);
+                log(JSON.stringify({
+                    active,
+                    lastActive: this.lastActive,
+                    total,
+                    lastTotal: this.lastTotal,
+                }));
+
+                log('Seychas ono upalo by');
+            } else {
+                this.utilization = utilization;
+            }
+
             this.lastActive = active;
             this.lastTotal = total;
         } catch (e) {
             logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
-        } finally {
-            this.utilization = utilization;
         }
 
         return this.utilization;

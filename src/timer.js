@@ -21,9 +21,9 @@ var Timer = class Timer {
     }
 
     set interval(newInterval) {
-        if (newInterval <= 0 || newInterval >= MAX_INTERVAL) {
+        if (newInterval <= 0 || newInterval >= MAX_INTERVAL || Number.isNaN(newInterval)) {
             throw new RangeError(
-                `Interval ${newInterval} is out of range. Interval must be > 0 and < ${MAX_INTERVAL}`,
+                `Interval ${newInterval} is out of range. Interval must be > 0 and < ${MAX_INTERVAL} and !isNaN`,
             );
         }
 
