@@ -99,7 +99,13 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initTimers() {
-            this.timers.set('cpu', new Timer(() => this.cpu.refresh(), 3000));
+            this.timers.set('cpu', new Timer(() => {
+                try {
+                    this.cpu.refresh();
+                } catch (e) {
+                    logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
+                }
+            }, 3000));
 
             this.timers.set(
                 'ui',
@@ -121,8 +127,7 @@ var PanelMenuButton = GObject.registerClass(
                             this.ui.get('label').set_text(`${utilization}%`);
                         }
                     } catch (e) {
-                        // eslint-disable-next-line no-undef
-                        logError(e);
+                        logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
                     }
                 }, 250),
             );

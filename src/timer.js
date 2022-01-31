@@ -21,10 +21,8 @@ var Timer = class Timer {
     }
 
     set interval(newInterval) {
-        if (newInterval <= 0 || newInterval >= MAX_INTERVAL || Number.isNaN(newInterval)) {
-            throw new RangeError(
-                `Interval ${newInterval} is out of range. Interval must be > 0 and < ${MAX_INTERVAL} and !isNaN`,
-            );
+        if (newInterval < 0 || newInterval > MAX_INTERVAL || Number.isNaN(newInterval)) {
+            throw new RangeError(`Interval ${newInterval} is out of range`);
         }
 
         this._interval = newInterval;
@@ -55,14 +53,7 @@ var Timer = class Timer {
 
     _addTimeout() {
         if (this.isStarted) {
-            try {
-                this.timeout = Mainloop.timeout_add(this.interval, () => this._tick());
-            } catch (e) {
-                // eslint-disable-next-line no-undef
-                logError(e);
-                log(this.interval);
-                log(`Should tick: ${!Main.sessionMode.isLocked && !Main.sessionMode.isGreeter}`);
-            }
+            this.timeout = Mainloop.timeout_add(this.interval, () => this._tick());
         }
     }
 
