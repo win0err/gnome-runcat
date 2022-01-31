@@ -26,8 +26,6 @@ var Timer = class Timer {
         }
 
         this._interval = newInterval;
-
-        return true;
     }
 
     start() {
