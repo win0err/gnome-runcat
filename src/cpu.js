@@ -5,8 +5,6 @@ const Config = imports.misc.config;
 const [major] = Config.PACKAGE_VERSION.split('.');
 const shellVersion = Number.parseInt(major, 10);
 
-const decoder = new TextDecoder('utf-8');
-
 // eslint-disable-next-line
 var Cpu = class Cpu {
     constructor() {
@@ -28,7 +26,7 @@ var Cpu = class Cpu {
             }
 
             const procTextData = shellVersion >= 41
-                ? decoder.decode(contents)
+                ? new TextDecoder('utf-8').decode(contents)
                 : ByteArray.toString(contents);
 
             const cpuInfo = procTextData
