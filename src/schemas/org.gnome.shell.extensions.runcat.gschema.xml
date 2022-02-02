@@ -23,5 +23,11 @@
 			<description/>
 		</key>
 
+		<key type="s" name="icon-pack">
+			<default>'cat'</default>
+			<summary>Icon Pack</summary>
+			<description/>
+		</key>
+
 	</schema>
 </schemalist>

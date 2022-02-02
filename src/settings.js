@@ -73,6 +73,19 @@ var Settings = class Settings {
 
         return this._hidePercentage;
     }
+
+    get iconPack() {
+        if (!this._iconPack) {
+            // eslint-disable-next-line no-use-before-define
+            this._iconPack = new Value(
+                this._gioSettings,
+                'icon-pack',
+                valueTypes.STRING,
+            );
+        }
+
+        return this._iconPack;
+    }
 };
 
 class Value {
