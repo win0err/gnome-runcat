@@ -9,14 +9,14 @@ const getGIcon = (name, pack = 'cat') => Gio.icon_new_for_string(
 
 // eslint-disable-next-line
 var IconProvider = class IconProvider {
-    constructor(spritesCount = 5) {
+    constructor(pack = 'cat', spritesCount = 5) {
         this.spritesCount = spritesCount;
         this.currentSprite = 0;
 
-        this._sleeping = getGIcon('sleeping');
+        this._sleeping = getGIcon('sleeping', pack);
 
         this.sprites = [...Array(spritesCount).keys()]
-            .map(i => getGIcon(`running-${i}`));
+            .map(i => getGIcon(`running-${i}`, pack));
     }
 
     get sleeping() {
