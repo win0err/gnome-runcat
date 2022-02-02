@@ -16,7 +16,6 @@ var PanelMenuButton = GObject.registerClass(
             super._init(null, Extension.metadata.name);
 
             this.cpu = new Cpu();
-            this.iconProvider = new IconProvider();
 
             this.ui = new Map();
             this.timers = new Map();
@@ -42,9 +41,12 @@ var PanelMenuButton = GObject.registerClass(
             this.sleepingThreshold = this.settings.sleepingThreshold.get();
             this.isRunnerHidden = this.settings.hideRunner.get();
             this.isPercentageHidden = this.settings.hidePercentage.get();
+            this.iconPack = this.settings.iconPack.get();
         }
 
         _initUi() {
+            this.iconProvider = new IconProvider(this.iconPack);
+
             const box = new St.BoxLayout({
                 style_class: 'panel-status-menu-box runcat-menu',
             });
@@ -95,6 +97,11 @@ var PanelMenuButton = GObject.registerClass(
 
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
+            });
+
+            this.settings.iconPack.addListener(() => {
+                this.iconPack = this.settings.iconPack.get();
+                this.iconProvider = new IconProvider(this.iconPack);
             });
         }
 
