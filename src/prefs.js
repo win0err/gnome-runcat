@@ -44,6 +44,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             this._initSleepingThreshold();
             this._initShowComboBox();
+            this._initIconPackComboBox();
             this._initBottomButtons();
 
             if (!isGtk4) {
@@ -188,6 +189,83 @@ const RuncatSettingsWidget = GObject.registerClass(
             case hideRunner && !hidePercentage:
                 return 1;
             case !hideRunner && hidePercentage:
+                return 2;
+            default:
+                return 0; // default show both
+            }
+        }
+
+        _initIconPackComboBox() {
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
+            });
+
+            const label = new Gtk.Label({
+                label: 'Icon Pack',
+                use_markup: true,
+                margin_end: 20,
+            });
+
+            const combo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
+                visible: true,
+            });
+
+            const options = [
+                { label: 'Cat', val: 'cat' },
+                { label: 'Dog', val: 'dog' },
+                { label: 'Dancing Parrot', val: 'dancing-parrot' },
+            ];
+            options.forEach(opt => combo.append(opt.val, opt.label));
+
+            combo.set_active(this._getActiveIconPackIndex());
+
+            this._settings.iconPack.addListener(() => {
+                combo.set_active(this._getActiveIconPackIndex());
+            });
+
+            combo.connect('changed', widget => {
+                switch (widget.get_active()) {
+                case 0:
+                    this._settings.iconPack.set('cat');
+                    break;
+                case 1:
+                    this._settings.iconPack.set('dog');
+                    break;
+                case 2:
+                    this._settings.iconPack.set('dancing-parrot');
+                    break;
+                default:
+                    break;
+                }
+            });
+
+            this.connect('destroy', () => {
+                this._settings.iconPack.removeAllListeners();
+            });
+
+            if (isGtk4) {
+                hbox.append(label);
+                hbox.append(combo);
+
+                this._box.append(hbox);
+            } else {
+                hbox.add(label);
+                hbox.pack_end(combo, false, false, 0);
+
+                this.add(hbox);
+            }
+        }
+
+        _getActiveIconPackIndex() {
+            const iconPack = this._settings.iconPack.get();
+
+            switch (iconPack) {
+            case 'cat':
+                return 0;
+            case 'dog':
+                return 1;
+            case 'dancing-parrot':
                 return 2;
             default:
                 return 0; // default show both
