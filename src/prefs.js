@@ -213,7 +213,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             const options = [
                 { label: 'Cat', val: 'cat' },
-                { label: 'Dog', val: 'dog' },
+                { label: 'Chicken', val: 'chicken' },
                 { label: 'Dancing Parrot', val: 'dancing-parrot' },
             ];
             options.forEach(opt => combo.append(opt.val, opt.label));
@@ -230,7 +230,7 @@ const RuncatSettingsWidget = GObject.registerClass(
                     this._settings.iconPack.set('cat');
                     break;
                 case 1:
-                    this._settings.iconPack.set('dog');
+                    this._settings.iconPack.set('chicken');
                     break;
                 case 2:
                     this._settings.iconPack.set('dancing-parrot');
@@ -263,7 +263,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             switch (iconPack) {
             case 'cat':
                 return 0;
-            case 'dog':
+            case 'chicken':
                 return 1;
             case 'dancing-parrot':
                 return 2;
