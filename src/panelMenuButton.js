@@ -147,6 +147,7 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.hideRunner.removeAllListeners();
             this.settings.hidePercentage.removeAllListeners();
             this.settings.sleepingThreshold.removeAllListeners();
+            this.settings.iconPack.removeAllListeners();
 
             super.destroy();
         }
