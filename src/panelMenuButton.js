@@ -32,7 +32,7 @@ var PanelMenuButton = GObject.registerClass(
             const utilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
 
             // y = 5000/sqrt(x+30) - 400
-            return Math.ceil(5000 / Math.sqrt(utilizationCoefficient + 30) - 400);
+            return Math.ceil((5000 / Math.sqrt(utilizationCoefficient + 30) / (this.iconProvider.speed || 1)) - 400);
         }
 
         _initSettings() {
