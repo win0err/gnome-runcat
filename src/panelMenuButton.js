@@ -6,7 +6,7 @@ const { St, Clutter, GObject } = imports.gi;
 const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
-const { IconProvider } = Extension.imports.iconProvider;
+const { IconProvider, getIconProvider } = Extension.imports.iconProvider;
 
 // eslint-disable-next-line
 var PanelMenuButton = GObject.registerClass(
@@ -45,7 +45,7 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         _initUi() {
-            this.iconProvider = new IconProvider(this.iconPack);
+            this.iconProvider = getIconProvider(this.iconPack);
 
             const box = new St.BoxLayout({
                 style_class: 'panel-status-menu-box runcat-menu',
@@ -101,7 +101,7 @@ var PanelMenuButton = GObject.registerClass(
 
             this.settings.iconPack.addListener(() => {
                 this.iconPack = this.settings.iconPack.get();
-                this.iconProvider = new IconProvider(this.iconPack);
+                this.iconProvider = getIconProvider(this.iconPack);
             });
         }
 
