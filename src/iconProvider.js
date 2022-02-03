@@ -37,4 +37,16 @@ var IconProvider = class IconProvider {
 
     reset() {
         this.currentSprite = 0;
-    }};
+    }
+};
+
+// eslint-disable-next-line
+var getIconProvider = (iconPack) => {
+    const iconPacks = {
+        cat: new IconProvider('cat', 'svg', 5),
+        'dancing-parrot': new IconProvider('dancing-parrot', 'png', 10),
+        chicken: new IconProvider('chicken', 'gif', 12),
+    };
+
+    return iconPacks[iconPack] || iconPack.cat;
+};
