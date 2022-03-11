@@ -8,6 +8,8 @@ const { Timer } = Extension.imports.timer;
 const { Cpu } = Extension.imports.cpu;
 const { IconProvider } = Extension.imports.iconProvider;
 
+const { states } = Extension.imports.iconProvider;
+
 // eslint-disable-next-line
 var PanelMenuButton = GObject.registerClass(
     { GTypeName: 'PanelMenuButton' },
@@ -51,7 +53,7 @@ var PanelMenuButton = GObject.registerClass(
 
             const icon = new St.Icon({
                 style_class: 'system-status-icon runcat-menu__icon',
-                gicon: this.iconProvider.sleeping,
+                gicon: this.iconProvider.nextSprite,
             });
             this.ui.set('icon', icon);
             this._manageUiElementVisibility('icon', this.isRunnerHidden);
@@ -117,9 +119,8 @@ var PanelMenuButton = GObject.registerClass(
 
                         if (!this.isRunnerHidden) {
                             const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                            this.ui.get('icon').set_gicon(
-                                isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
-                            );
+                            this.iconProvider.animationState = isRunningSpriteShown ? states.RUNNING : states.SLEEPING;
+                            this.ui.get('icon').set_gicon(this.iconProvider.nextSprite);
                         }
 
                         if (!this.isPercentageHidden) {
