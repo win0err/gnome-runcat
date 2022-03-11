@@ -44,6 +44,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             this._initSleepingThreshold();
             this._initShowComboBox();
+            this._initCommandOnClickEntry();
             this._initBottomButtons();
 
             if (!isGtk4) {
@@ -194,6 +195,50 @@ const RuncatSettingsWidget = GObject.registerClass(
             }
         }
 
+        _initCommandOnClickEntry() {
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
+            });
+
+            const label = new Gtk.Label({
+                label: 'Run command on click',
+                use_markup: true,
+                margin_end: 20,
+            });
+
+            const entry = new Gtk.Entry({
+                halign: Gtk.Align.END,
+                visible: true,
+            });
+
+            entry.get_buffer().set_text(this._settings.commandOnClick.get(), -1);
+            this._settings.commandOnClick.addListener(() => {
+                const updatedValue = this._settings.commandOnClick.get();
+                if (updatedValue !== entry.get_buffer().get_text()) {
+                    entry.get_buffer().set_text(updatedValue, -1);
+                }
+            });
+            entry.connect('changed', () => {
+                const updatedValue = entry.get_buffer().get_text();
+                if (updatedValue !== this._settings.commandOnClick.get()) {
+                    this._settings.commandOnClick.set(updatedValue);
+                }
+            });
+            this.connect('destroy', () => this._settings.commandOnClick.removeAllListeners());
+
+            if (isGtk4) {
+                hbox.append(label);
+                hbox.append(entry);
+
+                this._box.append(hbox);
+            } else {
+                hbox.add(label);
+                hbox.add(entry);
+
+                this.add(hbox);
+            }
+        }
+
         _initBottomButtons() {
             const resetButton = new Gtk.Button({ label: 'Reset to default' });
 
@@ -201,6 +246,7 @@ const RuncatSettingsWidget = GObject.registerClass(
                 this._settings.sleepingThreshold.set(0);
                 this._settings.hideRunner.set(false);
                 this._settings.hidePercentage.set(false);
+                this._settings.commandOnClick.set('gnome-system-monitor');
             });
 
             if (isGtk4) {

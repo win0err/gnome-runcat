@@ -23,5 +23,11 @@
 			<description/>
 		</key>
 
+		<key type="s" name="command-on-click">
+			<default>'gnome-system-monitor'</default>
+			<summary>Command on Click</summary>
+			<description/>
+		</key>
+
 	</schema>
 </schemalist>

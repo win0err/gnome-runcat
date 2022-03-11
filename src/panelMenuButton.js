@@ -1,7 +1,9 @@
 const PanelMenu = imports.ui.panelMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
-const { St, Clutter, GObject } = imports.gi;
+const {
+    St, Clutter, GObject, GLib,
+} = imports.gi;
 
 const { Settings } = Extension.imports.settings;
 const { Timer } = Extension.imports.timer;
@@ -27,6 +29,8 @@ var PanelMenuButton = GObject.registerClass(
             this._initUi();
             this._initListeners();
             this._initTimers();
+
+            this.connect('event', (this._onClicked.bind(this)));
         }
 
         get animationInterval() {
@@ -42,6 +46,7 @@ var PanelMenuButton = GObject.registerClass(
             this.sleepingThreshold = this.settings.sleepingThreshold.get();
             this.isRunnerHidden = this.settings.hideRunner.get();
             this.isPercentageHidden = this.settings.hidePercentage.get();
+            this.commandOnClick = this.settings.commandOnClick.get();
         }
 
         _initUi() {
@@ -96,6 +101,10 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
             });
+
+            this.settings.commandOnClick.addListener(() => {
+                this.commandOnClick = this.settings.commandOnClick.get();
+            });
         }
 
         _initTimers() {
@@ -133,6 +142,22 @@ var PanelMenuButton = GObject.registerClass(
             );
         }
 
+        _onClicked(actor, event) {
+            // Ignore non-clicks.
+            if ((event.type() !== Clutter.EventType.TOUCH_BEGIN
+                && event.type() !== Clutter.EventType.BUTTON_PRESS)) {
+                return Clutter.EVENT_PROPAGATE;
+            }
+
+            try {
+                GLib.spawn_command_line_async(this.commandOnClick);
+            } catch (e) {
+                logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
+            }
+
+            return Clutter.EVENT_PROPOGATE;
+        }
+
         destroy() {
             this.timers.forEach(timer => timer.stop());
             this.ui.forEach(element => element.destroy());
@@ -140,6 +165,7 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.hideRunner.removeAllListeners();
             this.settings.hidePercentage.removeAllListeners();
             this.settings.sleepingThreshold.removeAllListeners();
+            this.settings.commandOnClick.removeAllListeners();
 
             super.destroy();
         }

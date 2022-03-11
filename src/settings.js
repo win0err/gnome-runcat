@@ -73,6 +73,19 @@ var Settings = class Settings {
 
         return this._hidePercentage;
     }
+
+    get commandOnClick() {
+        if (!this._commandOnClick) {
+            // eslint-disable-next-line no-use-before-define
+            this._commandOnClick = new Value(
+                this._gioSettings,
+                'command-on-click',
+                valueTypes.STRING,
+            );
+        }
+
+        return this._commandOnClick;
+    }
 };
 
 class Value {
