@@ -42,6 +42,7 @@ var PanelMenuButton = GObject.registerClass(
             this.settings = new Settings();
 
             this.sleepingThreshold = this.settings.sleepingThreshold.get();
+            this.animatedSleeping = this.settings.animatedSleeping.get();
             this.isRunnerHidden = this.settings.hideRunner.get();
             this.isPercentageHidden = this.settings.hidePercentage.get();
         }
@@ -53,7 +54,7 @@ var PanelMenuButton = GObject.registerClass(
 
             const icon = new St.Icon({
                 style_class: 'system-status-icon runcat-menu__icon',
-                gicon: this.iconProvider.nextSprite,
+                gicon: this.iconProvider.sleeping,
             });
             this.ui.set('icon', icon);
             this._manageUiElementVisibility('icon', this.isRunnerHidden);
@@ -98,6 +99,10 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.sleepingThreshold.addListener(() => {
                 this.sleepingThreshold = this.settings.sleepingThreshold.get();
             });
+
+            this.settings.animatedSleeping.addListener(() => {
+                this.animatedSleeping = this.settings.animatedSleeping.get();
+            });
         }
 
         _initTimers() {
@@ -118,8 +123,12 @@ var PanelMenuButton = GObject.registerClass(
                         }
 
                         if (!this.isRunnerHidden) {
-                            const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                            this.iconProvider.animationState = isRunningSpriteShown ? states.RUNNING : states.SLEEPING;
+                            if (this.cpu.utilization > this.sleepingThreshold) {
+                                this.iconProvider.animationState = states.RUNNING;
+                            } else {
+                                this.iconProvider.animationState = this.animatedSleeping
+                                    ? states.SLEEPING : states.SLEEPING_STATIC;
+                            }
                             this.ui.get('icon').set_gicon(this.iconProvider.nextSprite);
                         }
 
@@ -141,6 +150,7 @@ var PanelMenuButton = GObject.registerClass(
             this.settings.hideRunner.removeAllListeners();
             this.settings.hidePercentage.removeAllListeners();
             this.settings.sleepingThreshold.removeAllListeners();
+            this.settings.animatedSleeping.removeAllListeners();
 
             super.destroy();
         }

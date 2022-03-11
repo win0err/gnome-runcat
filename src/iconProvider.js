@@ -22,6 +22,7 @@ const getGIconSet = name => {
 };
 
 const states = {
+    SLEEPING_STATIC: -1,
     SLEEPING: 0,
     RUNNING: 1,
 };
@@ -57,6 +58,10 @@ var IconProvider = class IconProvider {
         }
     }
 
+    get sleeping() {
+        return this.sleepingSprites[0];
+    }
+
     get nextSprite() {
         this.currentSprite++;
 
@@ -65,6 +70,8 @@ var IconProvider = class IconProvider {
         }
 
         switch (this.state) {
+        case states.SLEEPING_STATIC:
+            return this.sleepingSprites[0];
         case states.SLEEPING:
             return this.sleepingSprites[this.currentSprite];
         case states.RUNNING:
