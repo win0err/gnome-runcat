@@ -15,6 +15,7 @@ var PanelMenuButtonVisibility = {
 
 var Settings = {
     IDLE_THRESHOLD: 'idle-threshold',
+    IDLE_ANIMATION: 'idle-animation',
     DISPLAYING_ITEMS: 'displaying-items',
 };
 

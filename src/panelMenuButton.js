@@ -21,17 +21,19 @@ const {
 } = Extension.imports.constants;
 const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
 
+const queryGIconExists = (name, state, index) => Gio.file_new_for_path(
+    `${Extension.path}/resources/icons/${name}/my-${state}-${index}-symbolic.svg`,
+).query_exists(null);
+
 const getGIcon = (name, state, index) => Gio.icon_new_for_string(
     `${Extension.path}/resources/icons/${name}/my-${state}-${index}-symbolic.svg`,
 );
 
 const getGIconSet = (name, state) => {
     let count = 0;
-    let icon;
     const SET = [];
-    // eslint-disable-next-line no-cond-assign
-    while ((icon = getGIcon(name, state, count)) != null) {
-        SET[count] = icon;
+    while (queryGIconExists(name, state, count)) {
+        SET[count] = getGIcon(name, state, count);
         count++;
     }
     return SET;
@@ -40,7 +42,7 @@ const getGIconSet = (name, state) => {
 // eslint-disable-next-line func-names
 const spritesGenerator = function* (name, state) {
     const SET = getGIconSet(name, state);
-    const LENGTH = SET.length();
+    const LENGTH = SET.length;
 
     let i;
     while (true) {
@@ -73,6 +75,7 @@ var PanelMenuButton = GObject.registerClass(
             this.ui = {
                 builder: Gtk.Builder.new(),
                 icons: {
+                    idle: getGIcon('cat', 'idle', 0),
                     idleGenerator: spritesGenerator('cat', 'idle'),
                     runningGenerator: spritesGenerator('cat', 'active'),
                 },
@@ -130,11 +133,16 @@ var PanelMenuButton = GObject.registerClass(
             this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
             this.settings = {
                 idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
+                idleAnimation: this.gioSettings.get_boolean(Settings.IDLE_ANIMATION),
                 displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
             };
 
             this.gioSettings.connect(`changed::${Settings.IDLE_THRESHOLD}`, () => {
                 this.settings.idleThreshold = this.gioSettings.get_int(Settings.IDLE_THRESHOLD);
+            });
+
+            this.gioSettings.connect(`changed::${Settings.IDLE_ANIMATION}`, () => {
+                this.settings.idleAnimation = this.gioSettings.get_boolean(Settings.IDLE_ANIMATION);
             });
 
             this.gioSettings.connect(`changed::${Settings.DISPLAYING_ITEMS}`, () => {
@@ -171,9 +179,12 @@ var PanelMenuButton = GObject.registerClass(
 
         repaintUi() {
             const isRunningSpriteShown = this.data?.cpu > this.settings.idleThreshold;
+            const idleSprite = this.settings.idleAnimation
+                ? this.ui.icons.idleGenerator.next().value
+                : this.ui.icons.idle;
             const gicon = isRunningSpriteShown
                 ? this.ui.icons.runningGenerator.next().value
-                : this.ui.icons.idleGenerator.next().value;
+                : idleSprite;
 
             this.ui.builder.get_object('icon').set_gicon(gicon);
             this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`);

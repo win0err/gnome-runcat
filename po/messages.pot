@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-05 02:43+0300\n"
+"POT-Creation-Date: 2022-10-25 18:23-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/panelMenuButton.js:95
+#: src/panelMenuButton.js:108
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/panelMenuButton.js:99
+#: src/panelMenuButton.js:112
 msgid "Settings"
 msgstr ""
 
-#: src/prefs.js:48
+#: src/prefs.js:55
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.js:59
+#: src/prefs.js:66
 msgid "Version"
 msgstr ""
 
@@ -46,45 +46,49 @@ msgid "Idle threshold"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:34
+msgid "Idle animation"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:47
 msgid "Displaying items"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:38
+#: src/resources/ui/preferences.ui:51
 msgid "Character and percentage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:39
+#: src/resources/ui/preferences.ui:52
 msgid "Percentage only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:40
+#: src/resources/ui/preferences.ui:53
 msgid "Character only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:51
+#: src/resources/ui/preferences.ui:64
 msgid "Reset preferences"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:52
+#: src/resources/ui/preferences.ui:65
 msgid "Reset RunCat preferences to defaults"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:65
+#: src/resources/ui/preferences.ui:78
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:84
+#: src/resources/ui/preferences.ui:97
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:88
+#: src/resources/ui/preferences.ui:101
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:98
+#: src/resources/ui/preferences.ui:111
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:102
+#: src/resources/ui/preferences.ui:115
 msgid "About RunCat"
 msgstr ""
