@@ -43,6 +43,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             }
 
             this._initSleepingThreshold();
+            this._initAnimatedSleeping();
             this._initShowComboBox();
             this._initCommandOnClickEntry();
             this._initBottomButtons();
@@ -110,6 +111,44 @@ const RuncatSettingsWidget = GObject.registerClass(
             } else {
                 hbox.add(label);
                 hbox.add(scale);
+
+                this.add(hbox);
+            }
+        }
+
+        _initAnimatedSleeping() {
+            const hbox = new Gtk.Box({
+                orientation: Gtk.Orientation.HORIZONTAL,
+            });
+
+            const toggle = new Gtk.ToggleButton({
+                label: 'Animated Sleeping',
+                halign: Gtk.Align.END,
+                visible: true,
+            });
+
+            toggle.set_active(this._settings.animatedSleeping.get());
+
+            this._settings.animatedSleeping.addListener(() => {
+                const updatedValue = this._settings.animatedSleeping.get();
+                if (updatedValue !== toggle.get_active()) {
+                    toggle.set_active(updatedValue);
+                }
+            });
+            toggle.connect('toggled', () => {
+                const updatedValue = toggle.get_active();
+                if (updatedValue !== this._settings.animatedSleeping.get()) {
+                    this._settings.animatedSleeping.set(toggle.get_active());
+                }
+            });
+            this.connect('destroy', () => this._settings.animatedSleeping.removeAllListeners());
+
+            if (isGtk4) {
+                hbox.append(toggle);
+
+                this._box.append(hbox);
+            } else {
+                hbox.add(toggle);
 
                 this.add(hbox);
             }
@@ -244,6 +283,7 @@ const RuncatSettingsWidget = GObject.registerClass(
 
             resetButton.connect('clicked', () => {
                 this._settings.sleepingThreshold.set(0);
+                this._settings.animatedSleeping.set(true);
                 this._settings.hideRunner.set(false);
                 this._settings.hidePercentage.set(false);
                 this._settings.commandOnClick.set('gnome-system-monitor');
