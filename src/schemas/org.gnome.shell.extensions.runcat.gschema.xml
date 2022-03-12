@@ -11,12 +11,6 @@
 			<description/>
 		</key>
 
-		<key type="b" name="animated-sleeping">
-			<default>true</default>
-			<summary>Animated Sleeping</summary>
-			<description/>
-		</key>
-
 		<key type="b" name="hide-runner">
 			<default>false</default>
 			<summary>Hide Runner</summary>

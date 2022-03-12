@@ -48,19 +48,6 @@ var Settings = class Settings {
         return this._sleepingThreshold;
     }
 
-    get animatedSleeping() {
-        if (typeof this._animatedSleeping === 'undefined') {
-            // eslint-disable-next-line no-use-before-define
-            this._animatedSleeping = new Value(
-                this._gioSettings,
-                'animated-sleeping',
-                valueTypes.BOOLEAN,
-            );
-        }
-
-        return this._animatedSleeping;
-    }
-
     get hideRunner() {
         if (!this._hideRunner) {
             // eslint-disable-next-line no-use-before-define
