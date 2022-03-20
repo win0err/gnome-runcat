@@ -18,6 +18,7 @@ const RuncatSettingsWidget = GObject.registerClass(
             if (isGtk4) {
                 super._init({
                     hscrollbar_policy: Gtk.PolicyType.NEVER,
+                    vexpand: true,
                 });
             } else {
                 super._init({
