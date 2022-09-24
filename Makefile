@@ -3,25 +3,39 @@
 .PHONY : build clean install uninstall
 .DEFAULT_GOAL := help
 
-UUID = "runcat@kolesnikov.se"
+UUID = runcat@kolesnikov.se
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
+js_sources = $(shell find src -maxdepth 1 -type f -name '*.js')
+
 build: clean
-	mkdir -p dist build
-	cp -r src/* build/
-	glib-compile-schemas build/schemas
-	cp LICENSE build
-	(cd build; zip -qr ../dist/$(UUID).zip .)
+	mkdir -p dist/
+	gnome-extensions pack -f src/ \
+		$(addprefix --extra-source=../, $(js_sources)) \
+		--extra-source=../assets \
+		--extra-source=../LICENSE \
+		-o dist/
 
 clean:
-	rm -rf build dist @types
+	rm -rf dist
 
 install: uninstall build
-	gnome-extensions install dist/$(UUID).zip --force
+	gnome-extensions install dist/$(UUID).shell-extension.zip --force
+	gnome-extensions enable $(UUID) || true
 	echo "You need to restart GNOME Shell to apply changes"
 
 uninstall:
-	gnome-extensions uninstall $(UUID) | true
+	gnome-extensions uninstall $(UUID) || true
+
+
+open-prefs:
+	gnome-extensions prefs $(UUID)
+
+spawn-gnome-shell: install
+	env MUTTER_DEBUG_DUMMY_MODE_SPECS=1280x720 \
+	 	MUTTER_DEBUG_DUMMY_MONITOR_SCALES=1 \
+		dbus-run-session -- gnome-shell --nested --wayland
+
 
 help:
 	@echo -n "Available commands: "
