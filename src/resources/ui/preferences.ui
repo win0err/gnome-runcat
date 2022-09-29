@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="AdwPreferencesPage" id="preferences-general">
+        <property name="title" translatable="yes">General</property>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">General Preferences</property>
+
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Sleeping threshold</property>
+                        <property name="activatable-widget">sleeping-threshold-scale</property>
+
+                        <child>
+                            <object class="GtkScale" id="sleeping-threshold-scale">
+                                <property name="valign">center</property>
+                                <property name="hexpand">true</property>
+                                <property name="width-request">100px</property>
+                                <property name="draw-value">true</property>
+                                <property name="value-pos">right</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="digits">0</property>
+                                <property name="adjustment">sleeping-threshold</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwComboRow" id="displaying-items">
+                        <property name="title" translatable="yes">Displaying items</property>
+                        <property name="model">
+                            <object class="GtkStringList">
+                                <items>
+                                    <item translatable="yes">Runner and percentage</item>
+                                    <item translatable="yes">Percentage only</item>
+                                    <item translatable="yes">Runner only</item>
+                                </items>
+                            </object>
+                        </property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Reset preferences</property>
+                <property name="description" translatable="yes">Reset RunCat preferences to defaults</property>
+                <property name="header-suffix">
+                    <object class="GtkButton" id="reset">
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <child>
+                            <object class="GtkBox">
+                                <property name="margin-start">20</property>
+                                <property name="margin-end">20</property>
+                                <property name="margin-top">6</property>
+                                <property name="margin-bottom">6</property>
+                                <child>
+                                    <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Reset</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <style>
+                            <class name="circular" />
+                            <class name="destructive-action" />
+                        </style>
+                    </object>
+                </property>
+            </object>
+        </child>
+    </object>
+
+    <object class="GtkAboutDialog" id="about-dialog">
+        <property name="program-name">GNOME RunCat</property>
+        <property name="authors">Sergei Kolesnikov https://kolesnikov.se/</property>
+        <property name="artists">Sergei Kolesnikov, Takuto Nakamura</property>
+        <property name="comments">The cat tells you the CPU usage by running speed</property>
+        <property name="copyright">© 2020-2022 Sergei Kolesnikov</property>
+        <property name="license_type">gpl-3-0</property>
+        <property name="website">https://github.com/win0err/gnome-runcat</property>
+        <property name="website_label">Visit RunCat's GitHub page</property>
+        <property name="can-focus">False</property>
+        <property name="modal">True</property>
+        <property name="destroy-with-parent">True</property>
+    </object>
+
+    <menu id="main-menu">
+        <section>
+            <item>
+                <attribute name="label" translatable="yes">Visit Homepage</attribute>
+                <attribute name="action">prefs.homepage</attribute>
+            </item>
+            <item>
+                <attribute name="label" translatable="yes">About RunCat</attribute>
+                <attribute name="action">prefs.about</attribute>
+            </item>
+        </section>
+    </menu>
+
+    <object class="GtkMenuButton" id="menu-button">
+        <property name="menu-model">main-menu</property>
+        <property name="icon-name">open-menu-symbolic</property>
+    </object>
+
+
+    <object class="GtkAdjustment" id="sleeping-threshold">
+        <property name="lower">0</property>
+        <property name="upper">100</property>
+        <property name="step-increment">1</property>
+    </object>
+</interface>

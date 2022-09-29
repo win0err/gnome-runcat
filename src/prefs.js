@@ -1,220 +1,86 @@
-const { GObject, Gtk } = imports.gi;
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
+const {
+    Adw,
+    Gio,
+    Gdk,
+    Gtk,
+} = imports.gi;
 
-const Config = imports.misc.config;
-const [major] = Config.PACKAGE_VERSION.split('.');
-const shellVersion = Number.parseInt(major, 10);
+const ExtensionUtils = imports.misc.extensionUtils;
+const Extension = ExtensionUtils.getCurrentExtension();
 
-const isGtk4 = shellVersion >= 40;
+const { SCHEMA_PATH, Settings } = Extension.imports.constants;
 
-const { Settings } = Extension.imports.settings;
+// modified version of desktop cube's helper
+// https://github.com/Schneegans/Desktop-Cube/blob/main/prefs.js#L238
+const findWidgetByType = (parent, type) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of parent) {
+        if (child instanceof type) return child;
 
-const BaseComponent = isGtk4 ? Gtk.ScrolledWindow : Gtk.Box;
+        const match = findWidgetByType(child, type);
+        if (match) return match;
+    }
 
-const RuncatSettingsWidget = GObject.registerClass(
-    { GTypeName: 'RuncatSettingsWidget' },
-    class RuncatSettingsWidget extends BaseComponent {
-        _init() {
-            if (isGtk4) {
-                super._init({
-                    hscrollbar_policy: Gtk.PolicyType.NEVER,
-                    vexpand: true,
-                });
-            } else {
-                super._init({
-                    orientation: Gtk.Orientation.VERTICAL,
-                    border_width: 20,
-                    spacing: 20,
-                });
-            }
+    return null;
+};
 
-            this._settings = new Settings();
-            if (isGtk4) {
-                this._box = new Gtk.Box({
-                    orientation: Gtk.Orientation.VERTICAL,
-                    halign: Gtk.Align.CENTER,
-                    spacing: 20,
-                    margin_top: 20,
-                    margin_bottom: 20,
-                    margin_start: 20,
-                    margin_end: 20,
-                });
+// eslint-disable-next-line no-unused-vars
+function fillPreferencesWindow(window) {
+    const settings = ExtensionUtils.getSettings(SCHEMA_PATH);
 
-                this.set_child(this._box);
-            }
+    const builder = Gtk.Builder.new();
+    builder.add_from_file(`${Extension.path}/resources/ui/preferences.ui`);
 
-            this._initSleepingThreshold();
-            this._initShowComboBox();
-            this._initBottomButtons();
+    settings.bind(
+        Settings.SLEEPING_THRESHOLD,
+        builder.get_object(Settings.SLEEPING_THRESHOLD),
+        'value',
+        Gio.SettingsBindFlags.DEFAULT,
+    );
 
-            if (!isGtk4) {
-                this.show_all();
-            }
-        }
+    const combo = builder.get_object(Settings.DISPLAYING_ITEMS);
+    combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
+    combo.connect('notify::selected', widget => {
+        settings.set_enum(Settings.DISPLAYING_ITEMS, widget.selected);
+    });
 
-        _initSleepingThreshold() {
-            const hbox = new Gtk.Box({
-                orientation: Gtk.Orientation.HORIZONTAL,
-                spacing: 20,
-            });
+    builder.get_object('reset').connect('clicked', () => {
+        settings.reset(Settings.SLEEPING_THRESHOLD);
 
-            const label = new Gtk.Label({
-                label: 'Sleeping Threshold',
-                use_markup: true,
-            });
+        settings.reset(Settings.DISPLAYING_ITEMS);
+        combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
+    });
 
-            const scaleConfig = {
-                digits: 0,
-                adjustment: new Gtk.Adjustment({
-                    lower: 0,
-                    upper: 100,
-                }),
-                hexpand: true,
-                halign: Gtk.Align.END,
-            };
+    const page = builder.get_object('preferences-general');
+    window.add(page);
 
-            let scale;
-            if (isGtk4) {
-                scale = new Gtk.Scale({
-                    ...scaleConfig,
-                    draw_value: true,
-                });
-            } else {
-                scale = new Gtk.HScale({
-                    ...scaleConfig,
-                    value_pos: Gtk.PositionType.RIGHT,
-                });
-            }
-            scale.set_size_request(400, 15);
-            scale.set_value(this._settings.sleepingThreshold.get());
+    // eslint-disable-next-line no-param-reassign
+    window.title = `${Extension.metadata.name} Preferences`;
 
-            this._settings.sleepingThreshold.addListener(() => {
-                const updatedValue = this._settings.sleepingThreshold.get();
-                if (updatedValue !== scale.get_value()) {
-                    scale.set_value(updatedValue);
-                }
-            });
-            scale.connect('value-changed', () => {
-                const updatedValue = scale.get_value();
-                if (updatedValue !== this._settings.sleepingThreshold.get()) {
-                    this._settings.sleepingThreshold.set(scale.get_value());
-                }
-            });
-            this.connect('destroy', () => this._settings.sleepingThreshold.removeAllListeners());
+    const homepageAction = Gio.SimpleAction.new('homepage', null);
+    homepageAction.connect('activate', () => Gtk.show_uri(null, Extension.metadata.url, Gdk.CURRENT_TIME));
 
-            if (isGtk4) {
-                hbox.append(label);
-                hbox.append(scale);
+    const aboutAction = Gio.SimpleAction.new('about', null);
+    aboutAction.connect('activate', () => {
+        const logo = Gtk.Image.new_from_file(`${Extension.path}/resources/se.kolesnikov.runcat.svg`);
 
-                this._box.append(hbox);
-            } else {
-                hbox.add(label);
-                hbox.add(scale);
+        const aboutDialog = builder.get_object('about-dialog');
+        aboutDialog.set_property('logo', logo.get_paintable());
+        aboutDialog.set_property('version', `Version ${Extension.metadata.version}`);
+        aboutDialog.set_property('transient_for', window);
 
-                this.add(hbox);
-            }
-        }
+        aboutDialog.present();
+    });
 
-        _initShowComboBox() {
-            const hbox = new Gtk.Box({
-                orientation: Gtk.Orientation.HORIZONTAL,
-            });
+    const group = Gio.SimpleActionGroup.new();
+    group.add_action(homepageAction);
+    group.add_action(aboutAction);
 
-            const label = new Gtk.Label({
-                label: 'Show',
-                use_markup: true,
-                margin_end: 20,
-            });
+    const menu = builder.get_object('menu-button');
+    menu.insert_action_group('prefs', group);
 
-            const combo = new Gtk.ComboBoxText({
-                halign: Gtk.Align.END,
-                visible: true,
-            });
-
-            const options = ['Runner and percentage', 'Percentage only', 'Runner only'];
-            options.forEach(opt => combo.append(opt, opt));
-
-            combo.set_active(this._getActiveShowIndex());
-
-            this._settings.hideRunner.addListener(() => {
-                combo.set_active(this._getActiveShowIndex());
-            });
-            this._settings.hidePercentage.addListener(() => {
-                combo.set_active(this._getActiveShowIndex());
-            });
-            combo.connect('changed', widget => {
-                switch (widget.get_active()) {
-                case 0: // show runner & percentage
-                    this._settings.hideRunner.set(false);
-                    this._settings.hidePercentage.set(false);
-                    break;
-                case 1: // show percentage only
-                    this._settings.hideRunner.set(true);
-                    this._settings.hidePercentage.set(false);
-                    break;
-                case 2: // show runner only
-                    this._settings.hideRunner.set(false);
-                    this._settings.hidePercentage.set(true);
-                    break;
-                default:
-                    break;
-                }
-            });
-
-            this.connect('destroy', () => {
-                this._settings.hideRunner.removeAllListeners();
-                this._settings.hidePercentage.removeAllListeners();
-            });
-
-            if (isGtk4) {
-                hbox.append(label);
-                hbox.append(combo);
-
-                this._box.append(hbox);
-            } else {
-                hbox.add(label);
-                hbox.pack_end(combo, false, false, 0);
-
-                this.add(hbox);
-            }
-        }
-
-        _getActiveShowIndex() {
-            const hideRunner = this._settings.hideRunner.get();
-            const hidePercentage = this._settings.hidePercentage.get();
-
-            switch (true) {
-            case !hideRunner && !hidePercentage:
-                return 0;
-            case hideRunner && !hidePercentage:
-                return 1;
-            case !hideRunner && hidePercentage:
-                return 2;
-            default:
-                return 0; // default show both
-            }
-        }
-
-        _initBottomButtons() {
-            const resetButton = new Gtk.Button({ label: 'Reset to default' });
-
-            resetButton.connect('clicked', () => {
-                this._settings.sleepingThreshold.set(0);
-                this._settings.hideRunner.set(false);
-                this._settings.hidePercentage.set(false);
-            });
-
-            if (isGtk4) {
-                this._box.append(resetButton);
-            } else {
-                this.pack_end(resetButton, false, false, 0);
-            }
-        }
-    },
-);
-
-function buildPrefsWidget() {
-    return new RuncatSettingsWidget();
+    const header = findWidgetByType(window.get_content(), Adw.HeaderBar);
+    header.pack_end(menu);
 }
 
 function init() {

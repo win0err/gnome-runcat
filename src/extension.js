@@ -1,5 +1,7 @@
 'use strict';
 
+imports.gi.versions.Gtk = '4.0';
+
 const Main = imports.ui.main;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 

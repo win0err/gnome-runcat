@@ -12,6 +12,8 @@ build: clean
 	mkdir -p dist/
 	gnome-extensions pack -f src/ \
 		$(addprefix --extra-source=../, $(js_sources)) \
+		--extra-source=./dataProviders \
+		--extra-source=./resources \
 		--extra-source=../assets \
 		--extra-source=../LICENSE \
 		-o dist/
@@ -32,7 +34,7 @@ open-prefs:
 	gnome-extensions prefs $(UUID)
 
 spawn-gnome-shell: install
-	env MUTTER_DEBUG_DUMMY_MODE_SPECS=1280x720 \
+	env MUTTER_DEBUG_DUMMY_MODE_SPECS=1600x800 \
 	 	MUTTER_DEBUG_DUMMY_MONITOR_SCALES=1 \
 		dbus-run-session -- gnome-shell --nested --wayland
 
