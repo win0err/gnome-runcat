@@ -1,28 +1,53 @@
 #!/usr/bin/make -f
 
-.PHONY : build clean install uninstall
-.DEFAULT_GOAL := help
+.PHONY : build clean install uninstall open-prefs spawn-gnome-shell
+.DEFAULT_GOAL := build
 
 UUID = runcat@kolesnikov.se
+DIST_ARCHIVE = $(UUID).shell-extension.zip
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
 js_sources = $(shell find src -maxdepth 1 -type f -name '*.js')
 
-build: clean
+translations_sources = src/panelMenuButton.js src/prefs.js
+translations_sources += $(shell find src/resources/ui -maxdepth 1 -type f -name '*.ui')
+translations = $(shell find src/po -maxdepth 1 -type f -name '*.po')
+
+
+build: src/po/messages.pot $(translations) dist/$(DIST_ARCHIVE)
+
+dist:
 	mkdir -p dist/
+
+dist/$(DIST_ARCHIVE): dist
 	gnome-extensions pack -f src/ \
 		$(addprefix --extra-source=../, $(js_sources)) \
 		--extra-source=./dataProviders \
 		--extra-source=./resources \
 		--extra-source=../assets \
 		--extra-source=../LICENSE \
+		--podir=./po \
 		-o dist/
+
+
+src/po/%.po: src/po/messages.pot
+	msgmerge --previous -U $@ src/po/messages.pot
+
+src/po/messages.pot: $(translations_sources)
+	touch src/po/messages.pot && \
+	xgettext --join-existing \
+		--package-name gnome-runcat-extension \
+		--package-version 20 \
+		--from-code=UTF-8 \
+		--output=src/po/messages.pot \
+		$^
+
 
 clean:
 	rm -rf dist
 
 install: uninstall build
-	gnome-extensions install dist/$(UUID).shell-extension.zip --force
+	gnome-extensions install dist/$(DIST_ARCHIVE) --force
 	gnome-extensions enable $(UUID) || true
 	echo "You need to restart GNOME Shell to apply changes"
 

@@ -2,10 +2,8 @@
   "name": "RunCat",
   "description": "The cat tells you the CPU usage by running speed",
   "uuid": "runcat@kolesnikov.se",
+  "gettext-domain": "runcat@kolesnikov.se",
   "shell-version": [
-    "3.38",
-    "40",
-    "41",
     "42",
     "43"
   ],

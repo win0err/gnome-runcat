@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the GNOME RunCat package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: GNOME RunCat 20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-30 21:26+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panelMenuButton.js:95
+msgid "Open System Monitor"
+msgstr ""
+
+#: src/panelMenuButton.js:99
+msgid "Settings"
+msgstr ""
+
+#: src/prefs.js:48
+msgid "RunCat Settings"
+msgstr ""
+
+#: src/prefs.js:59
+msgid "Version"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:6
+msgid "General"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:10
+msgid "General Preferences"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:14
+msgid "Sleeping threshold"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:34
+msgid "Displaying items"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:38
+msgid "Runner and percentage"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:39
+msgid "Percentage only"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:40
+msgid "Runner only"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:51
+msgid "Reset preferences"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:52
+msgid "Reset RunCat preferences to defaults"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:65
+msgid "Reset"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:84
+msgid "The cat tells you the CPU usage by running speed"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:88
+msgid "Visit RunCat's GitHub page"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:97
+msgid "Visit Homepage"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:101
+msgid "About RunCat"
+msgstr ""

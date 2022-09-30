@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+    <requires lib="gtk" version="4.0" />
+
     <object class="AdwPreferencesPage" id="preferences-general">
         <property name="title" translatable="yes">General</property>
 
@@ -79,11 +81,11 @@
         <property name="program-name">GNOME RunCat</property>
         <property name="authors">Sergei Kolesnikov https://kolesnikov.se/</property>
         <property name="artists">Sergei Kolesnikov, Takuto Nakamura</property>
-        <property name="comments">The cat tells you the CPU usage by running speed</property>
+        <property name="comments" translatable="yes">The cat tells you the CPU usage by running speed</property>
         <property name="copyright">© 2020-2022 Sergei Kolesnikov</property>
         <property name="license_type">gpl-3-0</property>
         <property name="website">https://github.com/win0err/gnome-runcat</property>
-        <property name="website_label">Visit RunCat's GitHub page</property>
+        <property name="website_label" translatable="yes">Visit RunCat's GitHub page</property>
         <property name="can-focus">False</property>
         <property name="modal">True</property>
         <property name="destroy-with-parent">True</property>

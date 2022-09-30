@@ -14,3 +14,18 @@ var readFile = gioFile => new Promise((resolve, reject) => {
         },
     );
 });
+
+// modified version of desktop cube's helper
+// https://github.com/Schneegans/Desktop-Cube/blob/main/prefs.js#L238
+// eslint-disable-next-line no-unused-vars, no-var
+var findWidgetByType = (parent, type) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of parent) {
+        if (child instanceof type) return child;
+
+        const match = findWidgetByType(child, type);
+        if (match) return match;
+    }
+
+    return null;
+};

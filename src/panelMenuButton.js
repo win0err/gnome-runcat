@@ -11,6 +11,8 @@ const {
     GLib,
 } = imports.gi;
 
+const _ = imports.gettext.domain(Extension.metadata.uuid).gettext;
+
 const {
     SYSTEM_MONITOR_COMMAND,
     SCHEMA_PATH,
@@ -65,6 +67,7 @@ var PanelMenuButton = GObject.registerClass(
                     runningGenerator: spritesGenerator(),
                 },
             };
+            this.ui.builder.set_translation_domain(Extension.metadata.uuid);
 
             const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
 
@@ -89,11 +92,11 @@ var PanelMenuButton = GObject.registerClass(
             this.add_child(box);
 
             this.menu.addAction(
-                'Open System Monitor',
+                _('Open System Monitor'),
                 () => trySpawnCommandLine(SYSTEM_MONITOR_COMMAND),
             );
             this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-            this.menu.addAction('Settings', () => ExtensionUtils.openPrefs());
+            this.menu.addAction(_('Settings'), () => ExtensionUtils.openPrefs());
         }
 
         destroyUi() {

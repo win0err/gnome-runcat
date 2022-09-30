@@ -8,27 +8,17 @@ const {
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
 
+const _ = imports.gettext.domain(Extension.metadata.uuid).gettext;
+
 const { SCHEMA_PATH, Settings } = Extension.imports.constants;
-
-// modified version of desktop cube's helper
-// https://github.com/Schneegans/Desktop-Cube/blob/main/prefs.js#L238
-const findWidgetByType = (parent, type) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const child of parent) {
-        if (child instanceof type) return child;
-
-        const match = findWidgetByType(child, type);
-        if (match) return match;
-    }
-
-    return null;
-};
+const { findWidgetByType } = Extension.imports.utils;
 
 // eslint-disable-next-line no-unused-vars
 function fillPreferencesWindow(window) {
     const settings = ExtensionUtils.getSettings(SCHEMA_PATH);
 
     const builder = Gtk.Builder.new();
+    builder.set_translation_domain(Extension.metadata.uuid);
     builder.add_from_file(`${Extension.path}/resources/ui/preferences.ui`);
 
     settings.bind(
@@ -55,7 +45,7 @@ function fillPreferencesWindow(window) {
     window.add(page);
 
     // eslint-disable-next-line no-param-reassign
-    window.title = `${Extension.metadata.name} Settings`;
+    window.title = _('RunCat Settings');
 
     const homepageAction = Gio.SimpleAction.new('homepage', null);
     homepageAction.connect('activate', () => Gtk.show_uri(null, Extension.metadata.url, Gdk.CURRENT_TIME));
@@ -66,7 +56,8 @@ function fillPreferencesWindow(window) {
 
         const aboutDialog = builder.get_object('about-dialog');
         aboutDialog.set_property('logo', logo.get_paintable());
-        aboutDialog.set_property('version', `Version ${Extension.metadata.version}`);
+        const versionText = _('Version');
+        aboutDialog.set_property('version', `${versionText} ${Extension.metadata.version}`);
         aboutDialog.set_property('transient_for', window);
 
         aboutDialog.present();
