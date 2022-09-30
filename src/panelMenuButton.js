@@ -1,4 +1,7 @@
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
+const { trySpawnCommandLine } = imports.misc.util;
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
 const {
@@ -9,6 +12,7 @@ const {
 } = imports.gi;
 
 const {
+    SYSTEM_MONITOR_COMMAND,
     SCHEMA_PATH,
     PanelMenuButtonVisibility,
     Settings,
@@ -62,27 +66,40 @@ var PanelMenuButton = GObject.registerClass(
                 },
             };
 
+            const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
+
             this.ui.builder.add_from_file(`${Extension.path}/resources/ui/extension.ui`);
 
             const icon = this.ui.builder.get_object('icon');
             icon.set_property('gicon', this.ui.icons.sleeping);
+            if (!itemsVisibility.runner) {
+                icon.hide();
+            }
 
             const labelBox = this.ui.builder.get_object('labelBox');
             labelBox.add_child(this.ui.builder.get_object('label'));
+            if (!itemsVisibility.percentage) {
+                labelBox.hide();
+            }
 
             const box = this.ui.builder.get_object('box');
             box.add_child(icon);
             box.add_child(labelBox);
 
-            this.updateItemsVisibility();
-
             this.add_child(box);
+
+            this.menu.addAction(
+                'Open System Monitor',
+                () => trySpawnCommandLine(SYSTEM_MONITOR_COMMAND),
+            );
+            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            this.menu.addAction('Settings', () => ExtensionUtils.openPrefs());
         }
 
         destroyUi() {
             this.ui.builder.get_object('icon').destroy();
-            this.ui.builder.get_object('labelBox').destroy();
             this.ui.builder.get_object('label').destroy();
+            this.ui.builder.get_object('labelBox').destroy();
             this.ui.builder.get_object('box').destroy();
         }
 
@@ -109,7 +126,14 @@ var PanelMenuButton = GObject.registerClass(
 
             this.gioSettings.connect(`changed::${Settings.DISPLAYING_ITEMS}`, () => {
                 this.settings.displayingItems = this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS);
-                this.updateItemsVisibility();
+
+                const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
+
+                const runnerAction = itemsVisibility.runner ? 'show' : 'hide';
+                const percentageAction = itemsVisibility.percentage ? 'show' : 'hide';
+
+                this.ui.builder.get_object('icon')[runnerAction]();
+                this.ui.builder.get_object('labelBox')[percentageAction]();
             });
         }
 

@@ -23,3 +23,5 @@ var Settings = {
     SLEEPING_THRESHOLD: 'sleeping-threshold',
     DISPLAYING_ITEMS: 'displaying-items',
 };
+
+var SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r';

@@ -55,7 +55,7 @@ function fillPreferencesWindow(window) {
     window.add(page);
 
     // eslint-disable-next-line no-param-reassign
-    window.title = `${Extension.metadata.name} Preferences`;
+    window.title = `${Extension.metadata.name} Settings`;
 
     const homepageAction = Gio.SimpleAction.new('homepage', null);
     homepageAction.connect('activate', () => Gtk.show_uri(null, Extension.metadata.url, Gdk.CURRENT_TIME));
