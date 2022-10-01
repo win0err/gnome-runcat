@@ -48,7 +48,7 @@ function fillPreferencesWindow(window) {
     window.title = _('RunCat Settings');
 
     const homepageAction = Gio.SimpleAction.new('homepage', null);
-    homepageAction.connect('activate', () => Gtk.show_uri(null, Extension.metadata.url, Gdk.CURRENT_TIME));
+    homepageAction.connect('activate', () => Gtk.show_uri(window, Extension.metadata.url, Gdk.CURRENT_TIME));
 
     const aboutAction = Gio.SimpleAction.new('about', null);
     aboutAction.connect('activate', () => {
@@ -60,7 +60,7 @@ function fillPreferencesWindow(window) {
         aboutDialog.set_property('version', `${versionText} ${Extension.metadata.version}`);
         aboutDialog.set_property('transient_for', window);
 
-        aboutDialog.present();
+        aboutDialog.show();
     });
 
     const group = Gio.SimpleActionGroup.new();
