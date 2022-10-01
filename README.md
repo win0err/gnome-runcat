@@ -25,9 +25,9 @@ $ make install
 
 #### Release ZIP-archive
 If you want to install the extension from release zip-archive,
-download `runcat@kolesnikov.se.zip` from [the releases section](https://github.com/win0err/gnome-runcat/releases) and run:
+download `runcat@kolesnikov.se.shell-extension.zip` from [the releases section](https://github.com/win0err/gnome-runcat/releases) and run:
 ```bash
-$ gnome-extensions install path/to/runcat@kolesnikov.se.zip --force
+$ gnome-extensions install path/to/runcat@kolesnikov.se.shell-extension.zip --force
 ```
 
 #### After installation:
@@ -40,6 +40,7 @@ $ gnome-extensions install path/to/runcat@kolesnikov.se.zip --force
 
 
 ### Manage RunCat preferences
+- Right-click on the extension button on the top bar → Settings;
 - Open GNOME Tweaks → Extensions → RunCat → ⚙️;
 - or Open [RunCat on GNOME Extensions portal](https://extensions.gnome.org/extension/2986/runcat/) → ⚙️;
 - or Manage directly in `dconf`: `dconf list /org/gnome/shell/extensions/runcat/`.
