@@ -1,11 +1,13 @@
 #!/usr/bin/make -f
 
-.PHONY : build clean install uninstall open-prefs spawn-gnome-shell
+.PHONY : build clean install uninstall open-prefs spawn-gnome-shell translations
 .DEFAULT_GOAL := build
 
 UUID = runcat@kolesnikov.se
 DIST_ARCHIVE = $(UUID).shell-extension.zip
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
+
+all_sources = $(shell find src -type f)
 
 js_sources = $(shell find src -maxdepth 1 -type f -name '*.js')
 
@@ -19,7 +21,7 @@ build: src/po/messages.pot $(translations) dist/$(DIST_ARCHIVE)
 dist:
 	mkdir -p dist/
 
-dist/$(DIST_ARCHIVE): dist
+dist/$(DIST_ARCHIVE): dist $(all_sources)
 	gnome-extensions pack -f src/ \
 		$(addprefix --extra-source=../, $(js_sources)) \
 		--extra-source=./dataProviders \
@@ -31,17 +33,18 @@ dist/$(DIST_ARCHIVE): dist
 
 
 src/po/%.po: src/po/messages.pot
-	msgmerge --previous -U $@ src/po/messages.pot
+	msgmerge --update $@ src/po/messages.pot
 
 src/po/messages.pot: $(translations_sources)
 	touch src/po/messages.pot && \
-	xgettext --join-existing \
+	xgettext \
 		--package-name gnome-runcat-extension \
 		--package-version 20 \
 		--from-code=UTF-8 \
 		--output=src/po/messages.pot \
 		$^
 
+translations: src/po/messages.pot $(translations)
 
 clean:
 	rm -rf dist

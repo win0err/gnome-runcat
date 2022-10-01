@@ -75,7 +75,7 @@ var PanelMenuButton = GObject.registerClass(
 
             const icon = this.ui.builder.get_object('icon');
             icon.set_property('gicon', this.ui.icons.sleeping);
-            if (!itemsVisibility.runner) {
+            if (!itemsVisibility.character) {
                 icon.hide();
             }
 
@@ -109,10 +109,10 @@ var PanelMenuButton = GObject.registerClass(
         updateItemsVisibility() {
             const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
 
-            const runnerAction = itemsVisibility.runner ? 'show' : 'hide';
+            const characterAction = itemsVisibility.character ? 'show' : 'hide';
             const percentageAction = itemsVisibility.percentage ? 'show' : 'hide';
 
-            this.ui.builder.get_object('icon')[runnerAction]();
+            this.ui.builder.get_object('icon')[characterAction]();
             this.ui.builder.get_object('labelBox')[percentageAction]();
         }
 
@@ -132,10 +132,10 @@ var PanelMenuButton = GObject.registerClass(
 
                 const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
 
-                const runnerAction = itemsVisibility.runner ? 'show' : 'hide';
+                const characterAction = itemsVisibility.character ? 'show' : 'hide';
                 const percentageAction = itemsVisibility.percentage ? 'show' : 'hide';
 
-                this.ui.builder.get_object('icon')[runnerAction]();
+                this.ui.builder.get_object('icon')[characterAction]();
                 this.ui.builder.get_object('labelBox')[percentageAction]();
             });
         }

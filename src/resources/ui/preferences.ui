@@ -35,9 +35,9 @@
                         <property name="model">
                             <object class="GtkStringList">
                                 <items>
-                                    <item translatable="yes">Runner and percentage</item>
+                                    <item translatable="yes">Character and percentage</item>
                                     <item translatable="yes">Percentage only</item>
-                                    <item translatable="yes">Runner only</item>
+                                    <item translatable="yes">Character only</item>
                                 </items>
                             </object>
                         </property>
@@ -87,6 +87,7 @@
         <property name="website">https://github.com/win0err/gnome-runcat</property>
         <property name="website_label" translatable="yes">Visit RunCat's GitHub page</property>
         <property name="can-focus">False</property>
+        <property name="hide-on-close">True</property>
         <property name="modal">True</property>
         <property name="destroy-with-parent">True</property>
     </object>

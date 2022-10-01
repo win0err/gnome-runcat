@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the GNOME RunCat package.
+# This file is distributed under the same license as the gnome-runcat-extension package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GNOME RunCat 20\n"
+"Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-30 21:26+0300\n"
+"POT-Creation-Date: 2022-10-01 15:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgid "Displaying items"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:38
-msgid "Runner and percentage"
+msgid "Character and percentage"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:39
@@ -58,7 +58,7 @@ msgid "Percentage only"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:40
-msgid "Runner only"
+msgid "Character only"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:51
@@ -81,10 +81,10 @@ msgstr ""
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:97
+#: src/resources/ui/preferences.ui:98
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:101
+#: src/resources/ui/preferences.ui:102
 msgid "About RunCat"
 msgstr ""

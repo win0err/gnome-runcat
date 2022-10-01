@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<enum id="org.gnome.shell.extensions.runcat.DisplayingItems">
-		<value value="0" nick="runner-and-percentage"/>
+		<value value="0" nick="character-and-percentage"/>
 		<value value="1" nick="percentage-only"/>
-		<value value="2" nick="runner-only"/>
+		<value value="2" nick="character-only"/>
 	</enum>
 
 	<schema
@@ -18,7 +18,7 @@
 		</key>
 
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
-      		<default>'runner-and-percentage'</default>
+			<default>'character-and-percentage'</default>
 			<summary>Displaying items</summary>
 			<description/>
 		</key>
