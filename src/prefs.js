@@ -22,8 +22,8 @@ function fillPreferencesWindow(window) {
     builder.add_from_file(`${Extension.path}/resources/ui/preferences.ui`);
 
     settings.bind(
-        Settings.SLEEPING_THRESHOLD,
-        builder.get_object(Settings.SLEEPING_THRESHOLD),
+        Settings.IDLE_THRESHOLD,
+        builder.get_object(Settings.IDLE_THRESHOLD),
         'value',
         Gio.SettingsBindFlags.DEFAULT,
     );
@@ -35,7 +35,7 @@ function fillPreferencesWindow(window) {
     });
 
     builder.get_object('reset').connect('clicked', () => {
-        settings.reset(Settings.SLEEPING_THRESHOLD);
+        settings.reset(Settings.IDLE_THRESHOLD);
 
         settings.reset(Settings.DISPLAYING_ITEMS);
         combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));

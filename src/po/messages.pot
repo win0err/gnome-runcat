@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-01 15:25+0300\n"
+"POT-Creation-Date: 2022-10-01 15:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgid "General Preferences"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:14
-msgid "Sleeping threshold"
+msgid "Idle threshold"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:34

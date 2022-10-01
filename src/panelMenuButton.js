@@ -30,7 +30,7 @@ const spritesGenerator = function* () {
     const SPRITES_COUNT = 5;
 
     const sprites = [...Array(SPRITES_COUNT).keys()]
-        .map(i => getGIcon(`running-${i}`));
+        .map(i => getGIcon(`active-${i}`));
 
     let i;
     while (true) {
@@ -63,7 +63,7 @@ var PanelMenuButton = GObject.registerClass(
             this.ui = {
                 builder: Gtk.Builder.new(),
                 icons: {
-                    sleeping: getGIcon('sleeping'),
+                    idle: getGIcon('idle'),
                     runningGenerator: spritesGenerator(),
                 },
             };
@@ -74,7 +74,7 @@ var PanelMenuButton = GObject.registerClass(
             this.ui.builder.add_from_file(`${Extension.path}/resources/ui/extension.ui`);
 
             const icon = this.ui.builder.get_object('icon');
-            icon.set_property('gicon', this.ui.icons.sleeping);
+            icon.set_property('gicon', this.ui.icons.idle);
             if (!itemsVisibility.character) {
                 icon.hide();
             }
@@ -119,12 +119,12 @@ var PanelMenuButton = GObject.registerClass(
         initSettingsListeners() {
             this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
             this.settings = {
-                sleepingThreshold: this.gioSettings.get_int(Settings.SLEEPING_THRESHOLD),
+                idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
                 displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
             };
 
-            this.gioSettings.connect(`changed::${Settings.SLEEPING_THRESHOLD}`, () => {
-                this.settings.sleepingThreshold = this.gioSettings.get_int(Settings.SLEEPING_THRESHOLD);
+            this.gioSettings.connect(`changed::${Settings.IDLE_THRESHOLD}`, () => {
+                this.settings.idleThreshold = this.gioSettings.get_int(Settings.IDLE_THRESHOLD);
             });
 
             this.gioSettings.connect(`changed::${Settings.DISPLAYING_ITEMS}`, () => {
@@ -160,8 +160,8 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         repaintUi() {
-            const isRunningSpriteShown = this.data?.cpu > this.settings.sleepingThreshold;
-            const gicon = isRunningSpriteShown ? this.ui.icons.runningGenerator.next().value : this.ui.icons.sleeping;
+            const isRunningSpriteShown = this.data?.cpu > this.settings.idleThreshold;
+            const gicon = isRunningSpriteShown ? this.ui.icons.runningGenerator.next().value : this.ui.icons.idle;
 
             this.ui.builder.get_object('icon').set_gicon(gicon);
             this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`);

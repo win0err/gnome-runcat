@@ -11,9 +11,9 @@
 			path="/org/gnome/shell/extensions/runcat/"
 	>
 
-		<key type="i" name="sleeping-threshold">
+		<key type="i" name="idle-threshold">
 			<default>0</default>
-			<summary>Sleeping threshold</summary>
+			<summary>Idle threshold</summary>
 			<description/>
 		</key>
 

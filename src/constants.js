@@ -14,7 +14,7 @@ var PanelMenuButtonVisibility = {
 };
 
 var Settings = {
-    SLEEPING_THRESHOLD: 'sleeping-threshold',
+    IDLE_THRESHOLD: 'idle-threshold',
     DISPLAYING_ITEMS: 'displaying-items',
 };
 
