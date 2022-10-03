@@ -1,7 +1,10 @@
 'use strict';
 
+imports.gi.versions.Gtk = '4.0';
+
 const Main = imports.ui.main;
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Extension = ExtensionUtils.getCurrentExtension();
 
 const { PanelMenuButton } = Extension.imports.panelMenuButton;
 
@@ -22,5 +25,7 @@ class RunCatExtension {
 }
 
 function init() {
+    ExtensionUtils.initTranslations(Extension.metadata.uuid);
+
     return new RunCatExtension();
 }

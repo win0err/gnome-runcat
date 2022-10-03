@@ -1,12 +1,47 @@
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
+const { trySpawnCommandLine } = imports.misc.util;
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
-const { St, Clutter, GObject } = imports.gi;
+const {
+    Gio,
+    GObject,
+    Gtk,
+    GLib,
+} = imports.gi;
 
-const { Settings } = Extension.imports.settings;
-const { Timer } = Extension.imports.timer;
-const { Cpu } = Extension.imports.cpu;
-const { IconProvider } = Extension.imports.iconProvider;
+const _ = imports.gettext.domain(Extension.metadata.uuid).gettext;
+
+const {
+    SYSTEM_MONITOR_COMMAND,
+    SCHEMA_PATH,
+    PanelMenuButtonVisibility,
+    Settings,
+} = Extension.imports.constants;
+const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
+
+const getGIcon = name => Gio.icon_new_for_string(
+    `${Extension.path}/resources/icons/cat/my-${name}-symbolic.svg`,
+);
+
+// eslint-disable-next-line func-names
+const spritesGenerator = function* () {
+    const SPRITES_COUNT = 5;
+
+    const sprites = [...Array(SPRITES_COUNT).keys()]
+        .map(i => getGIcon(`active-${i}`));
+
+    let i;
+    while (true) {
+        for (i = 0; i < SPRITES_COUNT; i++) {
+            yield sprites[i];
+        }
+    }
+};
+
+// y = 5000/sqrt(x+30) - 400
+const getAnimationInterval = cpuUtilization => Math.ceil(5000 / Math.sqrt(cpuUtilization + 30) - 400);
 
 // eslint-disable-next-line
 var PanelMenuButton = GObject.registerClass(
@@ -15,131 +50,132 @@ var PanelMenuButton = GObject.registerClass(
         _init() {
             super._init(null, Extension.metadata.name);
 
-            this.cpu = new Cpu();
-            this.iconProvider = new IconProvider();
+            this.dataProviders = {
+                cpu: createCpuGenerator(),
+            };
 
-            this.ui = new Map();
-            this.timers = new Map();
-
-            this.currentSprite = 0;
-
-            this._initSettings();
-            this._initUi();
-            this._initListeners();
-            this._initTimers();
+            this.initSettingsListeners();
+            this.initUi();
+            this.initSources();
         }
 
-        get animationInterval() {
-            const utilizationCoefficient = this.cpu.utilization > 100 ? 100 : this.cpu.utilization;
+        initUi() {
+            this.ui = {
+                builder: Gtk.Builder.new(),
+                icons: {
+                    idle: getGIcon('idle'),
+                    runningGenerator: spritesGenerator(),
+                },
+            };
+            this.ui.builder.set_translation_domain(Extension.metadata.uuid);
 
-            // y = 5000/sqrt(x+30) - 400
-            return Math.ceil(5000 / Math.sqrt(utilizationCoefficient + 30) - 400);
-        }
+            const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
 
-        _initSettings() {
-            this.settings = new Settings();
+            this.ui.builder.add_from_file(`${Extension.path}/resources/ui/extension.ui`);
 
-            this.sleepingThreshold = this.settings.sleepingThreshold.get();
-            this.isRunnerHidden = this.settings.hideRunner.get();
-            this.isPercentageHidden = this.settings.hidePercentage.get();
-        }
+            const icon = this.ui.builder.get_object('icon');
+            icon.set_property('gicon', this.ui.icons.idle);
+            if (!itemsVisibility.character) {
+                icon.hide();
+            }
 
-        _initUi() {
-            const box = new St.BoxLayout({
-                style_class: 'panel-status-menu-box runcat-menu',
-            });
+            const labelBox = this.ui.builder.get_object('labelBox');
+            labelBox.add_child(this.ui.builder.get_object('label'));
+            if (!itemsVisibility.percentage) {
+                labelBox.hide();
+            }
 
-            const icon = new St.Icon({
-                style_class: 'system-status-icon runcat-menu__icon',
-                gicon: this.iconProvider.sleeping,
-            });
-            this.ui.set('icon', icon);
-            this._manageUiElementVisibility('icon', this.isRunnerHidden);
-
-            const labelBox = new St.BoxLayout({});
-            this.ui.set('labelBox', labelBox);
-
-            const label = new St.Label({
-                style_class: 'runcat-menu__label',
-                y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.FILL,
-                x_expand: true,
-            });
-            this.ui.set('label', label);
-            labelBox.add_child(label);
-            this._manageUiElementVisibility('labelBox', this.isPercentageHidden);
-
+            const box = this.ui.builder.get_object('box');
             box.add_child(icon);
             box.add_child(labelBox);
-            this.ui.set('box', box);
 
             this.add_child(box);
-        }
 
-        _manageUiElementVisibility(elementName, isHidden) {
-            const action = isHidden ? 'hide' : 'show';
-            this.ui.get(elementName)[action]();
-        }
-
-        _initListeners() {
-            this.settings.hideRunner.addListener(() => {
-                this.isRunnerHidden = this.settings.hideRunner.get();
-                this._manageUiElementVisibility('icon', this.isRunnerHidden);
-            });
-
-            this.settings.hidePercentage.addListener(() => {
-                this.isPercentageHidden = this.settings.hidePercentage.get();
-                this._manageUiElementVisibility('labelBox', this.isPercentageHidden);
-            });
-
-            this.settings.sleepingThreshold.addListener(() => {
-                this.sleepingThreshold = this.settings.sleepingThreshold.get();
-            });
-        }
-
-        _initTimers() {
-            this.timers.set('cpu', new Timer(() => {
-                try {
-                    this.cpu.refresh();
-                } catch (e) {
-                    logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
-                }
-            }, 3000));
-
-            this.timers.set(
-                'ui',
-                new Timer(() => {
-                    try {
-                        if (this.timers.has('ui')) {
-                            this.timers.get('ui').interval = this.animationInterval;
-                        }
-
-                        if (!this.isRunnerHidden) {
-                            const isRunningSpriteShown = this.cpu.utilization > this.sleepingThreshold;
-                            this.ui.get('icon').set_gicon(
-                                isRunningSpriteShown ? this.iconProvider.nextSprite : this.iconProvider.sleeping,
-                            );
-                        }
-
-                        if (!this.isPercentageHidden) {
-                            const utilization = Math.ceil(this.cpu.utilization || 0);
-                            this.ui.get('label').set_text(`${utilization}%`);
-                        }
-                    } catch (e) {
-                        logError(e, 'RuncatExtensionError'); // eslint-disable-line no-undef
-                    }
-                }, 250),
+            this.menu.addAction(
+                _('Open System Monitor'),
+                () => trySpawnCommandLine(SYSTEM_MONITOR_COMMAND),
             );
+            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            this.menu.addAction(_('Settings'), () => ExtensionUtils.openPrefs());
+        }
+
+        destroyUi() {
+            this.ui.builder.get_object('icon').destroy();
+            this.ui.builder.get_object('label').destroy();
+            this.ui.builder.get_object('labelBox').destroy();
+            this.ui.builder.get_object('box').destroy();
+        }
+
+        updateItemsVisibility() {
+            const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
+
+            const characterAction = itemsVisibility.character ? 'show' : 'hide';
+            const percentageAction = itemsVisibility.percentage ? 'show' : 'hide';
+
+            this.ui.builder.get_object('icon')[characterAction]();
+            this.ui.builder.get_object('labelBox')[percentageAction]();
+        }
+
+        initSettingsListeners() {
+            this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
+            this.settings = {
+                idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
+                displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
+            };
+
+            this.gioSettings.connect(`changed::${Settings.IDLE_THRESHOLD}`, () => {
+                this.settings.idleThreshold = this.gioSettings.get_int(Settings.IDLE_THRESHOLD);
+            });
+
+            this.gioSettings.connect(`changed::${Settings.DISPLAYING_ITEMS}`, () => {
+                this.settings.displayingItems = this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS);
+
+                const itemsVisibility = PanelMenuButtonVisibility[this.settings.displayingItems];
+
+                const characterAction = itemsVisibility.character ? 'show' : 'hide';
+                const percentageAction = itemsVisibility.percentage ? 'show' : 'hide';
+
+                this.ui.builder.get_object('icon')[characterAction]();
+                this.ui.builder.get_object('labelBox')[percentageAction]();
+            });
+        }
+
+        async initSources() {
+            this.refreshDataSourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => this.refreshData());
+            await this.refreshData();
+
+            this.repaintUiSourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 0, () => this.repaintUi());
+        }
+
+        destroySources() {
+            GLib.source_remove(this.refreshDataSourceId);
+            GLib.source_remove(this.repaintUiSourceId);
+        }
+
+        async refreshData() {
+            const { value: cpu } = await this.dataProviders.cpu.next();
+            this.data = { cpu };
+
+            return GLib.SOURCE_CONTINUE;
+        }
+
+        repaintUi() {
+            const isRunningSpriteShown = this.data?.cpu > this.settings.idleThreshold;
+            const gicon = isRunningSpriteShown ? this.ui.icons.runningGenerator.next().value : this.ui.icons.idle;
+
+            this.ui.builder.get_object('icon').set_gicon(gicon);
+            this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`);
+
+            const animationInterval = getAnimationInterval(this.data.cpu);
+
+            this.repaintUiSourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, animationInterval, () => this.repaintUi());
+
+            return GLib.SOURCE_REMOVE;
         }
 
         destroy() {
-            this.timers.forEach(timer => timer.stop());
-            this.ui.forEach(element => element.destroy());
-
-            this.settings.hideRunner.removeAllListeners();
-            this.settings.hidePercentage.removeAllListeners();
-            this.settings.sleepingThreshold.removeAllListeners();
+            this.destroySources();
+            this.destroyUi();
 
             super.destroy();
         }

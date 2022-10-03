@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+	<enum id="org.gnome.shell.extensions.runcat.DisplayingItems">
+		<value value="0" nick="character-and-percentage"/>
+		<value value="1" nick="percentage-only"/>
+		<value value="2" nick="character-only"/>
+	</enum>
+
 	<schema
 			id="org.gnome.shell.extensions.runcat"
 			path="/org/gnome/shell/extensions/runcat/"
 	>
 
-		<key type="i" name="sleeping-threshold">
+		<key type="i" name="idle-threshold">
 			<default>0</default>
-			<summary>Sleeping Threshold</summary>
+			<summary>Idle threshold</summary>
 			<description/>
 		</key>
 
-		<key type="b" name="hide-runner">
-			<default>false</default>
-			<summary>Hide Runner</summary>
+		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
+			<default>'character-and-percentage'</default>
+			<summary>Displaying items</summary>
 			<description/>
 		</key>
-
-		<key type="b" name="hide-percentage">
-			<default>false</default>
-			<summary>Hide Percentage</summary>
-			<description/>
-		</key>
-
 	</schema>
 </schemalist>

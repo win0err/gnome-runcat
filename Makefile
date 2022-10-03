@@ -1,26 +1,56 @@
 #!/usr/bin/make -f
 
-.PHONY : build clean install uninstall
-.DEFAULT_GOAL := help
+.PHONY : build clean install uninstall open-prefs spawn-gnome-shell translations
+.DEFAULT_GOAL := build
 
 UUID = runcat@kolesnikov.se
+DIST_ARCHIVE = $(UUID).shell-extension.zip
 LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
-js_sources = $(shell find src -maxdepth 1 -type f -name '*.js')
+all_sources = $(shell find src -type f)
 
-build: clean
+js_sources = $(shell cd src && find . -maxdepth 1 -type f -name '*.js')
+
+translations_sources = src/panelMenuButton.js src/prefs.js
+translations_sources += $(shell find src/resources/ui -maxdepth 1 -type f -name '*.ui')
+translations = $(shell find src/po -maxdepth 1 -type f -name '*.po')
+
+
+build: dist/$(DIST_ARCHIVE)
+
+dist:
 	mkdir -p dist/
+
+dist/$(DIST_ARCHIVE): dist $(all_sources)
 	gnome-extensions pack -f src/ \
-		$(addprefix --extra-source=../, $(js_sources)) \
+		$(addprefix --extra-source=, $(js_sources)) \
+		--extra-source=./dataProviders \
+		--extra-source=./resources \
 		--extra-source=../assets \
 		--extra-source=../LICENSE \
+		--podir=./po \
 		-o dist/
+
+
+src/po/%.po: src/po/messages.pot
+	msgmerge --update $@ src/po/messages.pot
+
+src/po/messages.pot: $(translations_sources)
+	touch src/po/messages.pot && \
+	xgettext \
+		--package-name gnome-runcat-extension \
+		--package-version 20 \
+		--from-code=UTF-8 \
+		--output=src/po/messages.pot \
+		$^
+
+translations: src/po/messages.pot $(translations)
 
 clean:
 	rm -rf dist
 
 install: uninstall build
-	gnome-extensions install dist/$(UUID).shell-extension.zip --force
+	gnome-extensions install dist/$(DIST_ARCHIVE) --force
 	gnome-extensions enable $(UUID) || true
 	echo "You need to restart GNOME Shell to apply changes"
 
@@ -31,8 +61,8 @@ uninstall:
 open-prefs:
 	gnome-extensions prefs $(UUID)
 
-spawn-gnome-shell: install
-	env MUTTER_DEBUG_DUMMY_MODE_SPECS=1280x720 \
+spawn-gnome-shell:
+	env MUTTER_DEBUG_DUMMY_MODE_SPECS=1600x800 \
 	 	MUTTER_DEBUG_DUMMY_MONITOR_SCALES=1 \
 		dbus-run-session -- gnome-shell --nested --wayland
 
