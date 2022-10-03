@@ -6,9 +6,17 @@ jobs:
     name: Test & Lint
     runs-on: ubuntu-latest
     steps:
+      - name: Install build dependencies
+        run: sudo apt install -y gettext
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
-      - run: npm install
-      - run: npm run lint
+          node-version: '16'
+      - name: Lint code
+        run: npm install && npm run lint
+      - name: Check that the translation files have been updated
+        run: |
+          make --always-make translations
+          if [ $(git diff --name-only | grep -v src/po/messages.pot | wc -l) -ne 0 ]; then
+            exit 1
+          fi
