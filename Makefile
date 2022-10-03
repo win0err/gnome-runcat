@@ -36,7 +36,6 @@ src/po/%.po: src/po/messages.pot
 	msgmerge --update $@ src/po/messages.pot
 
 src/po/messages.pot: $(translations_sources)
-	touch src/po/messages.pot && \
 	xgettext \
 		--package-name gnome-runcat-extension \
 		--package-version 20 \
