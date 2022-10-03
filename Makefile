@@ -26,7 +26,6 @@ dist/$(DIST_ARCHIVE): dist $(all_sources)
 		$(addprefix --extra-source=, $(js_sources)) \
 		--extra-source=./dataProviders \
 		--extra-source=./resources \
-		--extra-source=../assets \
 		--extra-source=../LICENSE \
 		--podir=./po \
 		-o dist/
