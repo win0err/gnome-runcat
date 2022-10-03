@@ -41,7 +41,7 @@ $ gnome-extensions install path/to/runcat@kolesnikov.se.shell-extension.zip --fo
 
 ### Manage RunCat preferences
 - Right-click on the extension button on the top bar → Settings;
-- Open GNOME Tweaks → Extensions → RunCat → ⚙️;
+- or Open GNOME Tweaks → Extensions → RunCat → ⚙️;
 - or Open [RunCat on GNOME Extensions portal](https://extensions.gnome.org/extension/2986/runcat/) → ⚙️;
 - or Manage directly in `dconf`: `dconf list /org/gnome/shell/extensions/runcat/`.
 
