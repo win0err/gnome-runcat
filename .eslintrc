@@ -4,9 +4,9 @@
     },
     "extends": "airbnb/base",
     "parserOptions": {
-        "ecmaVersion": 2020
+        "ecmaVersion": "latest"
     },
-    "ignorePatterns": ["@types/", "node_modules/", "build/"],
+    "ignorePatterns": ["@types/", "node_modules/"],
     "rules": {
         "indent": [
             "error",

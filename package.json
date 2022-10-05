@@ -2,7 +2,7 @@
   "name": "runcat",
   "private": true,
   "scripts": {
-    "generate:types": "ts-for-gir generate Gtk-4.0 Adw-1 Clutter-1.0 -e gjs",
+    "generate:types": "ts-for-gir generate --configName=.ts-for-girrc.json --ignoreVersionConflicts",
     "lint": "eslint src/"
   },
   "repository": "win0err/gnome-runcat",
