@@ -52,17 +52,17 @@ $ gnome-extensions install path/to/runcat@kolesnikov.se.shell-extension.zip --fo
 `make translations` command extracts translatable strings and updates existing translations.
 Make sure that you've run this command before pushing changes.
 
-- `make src/po/messages.pot` command extracts translatable strings;
-- `make src/po/*.po` command updates existing translations.
+- `make po/messages.pot` command extracts translatable strings;
+- `make po/*.po` command updates existing translations.
 
 ### Starting new translation
 
 To create a new translation file, use the following command: \
-`msginit -i src/po/messages.pot -l <locale> --no-translator -o src/po/<locale>.po`.
+`msginit -i po/messages.pot -l <locale> --no-translator -o po/<locale>.po`.
 
 #### Examples
-**Spanish** locale: `msginit -i src/po/messages.pot -l es --no-translator -o src/po/es.po`. \
-**Spanish (Argentina)** locale: `msginit -i src/po/messages.pot -l es_AR --no-translator -o src/po/es_AR.po`.
+**Spanish** locale: `msginit -i po/messages.pot -l es --no-translator -o po/es.po`. \
+**Spanish (Argentina)** locale: `msginit -i po/messages.pot -l es_AR --no-translator -o po/es_AR.po`.
 
 ## macOS version
 Thanks to [Takuto Nakamura](https://github.com/Kyome22/menubar_runcat) for [the macOS version](https://kyome.io/runcat/index.html) and cat images.

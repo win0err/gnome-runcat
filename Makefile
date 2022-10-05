@@ -13,7 +13,7 @@ js_sources = $(shell cd src && find . -maxdepth 1 -type f -name '*.js')
 
 translations_sources = src/panelMenuButton.js src/prefs.js
 translations_sources += $(shell find src/resources/ui -maxdepth 1 -type f -name '*.ui')
-translations = $(shell find src/po -maxdepth 1 -type f -name '*.po')
+translations = $(shell find po -maxdepth 1 -type f -name '*.po')
 
 
 build: dist/$(DIST_ARCHIVE)
@@ -21,28 +21,28 @@ build: dist/$(DIST_ARCHIVE)
 dist:
 	mkdir -p dist/
 
-dist/$(DIST_ARCHIVE): dist $(all_sources)
+dist/$(DIST_ARCHIVE): dist po/messages.pot $(translations) $(all_sources)
 	gnome-extensions pack -f src/ \
 		$(addprefix --extra-source=, $(js_sources)) \
 		--extra-source=./dataProviders \
 		--extra-source=./resources \
 		--extra-source=../LICENSE \
-		--podir=./po \
+		--podir=../po \
 		-o dist/
 
 
-src/po/%.po: src/po/messages.pot
-	msgmerge --update $@ src/po/messages.pot
+po/%.po: po/messages.pot
+	touch $@ && msgmerge --update $@ $^
 
-src/po/messages.pot: $(translations_sources)
+po/messages.pot: $(translations_sources)
 	xgettext \
-		--package-name gnome-runcat-extension \
-		--package-version 20 \
+		--package-name=gnome-runcat-extension \
+		--package-version=$$(jq .version src/metadata.json) \
 		--from-code=UTF-8 \
-		--output=src/po/messages.pot \
+		--output=$@ \
 		$^
 
-translations: src/po/messages.pot $(translations)
+translations: po/messages.pot $(translations)
 
 clean:
 	rm -rf dist
