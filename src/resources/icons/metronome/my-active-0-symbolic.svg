@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="388" height="388" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>RunCat: Sleeping Frame 0</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <title>RunCat: Sleeping Frame 0</title>
+ <path d="m193.63 53.285c-8.31 0-15 6.69-15 15v39.814l30 0.56445v-40.379c0-8.31-6.69-15-15-15zm15 55.379v149.62c0 8.31-6.69 15-15 15s-15-6.69-15-15v-150.19l-15.83-0.29688-50.371 200.46 168.47 1.0508-58.453-200.39-13.814-0.25977z" fill="#bebebe"/>
+</svg>

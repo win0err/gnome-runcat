@@ -21,6 +21,7 @@ var Settings = {
 
 var RunnerPacks = {
     CAT: 'cat',
+    METRONOME: 'metronome',
 };
 
 var RunnerStates = {
