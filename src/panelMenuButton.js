@@ -21,33 +21,33 @@ const {
 } = Extension.imports.constants;
 const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
 
-const queryGIconExists = (name, state, index) => Gio.file_new_for_path(
-    `${Extension.path}/resources/icons/${name}/my-${state}-${index}-symbolic.svg`,
-).query_exists(null);
+// returns null on error, e.g. file does not exist
+const getRunnerIcon = (pack, state, index) => Gio.FileIcon.new(Gio.File.new_for_path(
+    `${Extension.path}/resources/icons/${pack}/my-${state}-${index}-symbolic.svg`,
+));
 
-const getGIcon = (name, state, index) => Gio.icon_new_for_string(
-    `${Extension.path}/resources/icons/${name}/my-${state}-${index}-symbolic.svg`,
-);
+const getRunnerIcons = (pack, state) => {
+    const ICONS = [];
 
-const getGIconSet = (name, state) => {
     let count = 0;
-    const SET = [];
-    while (queryGIconExists(name, state, count)) {
-        SET[count] = getGIcon(name, state, count);
+    let icon;
+    // eslint-disable-next-line no-cond-assign
+    while ((icon = getRunnerIcon(pack, state, count)) != null) {
+        ICONS[count] = icon;
         count++;
     }
-    return SET;
+    return ICONS;
 };
 
 // eslint-disable-next-line func-names
-const spritesGenerator = function* (name, state) {
-    const SET = getGIconSet(name, state);
-    const LENGTH = SET.length;
+const spritesGenerator = function* (pack, state) {
+    const ICONS = getRunnerIcons(pack, state);
+    const LENGTH = ICONS.length;
 
     let i;
     while (true) {
         for (i = 0; i < LENGTH; i++) {
-            yield SET[i];
+            yield ICONS[i];
         }
     }
 };
@@ -75,7 +75,7 @@ var PanelMenuButton = GObject.registerClass(
             this.ui = {
                 builder: Gtk.Builder.new(),
                 icons: {
-                    idle: getGIcon('cat', 'idle', 0),
+                    idle: getRunnerIcon('cat', 'idle', 0),
                     idleGenerator: spritesGenerator('cat', 'idle'),
                     runningGenerator: spritesGenerator('cat', 'active'),
                 },
@@ -87,7 +87,7 @@ var PanelMenuButton = GObject.registerClass(
             this.ui.builder.add_from_file(`${Extension.path}/resources/ui/extension.ui`);
 
             const icon = this.ui.builder.get_object('icon');
-            icon.set_property('gicon', this.ui.icons.idleGenerator.next().value);
+            icon.set_property('gicon', this.ui.icons.idle);
             if (!itemsVisibility.character) {
                 icon.hide();
             }
