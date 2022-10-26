@@ -1,14 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="388" height="388" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
- <metadata>
-  <rdf:RDF>
-   <cc:Work rdf:about="">
-    <dc:format>image/svg+xml</dc:format>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:title>RunCat: Sleeping Frame 1</dc:title>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <title>RunCat: Sleeping Frame 1</title>
- <path d="m213.58 70.762v10.5h22.73l-24.451 28.781v10.045h41.586v-10.588h-25.061l24.205-28.014v-10.725zm47.955 57.459v7.4238l18.307 2e-3 -19.695 20.355v7.1055h33.498v-7.4883h-20.186l19.492-19.812v-7.586zm-196.53 33.314c-3.616 0.0715-7.298 0.74132-10.74 2.0801-13.769 5.355-43.6 19.123-43.6 61.578s25.626 61.938 69.229 74.967c43.603 13.029 89.323 13.234 108.44 13.234s140.54 2.0613 147.81-5.9707c0 0 41.252-12.681 41.252-44.348 4e-3 -25.239-3.591-31.011-11.748-39.99v-4e-3s11.752-20.338 9.1309-34.047c-1.842-9.637-31.391 18.59-31.391 18.59l-6.0918-1.5566s8.0328-29.067 0.38281-30.98-29.452 15.299-41.309 30.98c0 0-20.654 5.1195-29.068 31.438s-43.194-31.654-56.199-40.451-31.006-24.262-72.697-11.258c-41.691 13.004-54.688 34.988-54.693 53.549 0 15.3 2.6777 22.184-1.5293 28.686 0 0-47.427-4.9716-43.6-43.6s32.128-32.511 36.717-32.893c4.589-0.382 14.152-4.9723 12.24-16.447-1.434-8.6062-11.691-13.771-22.539-13.557zm231.78 22.037v2.2266h5.6738l-6.1035 6.1055v2.1309h10.381v-2.2461h-6.2559l6.041-5.9414v-2.2754zm30.041 7.6406c3.845 0 0 11.533 0 11.533s-5.9132-2.07-14.785 0c0 0 10.94-11.533 14.785-11.533zm34.18 16.072c0.2965 1e-3 0.49839 0.11612 0.57227 0.375 0.591 2.071-3.043 9.6719-3.043 9.6719-1.774-2.366-6.3223-4.5488-6.3223-4.5488s6.7175-5.5083 8.793-5.498z" fill="#bebebe"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="388"
+   height="388"
+   version="1.1"
+   id="svg379"
+   sodipodi:docname="my-idle-1-symbolic.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs383" />
+  <sodipodi:namedview
+     id="namedview381"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="6.0635395"
+     inkscape:cx="300.31964"
+     inkscape:cy="171.02222"
+     inkscape:window-width="1128"
+     inkscape:window-height="683"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg379" />
+  <metadata
+     id="metadata373">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>RunCat: Sleeping Frame 1</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="title375">RunCat: Sleeping Frame 1</title>
+  <path
+     d="m 213.58,70.762 v 10.5 h 22.73 l -24.451,28.781 v 10.045 h 41.586 V 109.5 H 228.384 L 252.589,81.486 V 70.761 Z m 47.955,57.459 v 7.4238 l 18.307,0.002 -19.695,20.355 v 7.1055 h 33.498 v -7.4883 h -20.186 l 19.492,-19.812 v -7.586 z m -196.53,33.314 c -3.616,0.0715 -7.298,0.74132 -10.74,2.0801 -13.769,5.355 -43.6,19.123 -43.6,61.578 0,42.455 25.626,61.938 69.229,74.967 43.603,13.029 89.323,13.234 108.44,13.234 19.117,0 140.54,2.0613 147.81,-5.9707 0,0 41.252,-12.681 41.252,-44.348 0.004,-25.239 -3.591,-31.011 -11.748,-39.99 v -0.004 c 0,0 11.752,-20.338 9.1309,-34.047 -1.842,-9.637 -31.391,18.59 -31.391,18.59 l -6.0918,-1.5566 c 0,0 8.0328,-29.067 0.38281,-30.98 -7.64999,-1.913 -29.452,15.299 -41.309,30.98 0,0 -20.654,5.1195 -29.068,31.438 -8.414,26.3185 -43.194,-31.654 -56.199,-40.451 -13.005,-8.797 -31.006,-24.262 -72.697,-11.258 -41.691,13.004 -54.688,34.988 -54.693,53.549 0,15.3 2.6777,22.184 -1.5293,28.686 0,0 -47.427,-4.9716 -43.6,-43.6 3.827,-38.6284 32.128,-32.511 36.717,-32.893 4.589,-0.382 14.152,-4.9723 12.24,-16.447 -1.434,-8.6062 -11.691,-13.771 -22.539,-13.557 z m 261.821,29.6776 c 3.845,0 0,11.533 0,11.533 0,0 -5.9132,-2.07 -14.785,0 0,0 10.94,-11.533 14.785,-11.533 z m 34.18,16.072 c 0.2965,10e-4 0.49839,0.11612 0.57227,0.375 0.591,2.071 -3.043,9.6719 -3.043,9.6719 -1.774,-2.366 -6.3223,-4.5488 -6.3223,-4.5488 0,0 6.7175,-5.5083 8.793,-5.498 z"
+     fill="#bebebe"
+     id="path377"
+     sodipodi:nodetypes="ccccccccccccccccccccccccssscccccccscsssccsssccsccscscccc" />
+  <g
+     id="g397"
+     transform="matrix(0.1744349,0,0,0.1744349,266.53625,159.57723)">
+    <path
+       d="m 242.882,106.623 v 9.0527 l 22.324,0.002 -24.016,24.822 v 8.6641 h 40.844 v -9.1328 h -24.613 l 23.77,-24.158 v -9.25 z"
+       style="fill:#bebebe"
+       id="path399" />
+  </g>
 </svg>
