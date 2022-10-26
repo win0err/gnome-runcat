@@ -19,4 +19,13 @@ var Settings = {
     DISPLAYING_ITEMS: 'displaying-items',
 };
 
+var RunnerPacks = {
+    CAT: 'cat',
+};
+
+var RunnerStates = {
+    IDLE: 'idle',
+    ACTIVE: 'active',
+};
+
 var SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r';

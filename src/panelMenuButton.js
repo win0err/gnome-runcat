@@ -18,6 +18,8 @@ const {
     SCHEMA_PATH,
     PanelMenuButtonVisibility,
     Settings,
+    RunnerPacks,
+    RunnerStates,
 } = Extension.imports.constants;
 const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
 
@@ -75,9 +77,9 @@ var PanelMenuButton = GObject.registerClass(
             this.ui = {
                 builder: Gtk.Builder.new(),
                 icons: {
-                    idle: getRunnerIcon('cat', 'idle', 0),
-                    idleGenerator: spritesGenerator('cat', 'idle'),
-                    runningGenerator: spritesGenerator('cat', 'active'),
+                    idle: getRunnerIcon(RunnerPacks.CAT, RunnerStates.IDLE, 0),
+                    idleGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.IDLE),
+                    runningGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.ACTIVE),
                 },
             };
             this.ui.builder.set_translation_domain(Extension.metadata.uuid);
