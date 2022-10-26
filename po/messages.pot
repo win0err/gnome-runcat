@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-25 18:23-0600\n"
+"POT-Creation-Date: 2022-10-25 18:36-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,46 +49,46 @@ msgstr ""
 msgid "Idle animation"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:47
+#: src/resources/ui/preferences.ui:48
 msgid "Displaying items"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:51
+#: src/resources/ui/preferences.ui:52
 msgid "Character and percentage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:52
+#: src/resources/ui/preferences.ui:53
 msgid "Percentage only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:53
+#: src/resources/ui/preferences.ui:54
 msgid "Character only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:64
+#: src/resources/ui/preferences.ui:65
 msgid "Reset preferences"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:65
+#: src/resources/ui/preferences.ui:66
 msgid "Reset RunCat preferences to defaults"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:78
+#: src/resources/ui/preferences.ui:79
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:97
+#: src/resources/ui/preferences.ui:98
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:101
+#: src/resources/ui/preferences.ui:102
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:111
+#: src/resources/ui/preferences.ui:112
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:115
+#: src/resources/ui/preferences.ui:116
 msgid "About RunCat"
 msgstr ""

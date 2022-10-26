@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-25 18:23-0600\n"
+"POT-Creation-Date: 2022-10-25 18:36-0600\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -50,48 +50,48 @@ msgstr "Порог бездействия"
 msgid "Idle animation"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:47
+#: src/resources/ui/preferences.ui:48
 msgid "Displaying items"
 msgstr "Отображаемые элементы"
 
-#: src/resources/ui/preferences.ui:51
+#: src/resources/ui/preferences.ui:52
 msgid "Character and percentage"
 msgstr "Персонаж и проценты"
 
-#: src/resources/ui/preferences.ui:52
+#: src/resources/ui/preferences.ui:53
 msgid "Percentage only"
 msgstr "Только проценты"
 
-#: src/resources/ui/preferences.ui:53
+#: src/resources/ui/preferences.ui:54
 msgid "Character only"
 msgstr "Только персонаж"
 
-#: src/resources/ui/preferences.ui:64
+#: src/resources/ui/preferences.ui:65
 msgid "Reset preferences"
 msgstr "Сбросить настройки"
 
-#: src/resources/ui/preferences.ui:65
+#: src/resources/ui/preferences.ui:66
 msgid "Reset RunCat preferences to defaults"
 msgstr "Сбросить настройки RunCat к значениям по умолчанию"
 
-#: src/resources/ui/preferences.ui:78
+#: src/resources/ui/preferences.ui:79
 msgid "Reset"
 msgstr "Сбрость"
 
-#: src/resources/ui/preferences.ui:97
+#: src/resources/ui/preferences.ui:98
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 "Котик, который показывает загрузку\n"
 " процессора скоростью бега"
 
-#: src/resources/ui/preferences.ui:101
+#: src/resources/ui/preferences.ui:102
 msgid "Visit RunCat's GitHub page"
 msgstr "Посетить страницу RunCat на GitHub"
 
-#: src/resources/ui/preferences.ui:111
+#: src/resources/ui/preferences.ui:112
 msgid "Visit Homepage"
 msgstr "Открыть домашнюю страницу"
 
-#: src/resources/ui/preferences.ui:115
+#: src/resources/ui/preferences.ui:116
 msgid "About RunCat"
 msgstr "О RunCat"
