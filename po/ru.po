@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 11:36-0600\n"
+"POT-Creation-Date: 2022-10-26 22:21-0600\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: src/panelMenuButton.js:110
+#: src/panelMenuButton.js:112
 msgid "Open System Monitor"
 msgstr "Открыть Системный монитор"
 
-#: src/panelMenuButton.js:114
+#: src/panelMenuButton.js:116
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/prefs.js:55
+#: src/prefs.js:63
 msgid "RunCat Settings"
 msgstr "Настройки RunCat"
 
-#: src/prefs.js:66
+#: src/prefs.js:74
 msgid "Version"
 msgstr "Версия"
 
@@ -66,32 +66,44 @@ msgstr "Только проценты"
 msgid "Character only"
 msgstr "Только персонаж"
 
-#: src/resources/ui/preferences.ui:65
+#: src/resources/ui/preferences.ui:63
+msgid "Runner pack"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:67
+msgid "Cat"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:68
+msgid "Metronome"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:79
 msgid "Reset preferences"
 msgstr "Сбросить настройки"
 
-#: src/resources/ui/preferences.ui:66
+#: src/resources/ui/preferences.ui:80
 msgid "Reset RunCat preferences to defaults"
 msgstr "Сбросить настройки RunCat к значениям по умолчанию"
 
-#: src/resources/ui/preferences.ui:79
+#: src/resources/ui/preferences.ui:93
 msgid "Reset"
 msgstr "Сбрость"
 
-#: src/resources/ui/preferences.ui:98
+#: src/resources/ui/preferences.ui:112
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 "Котик, который показывает загрузку\n"
 " процессора скоростью бега"
 
-#: src/resources/ui/preferences.ui:102
+#: src/resources/ui/preferences.ui:116
 msgid "Visit RunCat's GitHub page"
 msgstr "Посетить страницу RunCat на GitHub"
 
-#: src/resources/ui/preferences.ui:112
+#: src/resources/ui/preferences.ui:126
 msgid "Visit Homepage"
 msgstr "Открыть домашнюю страницу"
 
-#: src/resources/ui/preferences.ui:116
+#: src/resources/ui/preferences.ui:130
 msgid "About RunCat"
 msgstr "О RunCat"

@@ -35,17 +35,25 @@ function fillPreferencesWindow(window) {
         Gio.SettingsBindFlags.DEFAULT,
     );
 
-    const combo = builder.get_object(Settings.DISPLAYING_ITEMS);
-    combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
-    combo.connect('notify::selected', widget => {
+    const displayingItemsCombo = builder.get_object(Settings.DISPLAYING_ITEMS);
+    displayingItemsCombo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
+    displayingItemsCombo.connect('notify::selected', widget => {
         settings.set_enum(Settings.DISPLAYING_ITEMS, widget.selected);
+    });
+
+    const runnerPackCombo = builder.get_object(Settings.RUNNER_PACK);
+    runnerPackCombo.set_selected(settings.get_enum(Settings.RUNNER_PACK));
+    runnerPackCombo.connect('notify::selected', widget => {
+        settings.set_enum(Settings.RUNNER_PACK, widget.selected);
     });
 
     builder.get_object('reset').connect('clicked', () => {
         settings.reset(Settings.IDLE_THRESHOLD);
         settings.reset(Settings.IDLE_ANIMATION);
         settings.reset(Settings.DISPLAYING_ITEMS);
-        combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
+        settings.reset(Settings.RUNNER_PACK);
+        displayingItemsCombo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
+        runnerPackCombo.set_selected(settings.get_enum(Settings.RUNNER_PACK));
     });
 
     const page = builder.get_object('preferences-general');

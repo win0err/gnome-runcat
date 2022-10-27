@@ -17,8 +17,8 @@ const {
     SYSTEM_MONITOR_COMMAND,
     SCHEMA_PATH,
     PanelMenuButtonVisibility,
+    RunnerPack,
     Settings,
-    RunnerPacks,
     RunnerStates,
 } = Extension.imports.constants;
 const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
@@ -74,12 +74,14 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         initUi() {
+            const runnerPack = RunnerPack[this.settings.runnerPack];
+
             this.ui = {
                 builder: Gtk.Builder.new(),
                 icons: {
-                    idle: getGIcon(RunnerPacks.CAT, RunnerStates.IDLE, 0),
-                    idleGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.IDLE),
-                    runningGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.ACTIVE),
+                    idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
+                    idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
+                    runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
                 },
             };
             this.ui.builder.set_translation_domain(Extension.metadata.uuid);
@@ -137,6 +139,7 @@ var PanelMenuButton = GObject.registerClass(
                 idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
                 idleAnimation: this.gioSettings.get_boolean(Settings.IDLE_ANIMATION),
                 displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
+                runnerPack: this.gioSettings.get_enum(Settings.RUNNER_PACK),
             };
 
             this.gioSettings.connect(`changed::${Settings.IDLE_THRESHOLD}`, () => {
@@ -157,6 +160,18 @@ var PanelMenuButton = GObject.registerClass(
 
                 this.ui.builder.get_object('icon')[characterAction]();
                 this.ui.builder.get_object('labelBox')[percentageAction]();
+            });
+
+            this.gioSettings.connect(`changed::${Settings.RUNNER_PACK}`, () => {
+                this.settings.runnerPack = this.gioSettings.get_enum(Settings.RUNNER_PACK);
+
+                const runnerPack = RunnerPack[this.settings.runnerPack];
+
+                this.ui.icons = {
+                    idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
+                    idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
+                    runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
+                };
             });
         }
 

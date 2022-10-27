@@ -6,6 +6,11 @@
 		<value value="2" nick="character-only"/>
 	</enum>
 
+	<enum id="org.gnome.shell.extensions.runcat.RunnerPacks">
+		<value value="0" nick="cat"/>
+		<value value="1" nick="metronome"/>
+	</enum>
+
 	<schema
 			id="org.gnome.shell.extensions.runcat"
 			path="/org/gnome/shell/extensions/runcat/"
@@ -29,5 +34,11 @@
 			<description/>
 		</key>
 
+		<key name="runner-pack" enum="org.gnome.shell.extensions.runcat.RunnerPacks">
+			<default>'cat'</default>
+			<summary>Runner pack</summary>
+			<description/>
+		</key>
+		
 	</schema>
 </schemalist>

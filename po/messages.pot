@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 12:26-0600\n"
+"POT-Creation-Date: 2022-10-26 22:21-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/panelMenuButton.js:110
+#: src/panelMenuButton.js:112
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/panelMenuButton.js:114
+#: src/panelMenuButton.js:116
 msgid "Settings"
 msgstr ""
 
-#: src/prefs.js:55
+#: src/prefs.js:63
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.js:66
+#: src/prefs.js:74
 msgid "Version"
 msgstr ""
 
@@ -65,30 +65,42 @@ msgstr ""
 msgid "Character only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:65
-msgid "Reset preferences"
+#: src/resources/ui/preferences.ui:63
+msgid "Runner pack"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:66
-msgid "Reset RunCat preferences to defaults"
+#: src/resources/ui/preferences.ui:67
+msgid "Cat"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:68
+msgid "Metronome"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:79
+msgid "Reset preferences"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:80
+msgid "Reset RunCat preferences to defaults"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:93
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:98
+#: src/resources/ui/preferences.ui:112
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:102
+#: src/resources/ui/preferences.ui:116
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:112
+#: src/resources/ui/preferences.ui:126
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:116
+#: src/resources/ui/preferences.ui:130
 msgid "About RunCat"
 msgstr ""

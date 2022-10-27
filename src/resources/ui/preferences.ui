@@ -57,6 +57,20 @@
                         </property>
                     </object>
                 </child>
+                
+                <child>
+                    <object class="AdwComboRow" id="runner-pack">
+                        <property name="title" translatable="yes">Runner pack</property>
+                        <property name="model">
+                            <object class="GtkStringList">
+                                <items>
+                                    <item translatable="yes">Cat</item>
+                                    <item translatable="yes">Metronome</item>
+                                </items>
+                            </object>
+                        </property>
+                    </object>
+                </child>
             </object>
         </child>
 
