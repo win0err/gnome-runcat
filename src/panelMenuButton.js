@@ -74,15 +74,9 @@ var PanelMenuButton = GObject.registerClass(
         }
 
         initUi() {
-            const runnerPack = RunnerPack[this.settings.runnerPack];
-
             this.ui = {
                 builder: Gtk.Builder.new(),
-                icons: {
-                    idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
-                    idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
-                    runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
-                },
+                icons: this.loadUiIcons(),
             };
             this.ui.builder.set_translation_domain(Extension.metadata.uuid);
 
@@ -133,6 +127,16 @@ var PanelMenuButton = GObject.registerClass(
             this.ui.builder.get_object('labelBox')[percentageAction]();
         }
 
+        loadUiIcons() {
+            const runnerPack = RunnerPack[this.settings.runnerPack];
+
+            return {
+                idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
+                idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
+                runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
+            };
+        }
+
         initSettingsListeners() {
             this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
             this.settings = {
@@ -164,14 +168,7 @@ var PanelMenuButton = GObject.registerClass(
 
             this.gioSettings.connect(`changed::${Settings.RUNNER_PACK}`, () => {
                 this.settings.runnerPack = this.gioSettings.get_enum(Settings.RUNNER_PACK);
-
-                const runnerPack = RunnerPack[this.settings.runnerPack];
-
-                this.ui.icons = {
-                    idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
-                    idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
-                    runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
-                };
+                this.ui.icons = this.loadUiIcons();
             });
         }
 
