@@ -17,10 +17,17 @@
 			<description/>
 		</key>
 
+		<key type="b" name="animated-idle">
+			<default>true</default>
+			<summary>Animated idle</summary>
+			<description/>
+		</key>
+
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
 			<default>'character-and-percentage'</default>
 			<summary>Displaying items</summary>
 			<description/>
 		</key>
+
 	</schema>
 </schemalist>
