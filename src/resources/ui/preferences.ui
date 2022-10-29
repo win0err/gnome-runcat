@@ -31,11 +31,11 @@
 
                 <child>
                     <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Idle animation</property>
-                        <property name="activatable-widget">idle-animation</property>
+                        <property name="title" translatable="yes">Animated idle</property>
+                        <property name="activatable-widget">animated-idle</property>
 
                         <child>
-                            <object class="GtkSwitch" id="idle-animation">
+                            <object class="GtkSwitch" id="animated-idle">
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
                             </object>

@@ -17,9 +17,9 @@
 			<description/>
 		</key>
 
-		<key type="b" name="idle-animation">
+		<key type="b" name="animated-idle">
 			<default>true</default>
-			<summary>Idle animation</summary>
+			<summary>Animated idle</summary>
 			<description/>
 		</key>
 
