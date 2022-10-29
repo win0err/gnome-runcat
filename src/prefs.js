@@ -28,6 +28,13 @@ function fillPreferencesWindow(window) {
         Gio.SettingsBindFlags.DEFAULT,
     );
 
+    settings.bind(
+        Settings.ANIMATED_IDLE,
+        builder.get_object(Settings.ANIMATED_IDLE),
+        'state',
+        Gio.SettingsBindFlags.DEFAULT,
+    );
+
     const combo = builder.get_object(Settings.DISPLAYING_ITEMS);
     combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
     combo.connect('notify::selected', widget => {
@@ -36,7 +43,7 @@ function fillPreferencesWindow(window) {
 
     builder.get_object('reset').connect('clicked', () => {
         settings.reset(Settings.IDLE_THRESHOLD);
-
+        settings.reset(Settings.ANIMATED_IDLE);
         settings.reset(Settings.DISPLAYING_ITEMS);
         combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
     });
