@@ -141,7 +141,7 @@ var PanelMenuButton = GObject.registerClass(
             this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
             this.settings = {
                 idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
-                idleAnimation: this.gioSettings.get_boolean(Settings.IDLE_ANIMATION),
+                animatedIdle: this.gioSettings.get_boolean(Settings.ANIMATED_IDLE),
                 displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
                 runnerPack: this.gioSettings.get_enum(Settings.RUNNER_PACK),
             };
@@ -150,8 +150,8 @@ var PanelMenuButton = GObject.registerClass(
                 this.settings.idleThreshold = this.gioSettings.get_int(Settings.IDLE_THRESHOLD);
             });
 
-            this.gioSettings.connect(`changed::${Settings.IDLE_ANIMATION}`, () => {
-                this.settings.idleAnimation = this.gioSettings.get_boolean(Settings.IDLE_ANIMATION);
+            this.gioSettings.connect(`changed::${Settings.ANIMATED_IDLE}`, () => {
+                this.settings.animatedIdle = this.gioSettings.get_boolean(Settings.ANIMATED_IDLE);
             });
 
             this.gioSettings.connect(`changed::${Settings.DISPLAYING_ITEMS}`, () => {
@@ -193,7 +193,7 @@ var PanelMenuButton = GObject.registerClass(
 
         repaintUi() {
             const isRunningSpriteShown = this.data?.cpu > this.settings.idleThreshold;
-            const idleSprite = this.settings.idleAnimation
+            const idleSprite = this.settings.animatedIdle
                 ? this.ui.icons.idleGenerator.next().value
                 : this.ui.icons.idle;
             const gicon = isRunningSpriteShown

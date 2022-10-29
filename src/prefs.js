@@ -29,8 +29,8 @@ function fillPreferencesWindow(window) {
     );
 
     settings.bind(
-        Settings.IDLE_ANIMATION,
-        builder.get_object(Settings.IDLE_ANIMATION),
+        Settings.ANIMATED_IDLE,
+        builder.get_object(Settings.ANIMATED_IDLE),
         'state',
         Gio.SettingsBindFlags.DEFAULT,
     );
@@ -49,7 +49,7 @@ function fillPreferencesWindow(window) {
 
     builder.get_object('reset').connect('clicked', () => {
         settings.reset(Settings.IDLE_THRESHOLD);
-        settings.reset(Settings.IDLE_ANIMATION);
+        settings.reset(Settings.ANIMATED_IDLE);
         settings.reset(Settings.DISPLAYING_ITEMS);
         settings.reset(Settings.RUNNER_PACK);
         displayingItemsCombo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
