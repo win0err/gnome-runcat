@@ -13,14 +13,19 @@ var PanelMenuButtonVisibility = {
     [CHARACTER_ONLY]: { character: true, percentage: false },
 };
 
+const CAT = 0;
+const METRONOME = 1;
+
+var RunnerPack = {
+    [CAT]: 'cat',
+    [METRONOME]: 'metronome',
+};
+
 var Settings = {
     IDLE_THRESHOLD: 'idle-threshold',
     ANIMATED_IDLE: 'animated-idle',
     DISPLAYING_ITEMS: 'displaying-items',
-};
-
-var RunnerPacks = {
-    CAT: 'cat',
+    RUNNER_PACK: 'runner-pack',
 };
 
 var RunnerStates = {

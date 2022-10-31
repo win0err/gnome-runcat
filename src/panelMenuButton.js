@@ -17,8 +17,8 @@ const {
     SYSTEM_MONITOR_COMMAND,
     SCHEMA_PATH,
     PanelMenuButtonVisibility,
+    RunnerPack,
     Settings,
-    RunnerPacks,
     RunnerStates,
 } = Extension.imports.constants;
 const { createGenerator: createCpuGenerator } = Extension.imports.dataProviders.cpu;
@@ -76,11 +76,7 @@ var PanelMenuButton = GObject.registerClass(
         initUi() {
             this.ui = {
                 builder: Gtk.Builder.new(),
-                icons: {
-                    idle: getGIcon(RunnerPacks.CAT, RunnerStates.IDLE, 0),
-                    idleGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.IDLE),
-                    runningGenerator: spritesGenerator(RunnerPacks.CAT, RunnerStates.ACTIVE),
-                },
+                icons: this.loadUiIcons(),
             };
             this.ui.builder.set_translation_domain(Extension.metadata.uuid);
 
@@ -131,12 +127,23 @@ var PanelMenuButton = GObject.registerClass(
             this.ui.builder.get_object('labelBox')[percentageAction]();
         }
 
+        loadUiIcons() {
+            const runnerPack = RunnerPack[this.settings.runnerPack];
+
+            return {
+                idle: getGIcon(runnerPack, RunnerStates.IDLE, 0),
+                idleGenerator: spritesGenerator(runnerPack, RunnerStates.IDLE),
+                runningGenerator: spritesGenerator(runnerPack, RunnerStates.ACTIVE),
+            };
+        }
+
         initSettingsListeners() {
             this.gioSettings = ExtensionUtils.getSettings(SCHEMA_PATH);
             this.settings = {
                 idleThreshold: this.gioSettings.get_int(Settings.IDLE_THRESHOLD),
                 animatedIdle: this.gioSettings.get_boolean(Settings.ANIMATED_IDLE),
                 displayingItems: this.gioSettings.get_enum(Settings.DISPLAYING_ITEMS),
+                runnerPack: this.gioSettings.get_enum(Settings.RUNNER_PACK),
             };
 
             this.gioSettings.connect(`changed::${Settings.IDLE_THRESHOLD}`, () => {
@@ -157,6 +164,11 @@ var PanelMenuButton = GObject.registerClass(
 
                 this.ui.builder.get_object('icon')[characterAction]();
                 this.ui.builder.get_object('labelBox')[percentageAction]();
+            });
+
+            this.gioSettings.connect(`changed::${Settings.RUNNER_PACK}`, () => {
+                this.settings.runnerPack = this.gioSettings.get_enum(Settings.RUNNER_PACK);
+                this.ui.icons = this.loadUiIcons();
             });
         }
 
