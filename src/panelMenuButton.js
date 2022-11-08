@@ -164,7 +164,10 @@ var PanelMenuButton = GObject.registerClass(
             const gicon = isRunningSpriteShown ? this.ui.icons.runningGenerator.next().value : this.ui.icons.idle;
 
             this.ui.builder.get_object('icon').set_gicon(gicon);
-            this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`);
+            if(Math.round(this.data.cpu)<10)
+                this.ui.builder.get_object('label').set_text(`  ${Math.round(this.data.cpu)}%`)
+            else
+                this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`)
 
             const animationInterval = getAnimationInterval(this.data.cpu);
 
