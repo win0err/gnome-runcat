@@ -18,5 +18,5 @@
         "/usr/share/gnome-shell",
         "/usr/lib64/mutter-10/"
     ],
-    "outdir": "./@types"
+    "outdir": "node_modules/@types"
 }
