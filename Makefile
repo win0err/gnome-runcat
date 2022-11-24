@@ -50,7 +50,7 @@ clean:
 install: uninstall build
 	gnome-extensions install dist/$(DIST_ARCHIVE) --force
 	gnome-extensions enable $(UUID) || true
-	echo "You need to restart GNOME Shell to apply changes"
+	@echo "You need to restart GNOME Shell to apply changes"
 
 uninstall:
 	gnome-extensions uninstall $(UUID) || true

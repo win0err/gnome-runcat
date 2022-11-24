@@ -162,10 +162,10 @@ var PanelMenuButton = GObject.registerClass(
         repaintUi() {
             const isRunningSpriteShown = this.data?.cpu > this.settings.idleThreshold;
             const gicon = isRunningSpriteShown ? this.ui.icons.runningGenerator.next().value : this.ui.icons.idle;
-
+        
             this.ui.builder.get_object('icon').set_gicon(gicon);
             if(Math.round(this.data.cpu)<10)
-                this.ui.builder.get_object('label').set_text(`  ${Math.round(this.data.cpu)}%`)
+                this.ui.builder.get_object('label').set_text(`  ${Math.round(this.data.cpu)}%`.pad)
             else
                 this.ui.builder.get_object('label').set_text(`${Math.round(this.data.cpu)}%`)
 
