@@ -7,53 +7,59 @@ const { readFile } = Extension.imports.utils;
 var createGenerator = async function* () {
     const procStatFile = Gio.File.new_for_path('/proc/stat');
 
-    let prevActive = 0;
-    let prevTotal = 0;
+    let prevActive = [];
+    let prevTotal = [];
 
     while (true) {
         // eslint-disable-next-line no-await-in-loop
         const procStatContents = await readFile(procStatFile);
 
-        const cpuInfo = procStatContents
-            .split('\n')[0].trim()
-            .split(/[\s]+/)
-            .map(n => parseInt(n, 10));
+        const cpuMatrix = procStatContents
+            .split('\n')
+            .filter(l => l.startsWith('cpu'))   // we don't have to worry for aggragated value of CPU at line #0, since it is always smaller than the individual values
+            .map(l => l.trim()
+                .split(/[\s]+/)
+                .map(n => parseInt(n, 10))
+            ).map((cpuInfo, index) => {
+                const [
+                    , // eslint-disable-line
+                    user,
+                    nice,
+                    system,
+                    idle,
+                    iowait,
+                    irq, // eslint-disable-line
+                    softirq,
+                    steal,
+                    guest, // eslint-disable-line
+                ] = cpuInfo;
 
-        const [
-            , // eslint-disable-line
-            user,
-            nice,
-            system,
-            idle,
-            iowait,
-            irq, // eslint-disable-line
-            softirq,
-            steal,
-            guest, // eslint-disable-line
-        ] = cpuInfo;
+                const active = user + system + nice + softirq + steal;
+                const total = user + system + nice + softirq + steal + idle + iowait;
 
-        const active = user + system + nice + softirq + steal;
-        const total = user + system + nice + softirq + steal + idle + iowait;
+                // eslint-disable-next-line object-curly-newline
+                const data = JSON.stringify({ total, active, prevTotal, prevActive });
+        
+                let utilization = 0;   
+                if(typeof prevActive[index] !== 'undefined') {
+                    utilization = 100 * ((active - prevActive[index]) / (total - prevTotal[index]));
+                }
 
-        // eslint-disable-next-line object-curly-newline
-        const data = JSON.stringify({ total, active, prevTotal, prevActive });
+                if (Number.isNaN(utilization) || !Number.isFinite(utilization)) {
+                    log(`cpu utilization is ${utilization}, data: ${data}`);
+                    utilization = 0;
+                }
+                if (utilization > 100) {
+                    log(`cpu utilization is ${utilization}, data: ${data}`);
+                }
 
-        let utilization = 100 * ((active - prevActive) / (total - prevTotal));
-        if (Number.isNaN(utilization) || !Number.isFinite(utilization)) {
-            log(`cpu utilization is ${utilization}, data: ${data}`);
+                prevActive[index] = active;
+                prevTotal[index] = total;
 
-            utilization = 0;
-        }
+                return Math.round(utilization);
+            });
 
-        if (utilization > 100) {
-            log(`cpu utilization is ${utilization}, data: ${data}`);
-
-            utilization = 100;
-        }
-
-        prevActive = active;
-        prevTotal = total;
-
-        yield utilization;
+        const maxUtilization = cpuMatrix.reduce((a,b) => Math.max(a,b));
+        yield maxUtilization;
     }
 };
