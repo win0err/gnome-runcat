@@ -6,4 +6,7 @@
 .runcat-menu__label {
     font-size: .9em;
     line-height: 1;
+    width: 2em;
+    padding-right: 0.5em;
+    text-align: right;
 }
