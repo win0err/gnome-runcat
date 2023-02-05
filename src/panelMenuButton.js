@@ -85,6 +85,11 @@ var PanelMenuButton = GObject.registerClass(
                 labelBox.hide();
             }
 
+            if (itemsVisibility.percentage && itemsVisibility.percentage) {
+                //icon.set_property('style',"padding-right: 0px;");
+                labelBox.set_property('style',"padding-left: 0px;");
+            }
+
             const box = this.ui.builder.get_object('box');
             box.add_child(icon);
             box.add_child(labelBox);
