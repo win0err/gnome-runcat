@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-05 02:43+0300\n"
+"POT-Creation-Date: 2023-02-07 10:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/panelMenuButton.js:95
+#: src/panelMenuButton.js:99
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/panelMenuButton.js:99
+#: src/panelMenuButton.js:103
 msgid "Settings"
 msgstr ""
 
