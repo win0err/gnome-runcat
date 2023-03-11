@@ -76,9 +76,7 @@ msgstr "Сбрость"
 
 #: src/resources/ui/preferences.ui:84
 msgid "The cat tells you the CPU usage by running speed"
-msgstr ""
-"Котик, который показывает загрузку\n"
-" процессора скоростью бега"
+msgstr "Котик, который показывает загрузку процессора скоростью бега"
 
 #: src/resources/ui/preferences.ui:88
 msgid "Visit RunCat's GitHub page"
