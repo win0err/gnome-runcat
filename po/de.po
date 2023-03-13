@@ -19,7 +19,7 @@ msgstr ""
 
 #: src/panelMenuButton.js:95
 msgid "Open System Monitor"
-msgstr "Open System Monitor"
+msgstr "Systemüberwachung öffnen"
 
 #: src/panelMenuButton.js:99
 msgid "Settings"
