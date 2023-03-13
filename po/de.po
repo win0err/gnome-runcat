@@ -1,0 +1,90 @@
+# German translation for gnome-runcat-extension package.
+# Copyright (C) 2023 WebSnke
+# This file is distributed under the same license as the gnome-runcat-extension package.
+# WebSnke <websnke@tutanota.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-runcat-extension 21\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-13 16:30+0100\n"
+"PO-Revision-Date: 2023-03-13 16:30+0100\n"
+"Last-Translator: WebSnke\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/panelMenuButton.js:95
+msgid "Open System Monitor"
+msgstr "Open System Monitor"
+
+#: src/panelMenuButton.js:99
+msgid "Settings"
+msgstr "Settings"
+
+#: src/prefs.js:48
+msgid "RunCat Settings"
+msgstr "RunCat Settings"
+
+#: src/prefs.js:59
+msgid "Version"
+msgstr "Version"
+
+#: src/resources/ui/preferences.ui:6
+msgid "General"
+msgstr "Allgemein"
+
+#: src/resources/ui/preferences.ui:10
+msgid "General Preferences"
+msgstr "Allgemeine Einstellungen"
+
+#: src/resources/ui/preferences.ui:14
+msgid "Idle threshold"
+msgstr "Leerlaufzeitschwellenwert"
+
+#: src/resources/ui/preferences.ui:34
+msgid "Displaying items"
+msgstr "Artikel anzeigen"
+
+#: src/resources/ui/preferences.ui:38
+msgid "Character and percentage"
+msgstr "Charakter und Prozentsatz"
+
+#: src/resources/ui/preferences.ui:39
+msgid "Percentage only"
+msgstr "Nur Prozentsatz"
+
+#: src/resources/ui/preferences.ui:40
+msgid "Character only"
+msgstr "Nur Zeichen"
+
+#: src/resources/ui/preferences.ui:51
+msgid "Reset preferences"
+msgstr "Einstellungen zurücksetzen"
+
+#: src/resources/ui/preferences.ui:52
+msgid "Reset RunCat preferences to defaults"
+msgstr "Einstellungen von RunCat auf Standardwerte zurücksetzen"
+
+#: src/resources/ui/preferences.ui:65
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: src/resources/ui/preferences.ui:84
+msgid "The cat tells you the CPU usage by running speed"
+msgstr "Die Katze zeigt dir die CPU-Auslastung durch ihre Laufgeschwindigkeit an"
+
+#: src/resources/ui/preferences.ui:88
+msgid "Visit RunCat's GitHub page"
+msgstr "GitHub-Seite von RunCat besuchen"
+
+#: src/resources/ui/preferences.ui:98
+msgid "Visit Homepage"
+msgstr "Homepage besuchen"
+
+#: src/resources/ui/preferences.ui:102
+msgid "About RunCat"
+msgstr "Über RunCat"
