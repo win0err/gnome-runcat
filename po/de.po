@@ -23,11 +23,11 @@ msgstr "Open System Monitor"
 
 #: src/panelMenuButton.js:99
 msgid "Settings"
-msgstr "Settings"
+msgstr "Einstellungen"
 
 #: src/prefs.js:48
 msgid "RunCat Settings"
-msgstr "RunCat Settings"
+msgstr "RunCat-Einstellungen"
 
 #: src/prefs.js:59
 msgid "Version"
@@ -51,7 +51,7 @@ msgstr "Artikel anzeigen"
 
 #: src/resources/ui/preferences.ui:38
 msgid "Character and percentage"
-msgstr "Charakter und Prozentsatz"
+msgstr "Figur und Prozentsatz"
 
 #: src/resources/ui/preferences.ui:39
 msgid "Percentage only"
@@ -59,7 +59,7 @@ msgstr "Nur Prozentsatz"
 
 #: src/resources/ui/preferences.ui:40
 msgid "Character only"
-msgstr "Nur Zeichen"
+msgstr "Nur Figur"
 
 #: src/resources/ui/preferences.ui:51
 msgid "Reset preferences"
