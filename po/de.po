@@ -47,7 +47,7 @@ msgstr "Leerlaufzeitschwellenwert"
 
 #: src/resources/ui/preferences.ui:34
 msgid "Displaying items"
-msgstr "Artikel anzeigen"
+msgstr "Anzeigen als"
 
 #: src/resources/ui/preferences.ui:38
 msgid "Character and percentage"
@@ -55,11 +55,11 @@ msgstr "Figur und Prozentsatz"
 
 #: src/resources/ui/preferences.ui:39
 msgid "Percentage only"
-msgstr "Nur Prozentsatz"
+msgstr "Prozentsatz"
 
 #: src/resources/ui/preferences.ui:40
 msgid "Character only"
-msgstr "Nur Figur"
+msgstr "Figur"
 
 #: src/resources/ui/preferences.ui:51
 msgid "Reset preferences"
