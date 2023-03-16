@@ -47,7 +47,7 @@ msgstr "Leerlaufzeitschwellenwert"
 
 #: src/resources/ui/preferences.ui:34
 msgid "Animated idle"
-msgstr ""
+msgstr "Animierter Leerlauf"
 
 #: src/resources/ui/preferences.ui:48
 msgid "Displaying items"
@@ -71,11 +71,11 @@ msgstr ""
 
 #: src/resources/ui/preferences.ui:67
 msgid "Cat"
-msgstr ""
+msgstr "Katze"
 
 #: src/resources/ui/preferences.ui:68
 msgid "Metronome"
-msgstr ""
+msgstr "Metronom"
 
 #: src/resources/ui/preferences.ui:79
 msgid "Reset preferences"
