@@ -67,7 +67,7 @@ msgstr "Figur"
 
 #: src/resources/ui/preferences.ui:63
 msgid "Runner pack"
-msgstr ""
+msgstr "Figur"
 
 #: src/resources/ui/preferences.ui:67
 msgid "Cat"
