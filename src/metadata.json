@@ -5,5 +5,5 @@
   "gettext-domain": "runcat@kolesnikov.se",
   "shell-version": ["42", "43", "44"],
   "url": "https://github.com/win0err/gnome-runcat",
-  "version": 22
+  "version": 23
 }
