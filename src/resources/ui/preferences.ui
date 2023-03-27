@@ -108,7 +108,8 @@
     <object class="GtkAboutDialog" id="about-dialog">
         <property name="program-name">GNOME RunCat</property>
         <property name="authors">Sergei Kolesnikov https://kolesnikov.se/</property>
-        <property name="artists">exincore, Sergei Kolesnikov, Takuto Nakamura, WebSnke</property>
+        <property name="artists">exincore, Sergei Kolesnikov, Takuto Nakamura</property>
+        <property name="translators">WebSnke</property>
         <property name="comments" translatable="yes">The cat tells you the CPU usage by running speed</property>
         <property name="copyright">© 2020-2022 Sergei Kolesnikov</property>
         <property name="license_type">gpl-3-0</property>
