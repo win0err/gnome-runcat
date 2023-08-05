@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <interface>
     <requires lib="gtk" version="4.0" />
 
@@ -110,7 +109,6 @@
         <property name="program-name">GNOME RunCat</property>
         <property name="authors">Sergei Kolesnikov https://kolesnikov.se/</property>
         <property name="artists">exincore, Sergei Kolesnikov, Takuto Nakamura</property>
-        <property name="translator-credits">Sergei Kolesnikov, WebSnke</property>
         <property name="comments" translatable="yes">The cat tells you the CPU usage by running speed</property>
         <property name="copyright">© 2020-2022 Sergei Kolesnikov</property>
         <property name="license_type">gpl-3-0</property>
