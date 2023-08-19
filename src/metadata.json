@@ -1,9 +1,10 @@
 {
-  "name": "RunCat",
-  "description": "The cat tells you the CPU usage by running speed",
-  "uuid": "runcat@kolesnikov.se",
-  "gettext-domain": "runcat@kolesnikov.se",
-  "shell-version": ["42", "43", "44"],
-  "url": "https://github.com/win0err/gnome-runcat",
-  "version": 23
+	"name": "RunCat",
+	"description": "The cat tells you the CPU usage by running speed",
+	"uuid": "runcat@kolesnikov.se",
+	"gettext-domain": "runcat@kolesnikov.se",
+	"settings-schema": "org.gnome.shell.extensions.runcat",
+	"shell-version": ["45"],
+	"url": "https://github.com/win0err/gnome-runcat",
+	"version": 24
 }

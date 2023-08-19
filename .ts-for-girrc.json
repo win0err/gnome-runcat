@@ -1,22 +1,8 @@
 {
-    "environments": [
-        "gjs"
-    ],
-    "modules": [
-        "Gtk-4.0",
-        "Gtk-3.0",
-        "Soup-2.4",
-        "Shell-0.1",
-        "St-1.0",
-        "Adw-1",
-        "Clutter-10",
-        "Meta-10"
-    ],
-    "prettify": true,
-    "girDirectories": [
-        "/usr/share/gir-1.0",
-        "/usr/share/gnome-shell",
-        "/usr/lib64/mutter-10/"
-    ],
-    "outdir": "node_modules/@types"
+	"environments": ["gjs"],
+	"ignoreVersionConflicts": true,
+	"buildType": "types",
+	"generateAlias": true,
+	"prettify": true,
+	"outdir": "./@types"
 }

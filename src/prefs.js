@@ -1,79 +1,113 @@
-const {
-    Adw,
-    Gio,
-    Gdk,
-    Gtk,
-} = imports.gi;
+import Adw from 'gi://Adw'
+import Gio from 'gi://Gio'
+import Gtk from 'gi://Gtk'
+import Gdk from 'gi://Gdk'
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Extension = ExtensionUtils.getCurrentExtension();
+import {
+	ExtensionPreferences,
+	gettext as _,
+} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
-const _ = imports.gettext.domain(Extension.metadata.uuid).gettext;
+import { gioSettingsKeys } from './constants.js'
 
-const { SCHEMA_PATH, Settings } = Extension.imports.constants;
-const { findWidgetByType } = Extension.imports.utils;
 
-// eslint-disable-next-line no-unused-vars
-function fillPreferencesWindow(window) {
-    const settings = ExtensionUtils.getSettings(SCHEMA_PATH);
+export default class RunCatPreferences extends ExtensionPreferences {
+	/** @type {Gio.Settings} */
+	#settings
 
-    const builder = Gtk.Builder.new();
-    builder.set_translation_domain(Extension.metadata.uuid);
-    builder.add_from_file(`${Extension.path}/resources/ui/preferences.ui`);
+	/** @type {Gtk.Builder} */
+	#builder
 
-    settings.bind(
-        Settings.IDLE_THRESHOLD,
-        builder.get_object(Settings.IDLE_THRESHOLD),
-        'value',
-        Gio.SettingsBindFlags.DEFAULT,
-    );
+	/** @type {Adw.PreferencesWindow} */
+	#window
 
-    const combo = builder.get_object(Settings.DISPLAYING_ITEMS);
-    combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
-    combo.connect('notify::selected', widget => {
-        settings.set_enum(Settings.DISPLAYING_ITEMS, widget.selected);
-    });
+	/** @type {Adw.HeaderBar?} */
+	get #headerBar() {
+		const queue = [this.#window.get_content()]
 
-    builder.get_object('reset').connect('clicked', () => {
-        settings.reset(Settings.IDLE_THRESHOLD);
+		while (queue.length > 0) {
+			const child = queue.pop()
+			if (child instanceof Adw.HeaderBar) {
+				return child
+			}
 
-        settings.reset(Settings.DISPLAYING_ITEMS);
-        combo.set_selected(settings.get_enum(Settings.DISPLAYING_ITEMS));
-    });
+			queue.push(...child)
+		}
 
-    const page = builder.get_object('preferences-general');
-    window.add(page);
+		return null
+	}
 
-    // eslint-disable-next-line no-param-reassign
-    window.title = _('RunCat Settings');
+	fillPreferencesWindow(window) {
+		this.#window = window
 
-    const homepageAction = Gio.SimpleAction.new('homepage', null);
-    homepageAction.connect('activate', () => Gtk.show_uri(window, Extension.metadata.url, Gdk.CURRENT_TIME));
+		this.#settings = this.getSettings()
 
-    const aboutAction = Gio.SimpleAction.new('about', null);
-    aboutAction.connect('activate', () => {
-        const logo = Gtk.Image.new_from_file(`${Extension.path}/resources/se.kolesnikov.runcat.svg`);
+		this.#builder = new Gtk.Builder({ translation_domain: this.uuid })
+		this.#builder.add_from_file(`${this.path}/resources/ui/preferences.ui`)
 
-        const aboutDialog = builder.get_object('about-dialog');
-        aboutDialog.set_property('logo', logo.get_paintable());
-        const versionText = _('Version');
-        aboutDialog.set_property('version', `${versionText} ${Extension.metadata.version}`);
-        aboutDialog.set_property('transient_for', window);
+		this.#setupPage()
+		this.#setupMenu()
 
-        aboutDialog.show();
-    });
+		const page = /** @type {Adw.PreferencesPage} */ (this.#builder.get_object('preferences-general'))
+		this.#window.add(page)
 
-    const group = Gio.SimpleActionGroup.new();
-    group.add_action(homepageAction);
-    group.add_action(aboutAction);
+		this.#window.title = _('RunCat Settings')
+	}
 
-    const menu = builder.get_object('menu-button');
-    menu.insert_action_group('prefs', group);
+	#setupPage() {
+		// Idle Threshold
+		this.#settings.bind(
+			gioSettingsKeys.IDLE_THRESHOLD,
+			this.#builder.get_object(gioSettingsKeys.IDLE_THRESHOLD),
+			'value',
+			Gio.SettingsBindFlags.DEFAULT,
+		)
 
-    const header = findWidgetByType(window.get_content(), Adw.HeaderBar);
-    header.pack_end(menu);
-}
+		// Displaying Items
+		const combo = /** @type {Adw.ComboRow} */ (this.#builder.get_object(gioSettingsKeys.DISPLAYING_ITEMS))
+		// `Gio.Settings.bind_with_mapping` is missing in GJS: https://gitlab.gnome.org/GNOME/gjs/-/issues/397
+		combo.set_selected(this.#settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
+		combo.connect('notify::selected', ({ selected }) => {
+			this.#settings.set_enum(gioSettingsKeys.DISPLAYING_ITEMS, selected)
+		})
 
-function init() {
-    // do nothing
+		// Reset
+		this.#builder.get_object('reset').connect('clicked', () => {
+			// Idle Threshold
+			this.#settings.reset(gioSettingsKeys.IDLE_THRESHOLD)
+
+			// Displaying Items
+			this.#settings.reset(gioSettingsKeys.DISPLAYING_ITEMS)
+			combo.set_selected(this.#settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
+		})
+	}
+
+	#setupMenu() {
+		const homepageAction = Gio.SimpleAction.new('homepage', null)
+		homepageAction.connect(
+			'activate',
+			() => Gtk.show_uri(this.#window, this.metadata.url, Gdk.CURRENT_TIME),
+		)
+
+		const aboutAction = Gio.SimpleAction.new('about', null)
+		aboutAction.connect('activate', () => {
+			const logo = Gtk.Image.new_from_file(`${this.path}/resources/se.kolesnikov.runcat.svg`)
+
+			const aboutDialog = /** @type {Adw.AboutWindow} */ (this.#builder.get_object('about-dialog'))
+			aboutDialog.set_property('logo', logo.get_paintable())
+			aboutDialog.set_property('version', `${_('Version')} ${this.metadata.version}`)
+			aboutDialog.set_property('transient_for', this.#window)
+
+			aboutDialog.show()
+		})
+
+		const group = Gio.SimpleActionGroup.new()
+		group.add_action(homepageAction)
+		group.add_action(aboutAction)
+
+		const menu = /** @type {Gtk.MenuButton} */ (this.#builder.get_object('menu-button'))
+		menu.insert_action_group('prefs', group)
+
+		this.#headerBar?.pack_end(menu)
+	}
 }

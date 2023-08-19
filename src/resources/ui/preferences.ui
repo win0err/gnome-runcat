@@ -82,7 +82,7 @@
         <property name="authors">Sergei Kolesnikov https://kolesnikov.se/</property>
         <property name="artists">Sergei Kolesnikov, Takuto Nakamura</property>
         <property name="comments" translatable="yes">The cat tells you the CPU usage by running speed</property>
-        <property name="copyright">© 2020-2022 Sergei Kolesnikov</property>
+        <property name="copyright">© 2020-2023 Sergei Kolesnikov</property>
         <property name="license_type">gpl-3-0</property>
         <property name="website">https://github.com/win0err/gnome-runcat</property>
         <property name="website_label" translatable="yes">Visit RunCat's GitHub page</property>

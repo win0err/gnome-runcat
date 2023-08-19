@@ -1,59 +1,91 @@
-const { Gio } = imports.gi;
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
+import Gio from 'gi://Gio'
 
-const { readFile } = Extension.imports.utils;
+import { LOG_PREFIX } from '../constants.js'
 
-// eslint-disable-next-line func-names, no-unused-vars, no-var
-var createGenerator = async function* () {
-    const procStatFile = Gio.File.new_for_path('/proc/stat');
 
-    let prevActive = 0;
-    let prevTotal = 0;
+try {
+	// eslint-disable-next-line no-underscore-dangle
+	Gio._promisify(Gio.File.prototype, 'load_contents_async', 'load_contents_finish')
+} catch (e) {
+	logError(e)
+}
 
-    while (true) {
-        // eslint-disable-next-line no-await-in-loop
-        const procStatContents = await readFile(procStatFile);
+/** @typedef {{ active: number, total: number }} CpuData */
 
-        const cpuInfo = procStatContents
-            .split('\n')[0].trim()
-            .split(/[\s]+/)
-            .map(n => parseInt(n, 10));
+/**
+ * @param {string} line
+ * @returns {CpuData}
+ */
+function parseCpuLine(line) {
+	const values = line.trim().split(/[\s]+/).slice(1)
 
-        const [
-            , // eslint-disable-line
-            user,
-            nice,
-            system,
-            idle,
-            iowait,
-            irq, // eslint-disable-line
-            softirq,
-            steal,
-            guest, // eslint-disable-line
-        ] = cpuInfo;
+	// see `man proc`
+	const [
+		user,
+		nice,
+		system,
+		idle,
+		iowait,
+		irq, // eslint-disable-line
+		softirq,
+		steal,
+		guest, // eslint-disable-line
+		guestNice, // eslint-disable-line
+	] = values.map(n => parseInt(n, 10))
 
-        const active = user + system + nice + softirq + steal;
-        const total = user + system + nice + softirq + steal + idle + iowait;
+	return {
+		active: user + system + nice + softirq + steal,
+		total: user + system + nice + softirq + steal + idle + iowait,
+	}
+}
 
-        // eslint-disable-next-line object-curly-newline
-        const data = JSON.stringify({ total, active, prevTotal, prevActive });
+/**
+ * @param {string} contents
+ *
+ * @returns {{ system: CpuData, specific: CpuData[] }}
+ */
+function parseProcStatContents(contents) {
+	const [cpu, ...cpuN] = contents
+		.split('\n')
+		.filter(line => line.startsWith('cpu'))
 
-        let utilization = 100 * ((active - prevActive) / (total - prevTotal));
-        if (Number.isNaN(utilization) || !Number.isFinite(utilization)) {
-            log(`cpu utilization is ${utilization}, data: ${data}`);
+	return {
+		system: parseCpuLine(cpu),
+		specific: cpuN.map(parseCpuLine),
+	}
 
-            utilization = 0;
-        }
+}
 
-        if (utilization > 100) {
-            log(`cpu utilization is ${utilization}, data: ${data}`);
+export default async function* () {
+	const procStatFile = Gio.File.new_for_path('/proc/stat')
 
-            utilization = 100;
-        }
+	let prevActive = 0
+	let prevTotal = 0
 
-        prevActive = active;
-        prevTotal = total;
+	while (true) {
+		const [bytes] = await procStatFile.load_contents_async(null)
+		const contents = new TextDecoder('utf-8').decode(bytes)
 
-        yield utilization;
-    }
-};
+		const { active, total } = parseProcStatContents(contents).system
+
+		let utilization = 100 * ((active - prevActive) / (total - prevTotal))
+		if (Number.isNaN(utilization) || !Number.isFinite(utilization)) {
+			const data = JSON.stringify({ total, active, prevTotal, prevActive })
+			log(`${LOG_PREFIX}: cpu utilization is ${utilization}, data: ${data}`)
+
+			utilization = 0
+		}
+
+		if (utilization > 100) {
+			const data = JSON.stringify({ total, active, prevTotal, prevActive })
+			log(`${LOG_PREFIX}: cpu utilization is ${utilization}, data: ${data}`)
+
+			utilization = 100
+		}
+
+		prevActive = active
+		prevTotal = total
+
+		yield utilization
+	}
+}

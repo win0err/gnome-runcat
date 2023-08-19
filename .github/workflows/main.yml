@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '18'
       - name: Lint code
-        run: npm install && npm run lint
+        run: npm install && npm run test:lint
       - name: Check that the translation files have been updated
         run: |
           make --always-make translations

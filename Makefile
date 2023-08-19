@@ -11,7 +11,7 @@ all_sources = $(shell find src -type f)
 
 js_sources = $(shell cd src && find . -maxdepth 1 -type f -name '*.js')
 
-translations_sources = src/panelMenuButton.js src/prefs.js
+translations_sources = src/indicator.js src/prefs.js
 translations_sources += $(shell find src/resources/ui -maxdepth 1 -type f -name '*.ui')
 translations = $(shell find po -maxdepth 1 -type f -name '*.po')
 
