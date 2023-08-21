@@ -1,29 +1,19 @@
-'use strict';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js'
+import { panel as MainPanel } from 'resource:///org/gnome/shell/ui/main.js'
 
-const Main = imports.ui.main;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Extension = ExtensionUtils.getCurrentExtension();
+import RunCatIndicator from './indicator.js'
 
-const { PanelMenuButton } = Extension.imports.panelMenuButton;
 
-class RunCatExtension {
-    constructor() {
-        this.extensionButton = null;
-    }
+export default class RunCatExtension extends Extension {
+	#indicator = null
 
-    enable() {
-        this.extensionButton = new PanelMenuButton();
-        Main.panel.addToStatusArea('RunCat', this.extensionButton);
-    }
+	enable() {
+		this.#indicator = new RunCatIndicator()
+		MainPanel.addToStatusArea('runcat-indicator', this.#indicator)
+	}
 
-    disable() {
-        this.extensionButton.destroy();
-        this.extensionButton = null;
-    }
-}
-
-function init() {
-    ExtensionUtils.initTranslations(Extension.metadata.uuid);
-
-    return new RunCatExtension();
+	disable() {
+		this.#indicator.destroy()
+		this.#indicator = null
+	}
 }

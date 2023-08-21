@@ -18,7 +18,7 @@
 		</key>
 
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
-			<default>'character-and-percentage'</default>
+			<default>'character-only'</default>
 			<summary>Displaying items</summary>
 			<description/>
 		</key>

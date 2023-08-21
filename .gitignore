@@ -9,3 +9,5 @@ package-lock.json
 docs-lock.json
 src/schemas/gschemas.compiled
 po/*~
+tsconfig.alias.json
+.#*
