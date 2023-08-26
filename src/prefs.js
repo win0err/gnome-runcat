@@ -6,7 +6,7 @@ import Gdk from 'gi://Gdk'
 import {
 	ExtensionPreferences,
 	gettext as _,
-} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
+} from 'resource:///org/gnome/shell/extensions/js/extensions/prefs.js'
 
 import { gioSettingsKeys } from './constants.js'
 
