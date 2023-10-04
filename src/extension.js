@@ -8,7 +8,7 @@ export default class RunCatExtension extends Extension {
 	#indicator = null
 
 	enable() {
-		this.#indicator = new RunCatIndicator()
+		this.#indicator = new RunCatIndicator(this)
 		MainPanel.addToStatusArea('runcat-indicator', this.#indicator)
 	}
 

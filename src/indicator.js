@@ -7,7 +7,7 @@ import St from 'gi://St' // eslint-disable-line no-unused-vars
 import { Button as PanelMenuButton } from 'resource:///org/gnome/shell/ui/panelMenu.js'
 import { PopupSeparatorMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js'
 import { trySpawnCommandLine } from 'resource:///org/gnome/shell/misc/util.js'
-import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
+import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import {
 	SYSTEM_MONITOR_COMMAND,
@@ -66,12 +66,10 @@ export default class RunCatIndicator extends PanelMenuButton {
 		GObject.registerClass(this)
 	}
 
-	get extension() {
-		return Extension.lookupByURL(import.meta.url)
-	}
+	#extension = null
 
 	/** @type {Gio.Settings} */
-	#gioSettings = this.extension.getSettings()
+	#gioSettings
 
 	/** @type {{ icon: St.Icon, label: St.Label, labelBox: St.BoxLayout, box: St.BoxLayout }} */
 	#widgets
@@ -94,8 +92,11 @@ export default class RunCatIndicator extends PanelMenuButton {
 	/** @type {{ idle: Generator, active: Generator }} */
 	#icons
 
-	constructor() {
+	constructor(extension) {
 		super(null)
+
+		this.#extension = extension
+		this.#gioSettings = this.#extension.getSettings()
 
 		this.#initSettingsListeners()
 		this.#initUi()
@@ -128,8 +129,8 @@ export default class RunCatIndicator extends PanelMenuButton {
 
 	#initIcons() {
 		this.#icons = {
-			idle: spritesGenerator(this.extension.path, 'idle'),
-			active: spritesGenerator(this.extension.path, 'active'),
+			idle: spritesGenerator(this.#extension.path, 'idle'),
+			active: spritesGenerator(this.#extension.path, 'active'),
 		}
 
 		const [sprite] = this.#icons.idle.next().value
@@ -137,8 +138,8 @@ export default class RunCatIndicator extends PanelMenuButton {
 	}
 
 	#initUi() {
-		this.#builder = new Gtk.Builder({ translation_domain: this.extension.uuid })
-		this.#builder.add_from_file(`${this.extension.path}/resources/ui/extension.ui`)
+		this.#builder = new Gtk.Builder({ translation_domain: this.#extension.uuid })
+		this.#builder.add_from_file(`${this.#extension.path}/resources/ui/extension.ui`)
 
 		this.#widgets = {
 			icon: /** @type {St.Icon} */ (this.#builder.get_object('icon')),
@@ -163,7 +164,7 @@ export default class RunCatIndicator extends PanelMenuButton {
 		this.menu.addMenuItem(new PopupSeparatorMenuItem())
 		this.menu.addAction(_('Settings'), () => {
 			try {
-				this.extension.openPreferences()
+				this.#extension.openPreferences()
 			} catch (e) {
 				logError(e)
 			}
