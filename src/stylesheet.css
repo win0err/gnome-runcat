@@ -5,10 +5,11 @@
     -o-transition : all 0.2s ease-in-out;
     transition : all 0.2s ease-in-out;
     will-change: all;
-    icon-size: 2em;
+    icon-size: 4.5em;
+    width: 2em;
 }
 
 .runcat-menu__label {
-    font-size: .9em;
+    font-size: 0.9em;
     line-height: 1;
 }
