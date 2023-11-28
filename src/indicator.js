@@ -56,9 +56,16 @@ const spritesGenerator = function* (extensionRootPath, state) {
  *
  * @returns {number} delay between sprites in millisecons
  **/
-const getAnimationInterval = (cpuUtilization, spritesCount) => Math.ceil(
-	(25 / Math.sqrt(cpuUtilization + 30) - 2) * 1_000 / spritesCount,
-)
+const getAnimationInterval = (cpuUtilization, spritesCount) => {
+	const cpuSpeedBasedReductor = Math.max(
+		300,
+		Math.floor(cpuUtilization / 5) * 75
+	)
+
+	return Math.ceil(
+		(25 / Math.sqrt(cpuUtilization + 30) - 2) * cpuSpeedBasedReductor / spritesCount,
+	)
+}
 
 
 export default class RunCatIndicator extends PanelMenuButton {

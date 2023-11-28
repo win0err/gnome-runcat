@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-runcat-extension 26\n"
+"Project-Id-Version: gnome-runcat-extension \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-04 10:53+0300\n"
+"POT-Creation-Date: 2023-11-28 09:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.js:161
+#: src/indicator.js:168
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.js:165
+#: src/indicator.js:172
 msgid "Settings"
 msgstr ""
 
