@@ -1,5 +1,10 @@
 .runcat-menu__icon {
-    padding: 0 .5em 0 0;
+    padding: 0;
+    -webkit-transition : all 0.2s ease-in-out;
+    -moz-transition : all 0.2s ease-in-out;
+    -o-transition : all 0.2s ease-in-out;
+    transition : all 0.2s ease-in-out;
+    will-change: all;
     icon-size: 2em;
 }
 
