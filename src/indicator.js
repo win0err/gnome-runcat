@@ -59,7 +59,7 @@ const spritesGenerator = function* (extensionRootPath, state) {
 const getAnimationInterval = (cpuUtilization, spritesCount) => {
 	const cpuSpeedBasedReductor = Math.max(
 		300,
-		Math.floor(cpuUtilization / 5) * 75
+		Math.floor(cpuUtilization / 5) * 65
 	)
 
 	return Math.ceil(
