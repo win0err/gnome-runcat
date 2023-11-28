@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-04 10:43+0300\n"
+"POT-Creation-Date: 2023-11-28 09:46+0800\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: src/indicator.js:161
+#: src/indicator.js:168
 msgid "Open System Monitor"
 msgstr "Открыть Системный монитор"
 
-#: src/indicator.js:165
+#: src/indicator.js:172
 msgid "Settings"
 msgstr "Настройки"
 
