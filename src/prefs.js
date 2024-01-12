@@ -69,6 +69,14 @@ export default class RunCatPreferences extends ExtensionPreferences {
 			'value',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
+		
+		// Reverse Speed
+		this.#settings.bind(
+			gioSettingsKeys.REVERSE_SPEED,
+			this.#builder.get_object(gioSettingsKeys.REVERSE_SPEED),
+			'active',
+			Gio.SettingsBindFlags.DEFAULT
+		)
 
 		// Displaying Items
 		const combo = /** @type {Adw.ComboRow} */ (this.#builder.get_object(gioSettingsKeys.DISPLAYING_ITEMS))
@@ -82,6 +90,9 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		this.#builder.get_object('reset').connect('clicked', () => {
 			// Idle Threshold
 			this.#settings.reset(gioSettingsKeys.IDLE_THRESHOLD)
+
+			// Reverse Speed
+			this.#settings.reset(gioSettingsKeys.REVERSE_SPEED)
 
 			// Displaying Items
 			this.#settings.reset(gioSettingsKeys.DISPLAYING_ITEMS)

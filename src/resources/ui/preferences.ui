@@ -43,6 +43,18 @@
                         </property>
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Reverse speed</property>
+
+                        <child>
+                            <object class="GtkSwitch" id="reverse-speed">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
 

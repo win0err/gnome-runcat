@@ -7,8 +7,8 @@
 	</enum>
 
 	<schema
-			id="org.gnome.shell.extensions.runcat"
-			path="/org/gnome/shell/extensions/runcat/"
+		id="org.gnome.shell.extensions.runcat"
+		path="/org/gnome/shell/extensions/runcat/"
 	>
 
 		<key type="i" name="idle-threshold">
@@ -20,6 +20,12 @@
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
 			<default>'character-only'</default>
 			<summary>Displaying items</summary>
+			<description/>
+		</key>
+
+		<key name="reverse-speed" type="b">
+			<default>false</default>
+			<summary>Reverse speed</summary>
 			<description/>
 		</key>
 	</schema>
