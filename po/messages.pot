@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 13:59+0100\n"
+"POT-Creation-Date: 2024-01-15 10:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.js:170
+#: src/indicator.js:169
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.js:174
+#: src/indicator.js:173
 msgid "Settings"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.js:116
+#: src/prefs.js:126
 msgid "Version"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgid "Character only"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:49
-msgid "Reverse speed"
+msgid "Invert running speed"
 msgstr ""
 
 #: src/resources/ui/preferences.ui:63

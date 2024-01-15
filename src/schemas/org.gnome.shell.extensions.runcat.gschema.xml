@@ -23,9 +23,9 @@
 			<description/>
 		</key>
 
-		<key name="reverse-speed" type="b">
+		<key name="invert-running-speed" type="b">
 			<default>false</default>
-			<summary>Reverse speed</summary>
+			<summary>Invert running speed</summary>
 			<description/>
 		</key>
 	</schema>

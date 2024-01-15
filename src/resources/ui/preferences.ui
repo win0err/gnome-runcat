@@ -46,10 +46,10 @@
 
                 <child>
                     <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Reverse speed</property>
+                        <property name="title" translatable="yes">Invert running speed</property>
 
                         <child>
-                            <object class="GtkSwitch" id="reverse-speed">
+                            <object class="GtkSwitch" id="invert-running-speed">
                                 <property name="valign">center</property>
                             </object>
                         </child>
