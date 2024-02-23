@@ -1,90 +1,90 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# French translations for gnome-runcat-extension package.
+# Copyright (C) 2024 THE gnome-runcat-extension'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-runcat-extension package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Automatically generated, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 19:47+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2024-02-22 19:40+0100\n"
+"PO-Revision-Date: 2024-02-22 19:40+0100\n"
+"Last-Translator: thatoddshade\n"
+"Language-Team: none\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/indicator.js:161
 msgid "Open System Monitor"
-msgstr ""
+msgstr "Ouvrir le Moniteur Système"
 
 #: src/indicator.js:165
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: src/prefs.js:54
 msgid "RunCat Settings"
-msgstr ""
+msgstr "Paramètres de RunCat"
 
 #: src/prefs.js:105
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: src/resources/ui/preferences.ui:6
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: src/resources/ui/preferences.ui:10
 msgid "General Preferences"
-msgstr ""
+msgstr "Préférences Générales"
 
 #: src/resources/ui/preferences.ui:14
 msgid "Idle threshold"
-msgstr ""
+msgstr "Seuil d'inactivité"
 
 #: src/resources/ui/preferences.ui:34
 msgid "Displaying items"
-msgstr ""
+msgstr "Afficher les éléments"
 
 #: src/resources/ui/preferences.ui:38
 msgid "Character and percentage"
-msgstr ""
+msgstr "Personnage et pourcentage"
 
 #: src/resources/ui/preferences.ui:39
 msgid "Percentage only"
-msgstr ""
+msgstr "Seulement le pourcentage"
 
 #: src/resources/ui/preferences.ui:40
 msgid "Character only"
-msgstr ""
+msgstr "Seulement le personnage"
 
 #: src/resources/ui/preferences.ui:51
 msgid "Reset preferences"
-msgstr ""
+msgstr "Rénitialiser les paramètres"
 
 #: src/resources/ui/preferences.ui:52
 msgid "Reset RunCat preferences to defaults"
-msgstr ""
+msgstr "Rénitialiser les préférences de RunCat"
 
 #: src/resources/ui/preferences.ui:65
 msgid "Reset"
-msgstr ""
+msgstr "Rénitialiser"
 
 #: src/resources/ui/preferences.ui:84
 msgid "The cat tells you the CPU usage by running speed"
-msgstr ""
+msgstr "Le chat indique l'usage du processeur par sa vitesse de course"
 
 #: src/resources/ui/preferences.ui:88
 msgid "Visit RunCat's GitHub page"
-msgstr ""
+msgstr "Visiter la page GitHub de RunCat"
 
 #: src/resources/ui/preferences.ui:98
 msgid "Visit Homepage"
-msgstr ""
+msgstr "Visiter la Page d'Accueil"
 
 #: src/resources/ui/preferences.ui:102
 msgid "About RunCat"
-msgstr ""
+msgstr "À propos de RunCat"
