@@ -77,7 +77,13 @@ export default class RunCatIndicator extends PanelMenuButton {
 	/** @type {Gtk.Builder} */
 	#builder
 
-	/** @type {{ idleThreshold: number, displayingItems: { character: boolean, percentage: boolean } }} */
+	/**
+	 * @type {{
+	 *	idleThreshold: number,
+	 *	invertRunningSpeed: boolean,
+	 *	displayingItems: { character: boolean, percentage: boolean }
+	 * }}
+	*/
 	#settings
 
 	/** @type {{ [key: string]: number }} */
@@ -112,14 +118,16 @@ export default class RunCatIndicator extends PanelMenuButton {
 
 	repaintUi() {
 		/** @type {CharacterState} */
-		const characterState = this.#data?.cpu > this.#settings.idleThreshold ? 'active' : 'idle'
+		const isActive = this.#data?.cpu > this.#settings.idleThreshold || this.#settings.invertRunningSpeed
+		const characterState = isActive ? 'active' : 'idle'
 
 		const [sprite, spritesCount] = this.#icons[characterState].next().value
 
 		this.#widgets.icon.set_gicon(sprite)
 		this.#widgets.label.set_text(`${Math.round(this.#data.cpu)}%`)
 
-		const utilization = this.#data?.cpu > this.#settings.idleThreshold ? this.#data?.cpu : 0
+		const speed = this.#settings.invertRunningSpeed ? Math.abs(100 - this.#data?.cpu) : this.#data?.cpu
+		const utilization = isActive ? speed : 0
 
 		const animationInterval = getAnimationInterval(utilization, spritesCount)
 		this.#sourceIds.repaintUi = GLib.timeout_add(GLib.PRIORITY_DEFAULT, animationInterval, () => this.repaintUi())
@@ -175,19 +183,23 @@ export default class RunCatIndicator extends PanelMenuButton {
 		this.#settings = {
 			idleThreshold: this.#gioSettings.get_int(gioSettingsKeys.IDLE_THRESHOLD),
 			displayingItems: displayingItems[this.#gioSettings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS)],
+			invertRunningSpeed: this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_RUNNING_SPEED),
 		}
 
 		this.#gioSettings.connect('changed', (_, key) => {
 			switch (key) {
 			case gioSettingsKeys.IDLE_THRESHOLD:
 				this.#settings.idleThreshold = this.#gioSettings.get_int(gioSettingsKeys.IDLE_THRESHOLD)
-
 				break
+
+			case gioSettingsKeys.INVERT_RUNNING_SPEED:
+				this.#settings.invertRunningSpeed = this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_RUNNING_SPEED)
+				break
+
 			case gioSettingsKeys.DISPLAYING_ITEMS:
 				// eslint-disable-next-line max-len
 				this.#settings.displayingItems = displayingItems[this.#gioSettings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS)]
 				this.#updateItemsVisibility()
-
 				break
 			}
 		})
