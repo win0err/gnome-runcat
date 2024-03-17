@@ -7,27 +7,7 @@
 
         <child>
             <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">General Preferences</property>
-
-                <child>
-                    <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Idle threshold</property>
-                        <property name="activatable-widget">idle-threshold-scale</property>
-
-                        <child>
-                            <object class="GtkScale" id="idle-threshold-scale">
-                                <property name="valign">center</property>
-                                <property name="hexpand">true</property>
-                                <property name="width-request">100px</property>
-                                <property name="draw-value">true</property>
-                                <property name="value-pos">right</property>
-                                <property name="orientation">horizontal</property>
-                                <property name="digits">0</property>
-                                <property name="adjustment">idle-threshold</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
+                <property name="title" translatable="yes">General</property>
 
                 <child>
                     <object class="AdwComboRow" id="displaying-items">
@@ -43,16 +23,33 @@
                         </property>
                     </object>
                 </child>
+            </object>
+        </child>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Character</property>
 
                 <child>
-                    <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Invert running speed</property>
+                    <object class="AdwSwitchRow" id="invert-speed">
+                        <property name="title" translatable="yes">Invert speed</property>
+                    </object>
+                </child>
 
-                        <child>
-                            <object class="GtkSwitch" id="invert-running-speed">
-                                <property name="valign">center</property>
+                <child>
+                    <object class="AdwSpinRow" id="idle-threshold">
+                        <property name="title" translatable="yes">Idle threshold</property>
+                        <property name="subtitle" translatable="yes">Available when speed is not inverted</property>
+                        <property name="adjustment">
+                            <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">100</property>
+                                <property name="step-increment">1</property>
+                                <property name="page-increment">10</property>
                             </object>
-                        </child>
+                        </property>
+                        <property name="sensitive" bind-source="invert-speed"
+                                  bind-property="active" bind-flags="sync-create|invert-boolean" />
                     </object>
                 </child>
             </object>
@@ -120,12 +117,5 @@
     <object class="GtkMenuButton" id="menu-button">
         <property name="menu-model">main-menu</property>
         <property name="icon-name">open-menu-symbolic</property>
-    </object>
-
-
-    <object class="GtkAdjustment" id="idle-threshold">
-        <property name="lower">0</property>
-        <property name="upper">100</property>
-        <property name="step-increment">1</property>
     </object>
 </interface>

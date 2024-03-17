@@ -15,7 +15,7 @@ import {
 	gioSettingsKeys,
 } from './constants.js'
 
-import createCpuGenerator from './dataProviders/cpu.js'
+import createCpuGenerator, { MAX_CPU_UTILIZATION } from './dataProviders/cpu.js'
 
 
 /** @typedef {'idle' | 'active'} CharacterState */
@@ -57,7 +57,7 @@ const spritesGenerator = function* (extensionRootPath, state) {
  * @returns {number} delay between sprites in millisecons
  **/
 const getAnimationInterval = (cpuUtilization, spritesCount) => Math.ceil(
-	(25 / Math.sqrt(cpuUtilization + 30) - 2) * 1_000 / spritesCount,
+	(25 / Math.sqrt(cpuUtilization*100 + 30) - 2) * 1_000 / spritesCount,
 )
 
 
@@ -80,7 +80,7 @@ export default class RunCatIndicator extends PanelMenuButton {
 	/**
 	 * @type {{
 	 *	idleThreshold: number,
-	 *	invertRunningSpeed: boolean,
+	 *	invertSpeed: boolean,
 	 *	displayingItems: { character: boolean, percentage: boolean }
 	 * }}
 	*/
@@ -97,6 +97,11 @@ export default class RunCatIndicator extends PanelMenuButton {
 
 	/** @type {{ idle: Generator, active: Generator }} */
 	#icons
+
+	#formatter = new Intl.NumberFormat(undefined, {
+		maximumFractionDigits: 0,
+		style: 'percent',
+	})
 
 	constructor(extension) {
 		super(null)
@@ -117,17 +122,20 @@ export default class RunCatIndicator extends PanelMenuButton {
 	}
 
 	repaintUi() {
-		/** @type {CharacterState} */
-		const isActive = this.#data?.cpu > this.#settings.idleThreshold || this.#settings.invertRunningSpeed
-		const characterState = isActive ? 'active' : 'idle'
+		let utilization = this.#data?.cpu
+		let isActive = utilization > this.#settings.idleThreshold / 100
 
+		if (this.#settings.invertSpeed) {
+			utilization = MAX_CPU_UTILIZATION - utilization
+			isActive = true  // always active when speed is inverted
+		}
+
+		/** @type {CharacterState} */
+		const characterState = isActive ? 'active' : 'idle'
 		const [sprite, spritesCount] = this.#icons[characterState].next().value
 
 		this.#widgets.icon.set_gicon(sprite)
-		this.#widgets.label.set_text(`${Math.round(this.#data.cpu)}%`)
-
-		const speed = this.#settings.invertRunningSpeed ? Math.abs(100 - this.#data?.cpu) : this.#data?.cpu
-		const utilization = isActive ? speed : 0
+		this.#widgets.label.set_text(this.#formatter.format(this.#data.cpu))
 
 		const animationInterval = getAnimationInterval(utilization, spritesCount)
 		this.#sourceIds.repaintUi = GLib.timeout_add(GLib.PRIORITY_DEFAULT, animationInterval, () => this.repaintUi())
@@ -183,7 +191,7 @@ export default class RunCatIndicator extends PanelMenuButton {
 		this.#settings = {
 			idleThreshold: this.#gioSettings.get_int(gioSettingsKeys.IDLE_THRESHOLD),
 			displayingItems: displayingItems[this.#gioSettings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS)],
-			invertRunningSpeed: this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_RUNNING_SPEED),
+			invertSpeed: this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_SPEED),
 		}
 
 		this.#gioSettings.connect('changed', (_, key) => {
@@ -192,8 +200,8 @@ export default class RunCatIndicator extends PanelMenuButton {
 				this.#settings.idleThreshold = this.#gioSettings.get_int(gioSettingsKeys.IDLE_THRESHOLD)
 				break
 
-			case gioSettingsKeys.INVERT_RUNNING_SPEED:
-				this.#settings.invertRunningSpeed = this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_RUNNING_SPEED)
+			case gioSettingsKeys.INVERT_SPEED:
+				this.#settings.invertSpeed = this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_SPEED)
 				break
 
 			case gioSettingsKeys.DISPLAYING_ITEMS:

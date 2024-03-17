@@ -70,18 +70,13 @@ export default class RunCatPreferences extends ExtensionPreferences {
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
-		// Invert Running Speed
+		// Invert Speed
 		this.#settings.bind(
-			gioSettingsKeys.INVERT_RUNNING_SPEED,
-			this.#builder.get_object(gioSettingsKeys.INVERT_RUNNING_SPEED),
+			gioSettingsKeys.INVERT_SPEED,
+			this.#builder.get_object(gioSettingsKeys.INVERT_SPEED),
 			'active',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
-
-		this.#builder.get_object(gioSettingsKeys.INVERT_RUNNING_SPEED).connect('notify::active', () => {
-			this.#lockIdleThreshold()
-		})
-		this.#lockIdleThreshold()
 
 		// Displaying Items
 		const combo = /** @type {Adw.ComboRow} */ (this.#builder.get_object(gioSettingsKeys.DISPLAYING_ITEMS))
@@ -96,18 +91,13 @@ export default class RunCatPreferences extends ExtensionPreferences {
 			// Idle Threshold
 			this.#settings.reset(gioSettingsKeys.IDLE_THRESHOLD)
 
-			// Invert Running Speed
-			this.#settings.reset(gioSettingsKeys.INVERT_RUNNING_SPEED)
+			// Invert Speed
+			this.#settings.reset(gioSettingsKeys.INVERT_SPEED)
 
 			// Displaying Items
 			this.#settings.reset(gioSettingsKeys.DISPLAYING_ITEMS)
 			combo.set_selected(this.#settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
 		})
-	}
-
-	#lockIdleThreshold() {
-		const isLocked = this.#builder.get_object(gioSettingsKeys.INVERT_RUNNING_SPEED).get_active()
-		this.#builder.get_object('idle-threshold-scale').set_sensitive(!isLocked)
 	}
 
 	#setupMenu() {

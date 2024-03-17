@@ -14,7 +14,7 @@ export const displayingItems = {
 export const gioSettingsKeys = {
 	IDLE_THRESHOLD: 'idle-threshold',
 	DISPLAYING_ITEMS: 'displaying-items',
-	INVERT_RUNNING_SPEED: 'invert-running-speed',
+	INVERT_SPEED: 'invert-speed',
 }
 
 export const SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r'
