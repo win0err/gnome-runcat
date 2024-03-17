@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 10:39+0100\n"
+"POT-Creation-Date: 2024-03-17 21:28+0300\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: src/indicator.js:169
+#: src/indicator.js:177
 msgid "Open System Monitor"
 msgstr "Открыть Системный монитор"
 
-#: src/indicator.js:173
+#: src/indicator.js:181
 msgid "Settings"
 msgstr "Настройки"
 
@@ -30,71 +30,72 @@ msgstr "Настройки"
 msgid "RunCat Settings"
 msgstr "Настройки RunCat"
 
-#: src/prefs.js:126
+#: src/prefs.js:116
 msgid "Version"
 msgstr "Версия"
 
-#: src/resources/ui/preferences.ui:6
+#: src/resources/ui/preferences.ui:6 src/resources/ui/preferences.ui:10
 msgid "General"
 msgstr "Общие"
 
-#: src/resources/ui/preferences.ui:10
-msgid "General Preferences"
-msgstr "Общие настройки"
-
 #: src/resources/ui/preferences.ui:14
-msgid "Idle threshold"
-msgstr "Порог бездействия"
-
-#: src/resources/ui/preferences.ui:34
 msgid "Displaying items"
 msgstr "Отображаемые элементы"
 
-#: src/resources/ui/preferences.ui:38
+#: src/resources/ui/preferences.ui:18
 msgid "Character and percentage"
 msgstr "Персонаж и проценты"
 
-#: src/resources/ui/preferences.ui:39
+#: src/resources/ui/preferences.ui:19
 msgid "Percentage only"
 msgstr "Только проценты"
 
-#: src/resources/ui/preferences.ui:40
+#: src/resources/ui/preferences.ui:20
 msgid "Character only"
 msgstr "Только персонаж"
 
-#: src/resources/ui/preferences.ui:49
-msgid "Invert running speed"
+#: src/resources/ui/preferences.ui:31
+msgid "Character"
+msgstr "Персонаж"
+
+#: src/resources/ui/preferences.ui:35
+msgid "Invert speed"
 msgstr "Инвертировать скорость"
 
-#: src/resources/ui/preferences.ui:63
+#: src/resources/ui/preferences.ui:41
+msgid "Idle threshold"
+msgstr "Порог бездействия"
+
+#: src/resources/ui/preferences.ui:42
+msgid "Available when speed is not inverted"
+msgstr "Доступен, когда скорость не инвертирована"
+
+#: src/resources/ui/preferences.ui:60
 msgid "Reset preferences"
 msgstr "Сбросить настройки"
 
-#: src/resources/ui/preferences.ui:64
+#: src/resources/ui/preferences.ui:61
 msgid "Reset RunCat preferences to defaults"
 msgstr "Сбросить настройки RunCat к значениям по умолчанию"
 
-#: src/resources/ui/preferences.ui:77
+#: src/resources/ui/preferences.ui:74
 msgid "Reset"
 msgstr "Сбросить"
 
-#: src/resources/ui/preferences.ui:96
+#: src/resources/ui/preferences.ui:93
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 "Котик, который показывает загрузку\n"
 " процессора скоростью бега"
 
-#: src/resources/ui/preferences.ui:100
+#: src/resources/ui/preferences.ui:97
 msgid "Visit RunCat's GitHub page"
 msgstr "Посетить страницу RunCat на GitHub"
 
-#: src/resources/ui/preferences.ui:110
+#: src/resources/ui/preferences.ui:107
 msgid "Visit Homepage"
 msgstr "Открыть домашнюю страницу"
 
-#: src/resources/ui/preferences.ui:114
+#: src/resources/ui/preferences.ui:111
 msgid "About RunCat"
 msgstr "О RunCat"
-
-#~ msgid "Reverse speed"
-#~ msgstr "Oбратная скорость"

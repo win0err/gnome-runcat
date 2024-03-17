@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<enum id="org.gnome.shell.extensions.runcat.DisplayingItems">
-		<value value="0" nick="character-and-percentage"/>
-		<value value="1" nick="percentage-only"/>
-		<value value="2" nick="character-only"/>
+		<value value="0" nick="character-and-percentage" />
+		<value value="1" nick="percentage-only" />
+		<value value="2" nick="character-only" />
 	</enum>
 
 	<schema
@@ -14,19 +14,16 @@
 		<key type="i" name="idle-threshold">
 			<default>0</default>
 			<summary>Idle threshold</summary>
-			<description/>
 		</key>
 
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
 			<default>'character-only'</default>
 			<summary>Displaying items</summary>
-			<description/>
 		</key>
 
-		<key name="invert-running-speed" type="b">
+		<key name="invert-speed" type="b">
 			<default>false</default>
-			<summary>Invert running speed</summary>
-			<description/>
+			<summary>Invert speed</summary>
 		</key>
 	</schema>
 </schemalist>

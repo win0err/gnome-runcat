@@ -30,6 +30,7 @@
 	"globals": {
 		"log": "readonly",
 		"logError": "readonly",
-		"TextDecoder": "readonly"
+		"TextDecoder": "readonly",
+		"Intl": "readonly"
 	}
 }
