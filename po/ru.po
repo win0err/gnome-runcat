@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-04 10:43+0300\n"
+"POT-Creation-Date: 2024-01-15 10:39+0100\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: src/indicator.js:161
+#: src/indicator.js:169
 msgid "Open System Monitor"
 msgstr "Открыть Системный монитор"
 
-#: src/indicator.js:165
+#: src/indicator.js:173
 msgid "Settings"
 msgstr "Настройки"
 
@@ -30,7 +30,7 @@ msgstr "Настройки"
 msgid "RunCat Settings"
 msgstr "Настройки RunCat"
 
-#: src/prefs.js:105
+#: src/prefs.js:126
 msgid "Version"
 msgstr "Версия"
 
@@ -62,32 +62,39 @@ msgstr "Только проценты"
 msgid "Character only"
 msgstr "Только персонаж"
 
-#: src/resources/ui/preferences.ui:51
+#: src/resources/ui/preferences.ui:49
+msgid "Invert running speed"
+msgstr "Инвертировать скорость"
+
+#: src/resources/ui/preferences.ui:63
 msgid "Reset preferences"
 msgstr "Сбросить настройки"
 
-#: src/resources/ui/preferences.ui:52
+#: src/resources/ui/preferences.ui:64
 msgid "Reset RunCat preferences to defaults"
 msgstr "Сбросить настройки RunCat к значениям по умолчанию"
 
-#: src/resources/ui/preferences.ui:65
+#: src/resources/ui/preferences.ui:77
 msgid "Reset"
 msgstr "Сбросить"
 
-#: src/resources/ui/preferences.ui:84
+#: src/resources/ui/preferences.ui:96
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 "Котик, который показывает загрузку\n"
 " процессора скоростью бега"
 
-#: src/resources/ui/preferences.ui:88
+#: src/resources/ui/preferences.ui:100
 msgid "Visit RunCat's GitHub page"
 msgstr "Посетить страницу RunCat на GitHub"
 
-#: src/resources/ui/preferences.ui:98
+#: src/resources/ui/preferences.ui:110
 msgid "Visit Homepage"
 msgstr "Открыть домашнюю страницу"
 
-#: src/resources/ui/preferences.ui:102
+#: src/resources/ui/preferences.ui:114
 msgid "About RunCat"
 msgstr "О RunCat"
+
+#~ msgid "Reverse speed"
+#~ msgstr "Oбратная скорость"
