@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 21:28+0300\n"
+"POT-Creation-Date: 2024-03-21 00:56+0300\n"
 "PO-Revision-Date: 2022-09-30 19:16+0300\n"
 "Last-Translator: Sergei Kolesnikov <sergei@kolesnikov.se>\n"
 "Language-Team: Russian\n"
@@ -18,19 +18,28 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: src/indicator.js:177
+#: src/indicator.js:179
 msgid "Open System Monitor"
 msgstr "Открыть Системный монитор"
 
-#: src/indicator.js:181
+#: src/indicator.js:189
+#, javascript-format
+msgid "Execution of “%s” failed"
+msgstr "Не удалось выполнить «%s»"
+
+#: src/indicator.js:197
 msgid "Settings"
 msgstr "Настройки"
+
+#: src/indicator.js:201
+msgid "Failed to open extension settings"
+msgstr "Не удалось открыть настройки расширения"
 
 #: src/prefs.js:54
 msgid "RunCat Settings"
 msgstr "Настройки RunCat"
 
-#: src/prefs.js:116
+#: src/prefs.js:138
 msgid "Version"
 msgstr "Версия"
 
@@ -54,48 +63,56 @@ msgstr "Только проценты"
 msgid "Character only"
 msgstr "Только персонаж"
 
-#: src/resources/ui/preferences.ui:31
+#: src/resources/ui/preferences.ui:30
+msgid "Use a custom system monitor"
+msgstr "Использовать пользовательский системный монитор"
+
+#: src/resources/ui/preferences.ui:33
+msgid "Command"
+msgstr "Команда"
+
+#: src/resources/ui/preferences.ui:45
 msgid "Character"
 msgstr "Персонаж"
 
-#: src/resources/ui/preferences.ui:35
+#: src/resources/ui/preferences.ui:49
 msgid "Invert speed"
 msgstr "Инвертировать скорость"
 
-#: src/resources/ui/preferences.ui:41
+#: src/resources/ui/preferences.ui:55
 msgid "Idle threshold"
 msgstr "Порог бездействия"
 
-#: src/resources/ui/preferences.ui:42
+#: src/resources/ui/preferences.ui:56
 msgid "Available when speed is not inverted"
 msgstr "Доступен, когда скорость не инвертирована"
 
-#: src/resources/ui/preferences.ui:60
+#: src/resources/ui/preferences.ui:74
 msgid "Reset preferences"
 msgstr "Сбросить настройки"
 
-#: src/resources/ui/preferences.ui:61
+#: src/resources/ui/preferences.ui:75
 msgid "Reset RunCat preferences to defaults"
 msgstr "Сбросить настройки RunCat к значениям по умолчанию"
 
-#: src/resources/ui/preferences.ui:74
+#: src/resources/ui/preferences.ui:88
 msgid "Reset"
 msgstr "Сбросить"
 
-#: src/resources/ui/preferences.ui:93
+#: src/resources/ui/preferences.ui:107
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 "Котик, который показывает загрузку\n"
 " процессора скоростью бега"
 
-#: src/resources/ui/preferences.ui:97
+#: src/resources/ui/preferences.ui:111
 msgid "Visit RunCat's GitHub page"
 msgstr "Посетить страницу RunCat на GitHub"
 
-#: src/resources/ui/preferences.ui:107
+#: src/resources/ui/preferences.ui:121
 msgid "Visit Homepage"
 msgstr "Открыть домашнюю страницу"
 
-#: src/resources/ui/preferences.ui:111
+#: src/resources/ui/preferences.ui:125
 msgid "About RunCat"
 msgstr "О RunCat"
