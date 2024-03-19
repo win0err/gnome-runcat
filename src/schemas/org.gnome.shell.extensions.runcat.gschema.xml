@@ -25,5 +25,15 @@
 			<default>false</default>
 			<summary>Invert speed</summary>
 		</key>
+
+		<key name="custom-system-monitor-enabled" type="b">
+			<default>false</default>
+			<summary>Enable custom system monitor</summary>
+		</key>
+
+		<key name="custom-system-monitor-command" type="s">
+			<default>'gnome-system-monitor -r'</default>
+			<summary>Custom system monitor command</summary>
+		</key>
 	</schema>
 </schemalist>

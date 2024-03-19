@@ -86,6 +86,22 @@ export default class RunCatPreferences extends ExtensionPreferences {
 			this.#settings.set_enum(gioSettingsKeys.DISPLAYING_ITEMS, selected)
 		})
 
+		// Enable custom system monitor
+		this.#settings.bind(
+			gioSettingsKeys.customSystemMonitor.ENABLED,
+			this.#builder.get_object(gioSettingsKeys.customSystemMonitor.ENABLED),
+			'enable-expansion',
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
+		// Custom system monitor command
+		this.#settings.bind(
+			gioSettingsKeys.customSystemMonitor.COMMAND,
+			this.#builder.get_object(gioSettingsKeys.customSystemMonitor.COMMAND),
+			'text',
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
 		// Reset
 		this.#builder.get_object('reset').connect('clicked', () => {
 			// Idle Threshold
@@ -93,6 +109,12 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 			// Invert Speed
 			this.#settings.reset(gioSettingsKeys.INVERT_SPEED)
+
+			// Enable custom system monitor
+			this.#settings.reset(gioSettingsKeys.customSystemMonitor.ENABLED)
+
+			// Custom system monitor command
+			this.#settings.reset(gioSettingsKeys.customSystemMonitor.COMMAND)
 
 			// Displaying Items
 			this.#settings.reset(gioSettingsKeys.DISPLAYING_ITEMS)
