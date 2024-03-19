@@ -15,6 +15,10 @@ export const gioSettingsKeys = {
 	IDLE_THRESHOLD: 'idle-threshold',
 	DISPLAYING_ITEMS: 'displaying-items',
 	INVERT_SPEED: 'invert-speed',
+	customSystemMonitor: {
+		ENABLED: 'custom-system-monitor-enabled',
+		COMMAND: 'custom-system-monitor-command',
+	},
 }
 
 export const SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r'

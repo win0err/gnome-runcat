@@ -4,6 +4,7 @@ import GObject from 'gi://GObject'
 import GLib from 'gi://GLib'
 import St from 'gi://St' // eslint-disable-line no-unused-vars
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import { Button as PanelMenuButton } from 'resource:///org/gnome/shell/ui/panelMenu.js'
 import { PopupSeparatorMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js'
 import { trySpawnCommandLine } from 'resource:///org/gnome/shell/misc/util.js'
@@ -81,7 +82,8 @@ export default class RunCatIndicator extends PanelMenuButton {
 	 * @type {{
 	 *	idleThreshold: number,
 	 *	invertSpeed: boolean,
-	 *	displayingItems: { character: boolean, percentage: boolean }
+	 *	displayingItems: { character: boolean, percentage: boolean },
+	 *	customSystemMonitor: { isEnabled: boolean, command: string },
 	 * }}
 	*/
 	#settings
@@ -175,14 +177,29 @@ export default class RunCatIndicator extends PanelMenuButton {
 
 		this.menu.addAction(
 			_('Open System Monitor'),
-			() => trySpawnCommandLine(SYSTEM_MONITOR_COMMAND),
+			() => {
+				const command = this.#settings.customSystemMonitor.isEnabled
+					? this.#settings.customSystemMonitor.command
+					: SYSTEM_MONITOR_COMMAND
+
+				try {
+					trySpawnCommandLine(command)
+				} catch (e) {
+					Main.notifyError(
+						_('Execution of “%s” failed').format(command),
+						e.message,
+					)
+					console.error(e)
+				}
+			},
 		)
 		this.menu.addMenuItem(new PopupSeparatorMenuItem())
 		this.menu.addAction(_('Settings'), () => {
 			try {
 				this.#extension.openPreferences()
 			} catch (e) {
-				logError(e)
+				Main.notifyError(_('Failed to open extension settings'), e.message)
+				console.error(e)
 			}
 		})
 	}
@@ -192,6 +209,10 @@ export default class RunCatIndicator extends PanelMenuButton {
 			idleThreshold: this.#gioSettings.get_int(gioSettingsKeys.IDLE_THRESHOLD),
 			displayingItems: displayingItems[this.#gioSettings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS)],
 			invertSpeed: this.#gioSettings.get_boolean(gioSettingsKeys.INVERT_SPEED),
+			customSystemMonitor: {
+				isEnabled: this.#gioSettings.get_boolean(gioSettingsKeys.customSystemMonitor.ENABLED),
+				command: this.#gioSettings.get_string(gioSettingsKeys.customSystemMonitor.COMMAND),
+			},
 		}
 
 		this.#gioSettings.connect('changed', (_, key) => {
@@ -208,6 +229,16 @@ export default class RunCatIndicator extends PanelMenuButton {
 				// eslint-disable-next-line max-len
 				this.#settings.displayingItems = displayingItems[this.#gioSettings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS)]
 				this.#updateItemsVisibility()
+				break
+
+			case gioSettingsKeys.customSystemMonitor.ENABLED:
+				// eslint-disable-next-line max-len
+				this.#settings.customSystemMonitor.isEnabled = this.#gioSettings.get_boolean(gioSettingsKeys.customSystemMonitor.ENABLED)
+				break
+
+			case gioSettingsKeys.customSystemMonitor.COMMAND:
+				// eslint-disable-next-line max-len
+				this.#settings.customSystemMonitor.command = this.#gioSettings.get_string(gioSettingsKeys.customSystemMonitor.COMMAND)
 				break
 			}
 		})
