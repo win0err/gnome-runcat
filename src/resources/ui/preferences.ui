@@ -23,6 +23,20 @@
                         </property>
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwExpanderRow" id="custom-system-monitor-enabled">
+                        <property name="show_enable_switch">True</property>
+                        <property name="title" translatable="yes">Use a custom system monitor</property>
+                        <child>
+                            <object class="AdwEntryRow" id="custom-system-monitor-command">
+                                <property name="title" translatable="yes">Command</property>
+                                <property name="text">gnome-system-monitor -r</property>
+                                <property name="show-apply-button">True</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
 
