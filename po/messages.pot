@@ -14,22 +14,31 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.js:177
+#: src/indicator.js:179
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.js:181
+#: src/indicator.js:189
+#, javascript-format
+msgid "Execution of “%s” failed"
+msgstr ""
+
+#: src/indicator.js:197
 msgid "Settings"
+msgstr ""
+
+#: src/indicator.js:201
+msgid "Failed to open extension settings"
 msgstr ""
 
 #: src/prefs.js:54
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.js:116
+#: src/prefs.js:138
 msgid "Version"
 msgstr ""
 
@@ -53,46 +62,54 @@ msgstr ""
 msgid "Character only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:31
+#: src/resources/ui/preferences.ui:30
+msgid "Use a custom system monitor"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:33
+msgid "Command"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:45
 msgid "Character"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:35
+#: src/resources/ui/preferences.ui:49
 msgid "Invert speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:41
+#: src/resources/ui/preferences.ui:55
 msgid "Idle threshold"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:42
+#: src/resources/ui/preferences.ui:56
 msgid "Available when speed is not inverted"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:60
+#: src/resources/ui/preferences.ui:74
 msgid "Reset preferences"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:61
+#: src/resources/ui/preferences.ui:75
 msgid "Reset RunCat preferences to defaults"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:74
+#: src/resources/ui/preferences.ui:88
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:93
+#: src/resources/ui/preferences.ui:107
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:97
+#: src/resources/ui/preferences.ui:111
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:107
+#: src/resources/ui/preferences.ui:121
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:111
+#: src/resources/ui/preferences.ui:125
 msgid "About RunCat"
 msgstr ""
