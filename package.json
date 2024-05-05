@@ -2,16 +2,27 @@
   "name": "runcat",
   "private": true,
   "scripts": {
-    "types:generate": "ts-for-gir generate --configName=.ts-for-girrc.json",
-    "test:lint": "eslint src/"
+    "test:lint": "eslint src/",
+    "test:typecheck": "tsc --project jsconfig.json",
+    "test": "npm run test:lint && npm run test:typecheck"
   },
   "repository": "win0err/gnome-runcat",
   "author": "Sergei Kolesnikov <sergei@kolesnikov.se>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@ts-for-gir/cli": "^3.2.0",
+    "@girs/adw-1": "next",
+    "@girs/gdk-4.0": "next",
+    "@girs/gio-2.0": "next",
+    "@girs/gjs": "next",
+    "@girs/glib-2.0": "next",
+    "@girs/gnome-shell": "next",
+    "@girs/gobject-2.0": "next",
+    "@girs/gtk-4.0": "next",
+    "@girs/gtop-2.0": "next",
+    "@girs/st-14": "next",
     "eslint": "^8.47.0",
-    "eslint-plugin-import": "^2.28.0",
-    "eslint-import-resolver-typescript": "^3.6.0"
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "typescript": "^5.5.3"
   }
 }

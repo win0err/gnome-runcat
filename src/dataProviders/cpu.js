@@ -16,7 +16,7 @@ function getCpuStats() {
 	}
 }
 
-export default async function* () {
+export default function* () {
 	let prevActive = 0
 	let prevTotal = 0
 
