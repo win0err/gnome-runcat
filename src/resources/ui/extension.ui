@@ -4,20 +4,22 @@
 
     <object class="StBoxLayout" id="box">
         <property name="style-class">panel-status-menu-box runcat-menu</property>
-    </object>
 
-    <object class="StIcon" id="icon">
-        <property name="style-class">system-status-icon runcat-menu__icon</property>
-    </object>
+        <child>
+            <object class="StIcon" id="icon">
+                <property name="style-class">system-status-icon runcat-menu__icon</property>
+            </object>
+        </child>
 
-    <object class="StLabel" id="label">
-        <property name="text">...</property>
-        <property name="style-class">runcat-menu__label</property>
-        <property name="x-expand">True</property>
-        <property name="y-expand">True</property>
-        <property name="x-align">fill</property>
-        <property name="y-align">center</property>
+        <child>
+            <object class="StLabel" id="label">
+                <property name="text">...</property>
+                <property name="style-class">runcat-menu__label</property>
+                <property name="x-expand">True</property>
+                <property name="y-expand">True</property>
+                <property name="x-align">fill</property>
+                <property name="y-align">center</property>
+            </object>
+        </child>
     </object>
-
-    <object class="StBoxLayout" id="labelBox" />
 </interface>

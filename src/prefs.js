@@ -23,7 +23,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 	/** @type {Adw.HeaderBar?} */
 	get #headerBar() {
-		const queue = [this.#window.get_content()]
+		const queue = /** @type {any[]} */ ([this.#window.get_content()])
 
 		while (queue.length > 0) {
 			const child = queue.pop()
@@ -37,12 +37,15 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		return null
 	}
 
+	/**
+	 * @param {Adw.PreferencesWindow} window
+	 */
 	fillPreferencesWindow(window) {
 		this.#window = window
 
 		this.#settings = this.getSettings()
 
-		this.#builder = new Gtk.Builder({ translation_domain: this.uuid })
+		this.#builder = new Gtk.Builder({ translationDomain: this.uuid })
 		this.#builder.add_from_file(`${this.path}/resources/ui/preferences.ui`)
 
 		this.#setupPage()
@@ -82,7 +85,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		const combo = /** @type {Adw.ComboRow} */ (this.#builder.get_object(gioSettingsKeys.DISPLAYING_ITEMS))
 		// `Gio.Settings.bind_with_mapping` is missing in GJS: https://gitlab.gnome.org/GNOME/gjs/-/issues/397
 		combo.set_selected(this.#settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
-		combo.connect('notify::selected', ({ selected }) => {
+		combo.connect('notify::selected', (/** @type {Adw.ComboRow} */ { selected }) => {
 			this.#settings.set_enum(gioSettingsKeys.DISPLAYING_ITEMS, selected)
 		})
 

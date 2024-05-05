@@ -68,7 +68,8 @@ To create a new translation file, use the following command: \
 
 You need to install project JS dependencies first: `npm i`
 
-- `npm run types:generate` — generate type definition for GJS environment;
+- `npm run test` — run all available tests;
+- `npm run test:typecheck` — check types;
 - `npm run test:lint` — lint project files.
 
 ## macOS version
