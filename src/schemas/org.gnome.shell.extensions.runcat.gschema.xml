@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<enum id="org.gnome.shell.extensions.runcat.DisplayingItems">
-		<value value="0" nick="character-and-percentage"/>
-		<value value="1" nick="percentage-only"/>
-		<value value="2" nick="character-only"/>
+		<value value="0" nick="character-and-percentage" />
+		<value value="1" nick="percentage-only" />
+		<value value="2" nick="character-only" />
 	</enum>
 
 	<schema
-			id="org.gnome.shell.extensions.runcat"
-			path="/org/gnome/shell/extensions/runcat/"
+		id="org.gnome.shell.extensions.runcat"
+		path="/org/gnome/shell/extensions/runcat/"
 	>
 
 		<key type="i" name="idle-threshold">
 			<default>0</default>
 			<summary>Idle threshold</summary>
-			<description/>
 		</key>
 
 		<key name="displaying-items" enum="org.gnome.shell.extensions.runcat.DisplayingItems">
 			<default>'character-only'</default>
 			<summary>Displaying items</summary>
-			<description/>
+		</key>
+
+		<key name="invert-speed" type="b">
+			<default>false</default>
+			<summary>Invert speed</summary>
+		</key>
+
+		<key name="custom-system-monitor-enabled" type="b">
+			<default>false</default>
+			<summary>Enable custom system monitor</summary>
+		</key>
+
+		<key name="custom-system-monitor-command" type="s">
+			<default>'gnome-system-monitor -r'</default>
+			<summary>Custom system monitor command</summary>
 		</key>
 	</schema>
 </schemalist>

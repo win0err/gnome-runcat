@@ -5,7 +5,8 @@ import RunCatIndicator from './indicator.js'
 
 
 export default class RunCatExtension extends Extension {
-	#indicator = null
+	/** @type {import('resource:///org/gnome/shell/ui/panelMenu.js').Button} */
+	#indicator
 
 	enable() {
 		this.#indicator = new RunCatIndicator(this)

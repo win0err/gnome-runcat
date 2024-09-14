@@ -2,10 +2,9 @@ build/
 dist/
 .idea/
 .vscode/
-@types/
+@types/generated/
 node_modules/
 yarn.lock
-package-lock.json
 docs-lock.json
 src/schemas/gschemas.compiled
 po/*~
