@@ -6,5 +6,5 @@
 	"settings-schema": "org.gnome.shell.extensions.runcat",
 	"shell-version": ["45", "46", "47"],
 	"url": "https://github.com/win0err/gnome-runcat",
-	"version": 27
+	"version": 28
 }
