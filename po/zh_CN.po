@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-runcat-extension package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-runcat-extension 28\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-14 13:33+0300\n"
+"PO-Revision-Date: 2024-10-22 04:09+0800\n"
+"Last-Translator: SuGotLand 苏革岚 <sugotland@outlook.com>\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: src/indicator.js:161
+msgid "Open System Monitor"
+msgstr "打开系统监视器"
+
+#: src/indicator.js:165
+msgid "Settings"
+msgstr "设置"
+
+#: src/prefs.js:54
+msgid "RunCat Settings"
+msgstr "RunCat 设置"
+
+#: src/prefs.js:105
+msgid "Version"
+msgstr "版本"
+
+#: src/resources/ui/preferences.ui:6
+msgid "General"
+msgstr "常规"
+
+#: src/resources/ui/preferences.ui:10
+msgid "General Preferences"
+msgstr "常规首选项"
+
+#: src/resources/ui/preferences.ui:14
+msgid "Idle threshold"
+msgstr "空闲临界值"
+
+#: src/resources/ui/preferences.ui:34
+msgid "Displaying items"
+msgstr "显示项目"
+
+#: src/resources/ui/preferences.ui:38
+msgid "Character and percentage"
+msgstr "猫和百分比"
+
+#: src/resources/ui/preferences.ui:39
+msgid "Percentage only"
+msgstr "仅百分比"
+
+#: src/resources/ui/preferences.ui:40
+msgid "Character only"
+msgstr "仅猫"
+
+#: src/resources/ui/preferences.ui:51
+msgid "Reset preferences"
+msgstr "重设首选项"
+
+#: src/resources/ui/preferences.ui:52
+msgid "Reset RunCat preferences to defaults"
+msgstr "将 RunCat 首选项重置为默认值"
+
+#: src/resources/ui/preferences.ui:65
+msgid "Reset"
+msgstr "重置"
+
+#: src/resources/ui/preferences.ui:84
+msgid "The cat tells you the CPU usage by running speed"
+msgstr "这只猫会通过运行速度告诉你 CPU 的使用情况"
+
+#: src/resources/ui/preferences.ui:88
+msgid "Visit RunCat's GitHub page"
+msgstr "访问 RunCat 的 GitHub 页面"
+
+#: src/resources/ui/preferences.ui:98
+msgid "Visit Homepage"
+msgstr "访问主页"
+
+#: src/resources/ui/preferences.ui:102
+msgid "About RunCat"
+msgstr "关于 RunCat"
