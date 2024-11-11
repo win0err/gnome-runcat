@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-.PHONY : build clean install uninstall open-prefs spawn-gnome-shell translations
+.PHONY : build clean install uninstall open-prefs spawn-gnome-shell translations compile
 .DEFAULT_GOAL := build
 
 UUID = runcat@kolesnikov.se
@@ -9,40 +9,59 @@ LOCAL = $(HOME)/.local/share/gnome-shell/extensions
 
 all_sources = $(shell find src -type f)
 
-js_sources = $(shell cd src && find . -maxdepth 1 -type f -name '*.js')
+typescript_sources = $(shell find src -type f -name '*.ts' -not -name '*.d.ts')
+typescript_compiled = $(typescript_sources:src/%.ts=.build/%.js)
 
-translations_sources = src/indicator.js src/prefs.js
-translations_sources += $(shell find src/resources/ui -maxdepth 1 -type f -name '*.ui')
-translations = $(shell find po -maxdepth 1 -type f -name '*.po')
+translations_ts_sources = src/indicator.ts src/prefs.ts
+translations_ui_sources = $(wildcard src/resources/ui/*.ui)
+translations = $(wildcard po/*.po)
 
+schema = src/schemas/org.gnome.shell.extensions.runcat.gschema.xml
+stylesheet = src/stylesheet.css
 
 build: dist/$(DIST_ARCHIVE)
 
 dist:
 	mkdir -p dist/
 
-dist/$(DIST_ARCHIVE): dist po/messages.pot $(translations) $(all_sources)
-	gnome-extensions pack -f src/ \
-		$(addprefix --extra-source=, $(js_sources)) \
-		--extra-source=./dataProviders \
-		--extra-source=./resources \
-		--extra-source=../LICENSE \
-		--podir=../po \
+.build/%.js: $(typescript_sources)
+	tsc
+
+dist/$(DIST_ARCHIVE): dist compile po/messages.pot $(translations) $(all_sources) $(typescript_compiled)
+	gnome-extensions pack --force \
+		$(addprefix --extra-source=, $(wildcard .build/*.js)) \
+		$(addprefix --extra-source=, $(shell find .build/ -mindepth 1 -type d)) \
+		--extra-source=./$(stylesheet) \
+		--extra-source=./src/metadata.json \
+		--extra-source=./src/resources \
+		--extra-source=./LICENSE \
+		--podir=./po \
+		--schema=./$(schema) \
 		-o dist/
 
 
 po/%.po: po/messages.pot
 	touch $@ && msgmerge --update $@ $^
 
-po/messages.pot: $(translations_sources)
+po/messages.pot: $(translations_ts_sources) $(translations_ui_sources)
 	xgettext \
+		--language=JavaScript \
 		--package-name=gnome-runcat-extension \
 		--package-version=$$(jq .version src/metadata.json) \
 		--from-code=UTF-8 \
 		--output=$@ \
-		$^
+		$(translations_ts_sources)
+	xgettext \
+		--join-existing \
+		--package-name=gnome-runcat-extension \
+		--package-version=$$(jq .version src/metadata.json) \
+		--from-code=UTF-8 \
+		--output=$@ \
+		$(translations_ui_sources)
 
 translations: po/messages.pot $(translations)
+
+compile: $(typescript_compiled)
 
 clean:
 	rm -rf dist

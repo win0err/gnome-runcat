@@ -10,3 +10,4 @@ src/schemas/gschemas.compiled
 po/*~
 tsconfig.alias.json
 .#*
+.build/

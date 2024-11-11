@@ -17,28 +17,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.js:238
+#: src/indicator.ts:150
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.js:252
+#: src/indicator.ts:161
 #, javascript-format
 msgid "Execution of “%s” failed"
 msgstr ""
 
-#: src/indicator.js:260
+#: src/indicator.ts:171
 msgid "Settings"
 msgstr ""
 
-#: src/indicator.js:264
+#: src/indicator.ts:176
 msgid "Failed to open extension settings"
 msgstr ""
 
-#: src/prefs.js:57
+#: src/prefs.ts:47
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.js:141
+#: src/prefs.ts:133
 msgid "Version"
 msgstr ""
 
