@@ -1,8 +1,0 @@
-{
-	"environments": ["gjs"],
-	"ignoreVersionConflicts": true,
-	"buildType": "types",
-	"generateAlias": true,
-	"prettify": true,
-	"outdir": "./@types"
-}
