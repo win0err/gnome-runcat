@@ -1,0 +1,22 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"strict": true,
+		"lib": ["ES2022"],
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "Bundler",
+		"sourceMap": false,
+		"noEmitOnError": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"baseUrl": ".",
+		"rootDirs": ["src"],
+		"noImplicitAny": true,
+		"pretty": true,
+		"removeComments": false,
+		"outDir": ".build"
+	},
+	"include": ["typings/ambient.d.ts", "typings/gnome-shell-extensions.d.ts"],
+	"files": ["src/extension.ts", "src/prefs.ts"]
+}
