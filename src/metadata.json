@@ -4,7 +4,7 @@
 	"uuid": "runcat@kolesnikov.se",
 	"gettext-domain": "runcat@kolesnikov.se",
 	"settings-schema": "org.gnome.shell.extensions.runcat",
-	"shell-version": ["45", "46", "47"],
+	"shell-version": ["46", "47", "48"],
 	"url": "https://github.com/win0err/gnome-runcat",
-	"version": 28
+	"version": 29
 }
