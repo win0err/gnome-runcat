@@ -2,6 +2,9 @@
   "name": "runcat",
   "private": true,
   "scripts": {
+    "build:compile": "tsc --project tsconfig.json",
+    "build:prettify": "eslint --fix --rule 'max-len: off' .build/",
+    "build": "npm run build:compile && npm run build:prettify",
     "test:lint": "eslint src/",
     "test:typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "npm run test:lint && npm run test:typecheck"

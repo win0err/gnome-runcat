@@ -7,6 +7,7 @@ type CpuStats = { active: number, total: number }
 
 function getCpuStats(): CpuStats {
 	const cpu = new GTop.glibtop_cpu()
+
 	GTop.glibtop_get_cpu(cpu)
 
 	return {

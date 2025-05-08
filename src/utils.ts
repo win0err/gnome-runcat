@@ -11,6 +11,7 @@ export const spritesGenerator = function* (
 	) => `${extensionRootPath}/resources/icons/runcat/${state}/sprite-${idx}-symbolic.svg`
 
 	const sprites: Gio.Icon[] = []
+
 	for (
 		let i = 0, path = getPathForIdx(i);
 		Gio.file_new_for_path(path).query_exists(null);

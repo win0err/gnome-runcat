@@ -15,7 +15,7 @@
 			"typescript": {}
 		}
 	},
-	"ignorePatterns": ["@types/", "node_modules/"],
+	"ignorePatterns": ["node_modules/"],
 	"rules": {
 		"quotes": ["error", "single"],
 		"no-tabs": "off",
@@ -34,7 +34,60 @@
 		"import/extensions": 0,
 		"import/newline-after-import": ["error", { "count": 2 }],
 		"import/no-unresolved": [2, { "ignore": ["^(resource|gi)"] }],
-		"no-warning-comments": ["error", { "terms": ["fixme"], "location": "anywhere" }]
+		"no-warning-comments": ["error", { "terms": ["fixme"], "location": "anywhere" }],
+		"lines-between-class-members": [
+			"error",
+			{
+				"enforce": [
+					{ "blankLine": "always", "prev": "*", "next": "method" },
+					{ "blankLine": "never", "prev": "field", "next": "field" }
+				]
+			}
+		],
+		"padding-line-between-statements": [
+			"error",
+			{
+				"blankLine": "always",
+				"prev": ["singleline-const", "singleline-let", "singleline-var"],
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "*",
+				"next": ["singleline-const", "singleline-let", "singleline-var"]
+			},
+			{
+				"blankLine": "always",
+				"next": "*",
+				"prev": [
+					"multiline-const",
+					"multiline-let",
+					"multiline-var",
+					"multiline-expression",
+					"multiline-block-like",
+					"block-like",
+					"export"
+				]
+			},
+			{
+				"blankLine": "always",
+				"prev": [
+					"multiline-const",
+					"multiline-let",
+					"multiline-var",
+					"multiline-expression",
+					"multiline-block-like",
+					"block-like",
+					"export"
+				],
+				"next": "*"
+			},
+			{
+				"blankLine": "any",
+				"prev": ["singleline-const", "singleline-let", "singleline-var"],
+				"next": ["singleline-const", "singleline-let", "singleline-var"]
+			}
+		]
 	},
 	"globals": {
 		"log": "readonly",

@@ -28,7 +28,6 @@ export default class RunCatIndicator extends PanelMenu.Button
 	implements WithInheritedGObjectParams<typeof gObjectProperties> {
 
 	declare menu: PopupMenu
-
 	declare idleThreshold: number
 	declare displayingItems: DisplayingItems
 	declare isSpeedInverted: boolean
@@ -46,7 +45,6 @@ export default class RunCatIndicator extends PanelMenu.Button
 	#dataProviders: Record<string, Generator> = { cpu: createCpuGenerator() }
 	#data: { cpu: number } = { cpu: 0 }
 	#icons!: Record<CharacterState, ReturnType<typeof spritesGenerator>>
-
 	#formatter = new Intl.NumberFormat(undefined, {
 		maximumFractionDigits: 0,
 		style: 'percent',
@@ -65,6 +63,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 
 	refreshData() {
 		const { value: cpuValue } = this.#dataProviders.cpu.next()
+
 		this.#data.cpu = cpuValue
 
 		return GLib.SOURCE_CONTINUE
@@ -87,6 +86,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 		this.currentText = this.#formatter.format(this.#data.cpu)
 
 		const animationInterval = getAnimationInterval(utilization, spritesCount)
+
 		this.#sourceIds.repaintUi = GLib.timeout_add(
 			GLib.PRIORITY_DEFAULT,
 			animationInterval,
@@ -103,15 +103,18 @@ export default class RunCatIndicator extends PanelMenu.Button
 		}
 
 		const [sprite] = this.#icons.idle.next().value
+
 		this.currentIcon = sprite
 	}
 
 	#initUi() {
 		const builder = new Gtk.Builder({ translationDomain: this.#extension.uuid })
+
 		builder.add_from_file(`${this.#extension.path}/resources/ui/extension.ui`)
 
 		const box = builder.get_object<St.BoxLayout>('box')
 		const label = builder.get_object<St.Label>('label')
+
 		this.bind_property(
 			gObjectPropertyNames.currentText,
 			label, 'text',
@@ -129,6 +132,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 		)
 
 		const icon = builder.get_object<St.Icon>('icon')
+
 		this.bind_property(
 			gObjectPropertyNames.currentIcon,
 			icon, 'gicon',
@@ -171,6 +175,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 				}
 			},
 		)
+
 		this.menu.addMenuItem(new PopupSeparatorMenuItem())
 		this.menu.addAction(_('Settings'), () => {
 			try {
@@ -215,6 +220,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 		// sync enum that cannot be binded
 		const updateDisplayingItems = () => {
 			const option = settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS) as DisplayingItemsOption
+
 			this.displayingItems = enumToDisplayingItems[option]
 		}
 

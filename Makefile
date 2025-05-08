@@ -25,7 +25,7 @@ dist:
 	mkdir -p dist/
 
 .build/%.js: $(typescript_sources)
-	tsc
+	npm run build
 
 dist/$(DIST_ARCHIVE): dist compile po/messages.pot $(translations) $(all_sources) $(typescript_compiled)
 	gnome-extensions pack --force \
@@ -64,7 +64,7 @@ translations: po/messages.pot $(translations)
 compile: $(typescript_compiled)
 
 clean:
-	rm -rf dist
+	rm -rf dist .build
 
 install: uninstall build
 	gnome-extensions install dist/$(DIST_ARCHIVE) --force

@@ -22,6 +22,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 		while (queue.length > 0) {
 			const child = queue.pop()
+
 			if (child instanceof Adw.HeaderBar) {
 				return child
 			}
@@ -43,6 +44,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		this.#setupMenu()
 
 		const page = this.#builder.get_object<Adw.PreferencesPage>('preferences-general')
+
 		this.#window.add(page)
 
 		this.#window.title = _('RunCat Settings')
@@ -74,6 +76,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 		// Displaying Items
 		const combo = this.#builder!.get_object<Adw.ComboRow>(gioSettingsKeys.DISPLAYING_ITEMS)
+
 		// `Gio.Settings.bind_with_mapping` is missing in GJS: https://gitlab.gnome.org/GNOME/gjs/-/issues/397
 		combo.set_selected(this.#settings!.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
 		combo.connect('notify::selected', (/** @type {Adw.ComboRow} */ { selected }: Adw.ComboRow) => {
@@ -120,16 +123,19 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		if (!this.#builder) return
 
 		const homepageAction = Gio.SimpleAction.new('homepage', null)
+
 		homepageAction.connect(
 			'activate',
 			() => Gtk.show_uri(this.#window, this.metadata.url!, Gdk.CURRENT_TIME),
 		)
 
 		const aboutAction = Gio.SimpleAction.new('about', null)
+
 		aboutAction.connect('activate', () => {
 			const logo = Gtk.Image.new_from_file(`${this.path}/resources/se.kolesnikov.runcat.svg`)
 
 			const aboutDialog = this.#builder!.get_object<Adw.AboutWindow>('about-dialog')
+
 			aboutDialog.set_property('logo', logo.get_paintable())
 			aboutDialog.set_property('version', `${_('Version')} ${this.metadata.version}`)
 			aboutDialog.set_property('transient_for', this.#window)
@@ -138,10 +144,12 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		})
 
 		const group = Gio.SimpleActionGroup.new()
+
 		group.add_action(homepageAction)
 		group.add_action(aboutAction)
 
 		const menu = this.#builder.get_object<Gtk.MenuButton>('menu-button')
+
 		menu.insert_action_group('prefs', group)
 
 		this.#headerBar?.pack_end(menu)
