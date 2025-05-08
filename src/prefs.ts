@@ -17,6 +17,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 	#window: Adw.PreferencesWindow | null = null
 
 	get #headerBar(): Adw.HeaderBar | null {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const queue: any[] = [this.#window?.get_content()]
 
 		while (queue.length > 0) {

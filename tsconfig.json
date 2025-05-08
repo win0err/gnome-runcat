@@ -15,7 +15,10 @@
 		"noImplicitAny": true,
 		"pretty": true,
 		"removeComments": false,
-		"outDir": ".build"
+		"outDir": ".build",
+		"paths": {
+			"@/*": ["src/*"] // Пример настройки путей
+		},
 	},
 	"include": ["typings/ambient.d.ts", "typings/gnome-shell-extensions.d.ts"],
 	"files": ["src/extension.ts", "src/prefs.ts"]

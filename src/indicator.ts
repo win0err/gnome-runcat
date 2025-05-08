@@ -26,9 +26,9 @@ import type { DisplayingItems, DisplayingItemsOption, CharacterState, WithInheri
 
 export default class RunCatIndicator extends PanelMenu.Button
 	implements WithInheritedGObjectParams<typeof gObjectProperties> {
-	
-	declare menu: PopupMenu;
-	
+
+	declare menu: PopupMenu
+
 	declare idleThreshold: number
 	declare displayingItems: DisplayingItems
 	declare isSpeedInverted: boolean
@@ -122,6 +122,8 @@ export default class RunCatIndicator extends PanelMenu.Button
 			gObjectPropertyNames.displayingItems,
 			label, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
+			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(_, { percentage }: DisplayingItems) => [true, percentage] as any,
 			null,
 		)
@@ -137,6 +139,8 @@ export default class RunCatIndicator extends PanelMenu.Button
 			gObjectPropertyNames.displayingItems,
 			icon, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
+			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(_, { character }: DisplayingItems) => [true, character] as any,
 			null,
 		)

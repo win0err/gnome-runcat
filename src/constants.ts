@@ -2,6 +2,7 @@ import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
 import type { DisplayingItems, DisplayingItemsOption } from './types'
 
+
 export const displayingItemsOptions = {
 	CHARACTER_AND_PERCENTAGE: 0,
 	PERCENTAGE_ONLY: 1,
@@ -44,7 +45,9 @@ export const gObjectProperties: Record<keyof typeof gObjectPropertyNames, GObjec
 	),
 	currentIcon: GObject.ParamSpec.object<Gio.Icon>(
 		'currentIcon', '', '',
-		(GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT) as any, Gio.Icon.$gtype,
+		// @ts-expect-error: Wrong GObject.ParamSpec.object definition
+		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
+		Gio.Icon.$gtype,
 	),
 
 	displayingItems: GObject.ParamSpec.jsobject<DisplayingItems>(

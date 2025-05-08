@@ -23,16 +23,22 @@ jobs:
     steps:
       - name: Install build dependencies
         run: sudo apt install -y gettext
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 'latest'
+
       - name: Install NPM dependencies
         run: npm install
+
       - name: Lint code
         run: npm run test:lint
+
       - name: Typecheck
         run: npm run test:typecheck
+
       - name: Check that the translation files have been updated
         run: |
           make --always-make translations

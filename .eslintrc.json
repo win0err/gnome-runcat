@@ -1,10 +1,19 @@
 {
 	"env": { "es2021": true },
-	"plugins": ["import"],
-	"extends": ["eslint:recommended"],
+	"plugins": ["import", "@typescript-eslint"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaVersion": 2022,
 		"sourceType": "module"
+	},
+	"settings": {
+		"import/resolver": {
+			"typescript": {}
+		}
 	},
 	"ignorePatterns": ["@types/", "node_modules/"],
 	"rules": {
@@ -17,7 +26,7 @@
 		"comma-dangle": ["error", "always-multiline"],
 		"newline-before-return": "error",
 		"no-underscore-dangle": ["error", { "allowAfterThis": true, "allowAfterSuper": true }],
-		"no-unused-vars": "error",
+		"@typescript-eslint/no-unused-vars": "error",
 		"eol-last": ["error", "always"],
 		"strict": "off",
 		"no-plusplus": "off",

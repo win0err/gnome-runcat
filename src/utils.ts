@@ -1,11 +1,14 @@
 import Gio from 'gi://Gio'
-import type { CharacterState, SpriteTuple } from "./types"
+import type { CharacterState, SpriteTuple } from './types'
+
 
 export const spritesGenerator = function* (
 	extensionRootPath: string,
 	state: CharacterState,
 ): Generator<SpriteTuple, SpriteTuple, void> {
-	const getPathForIdx = (idx: number) => `${extensionRootPath}/resources/icons/runcat/${state}/sprite-${idx}-symbolic.svg`
+	const getPathForIdx = (
+		idx: number,
+	) => `${extensionRootPath}/resources/icons/runcat/${state}/sprite-${idx}-symbolic.svg`
 
 	const sprites: Gio.Icon[] = []
 	for (
