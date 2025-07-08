@@ -73,3 +73,14 @@ export const gObjectProperties: Record<keyof typeof gObjectPropertyNames, GObjec
 		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, SYSTEM_MONITOR_COMMAND,
 	),
 }
+
+export const indicatorPositions = {
+	START: 0,
+	END: -1,
+} as const
+
+export const indicatorBoxes = {
+	LEFT: 'left',
+	CENTER: 'center',
+	RIGHT: 'right',
+} as const
