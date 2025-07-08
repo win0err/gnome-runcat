@@ -18,8 +18,9 @@ This is the recommended method for installation, as it doesn't require the build
 ### Manual installation
 
 #### From source code
-If you want to install the extension from sources, clone [the RunCat repository](https://github.com/win0err/gnome-runcat), navigate to the cloned directory and run:
+If you want to install the extension from sources, clone [the RunCat repository](https://github.com/win0err/gnome-runcat), navigate to the cloned directory and run, you need `npm` installed:
 ```bash
+$ npm i # one time only
 $ make install
 ```
 
@@ -68,7 +69,8 @@ To create a new translation file, use the following command: \
 
 You need to install project JS dependencies first: `npm i`
 
-- `npm run types:generate` — generate type definition for GJS environment;
+- `npm run test` — run all available tests;
+- `npm run test:typecheck` — check types;
 - `npm run test:lint` — lint project files.
 
 ## macOS version

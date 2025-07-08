@@ -1,6 +1,7 @@
 .runcat-menu__icon {
     padding: 0 .5em 0 0;
     icon-size: 2em;
+    -st-icon-style: symbolic;
 }
 
 .runcat-menu__label {
