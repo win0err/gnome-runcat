@@ -1,6 +1,14 @@
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
-import type { DisplayingItems, DisplayingItemsOption } from './types'
+
+import type {
+	DisplayingItems,
+	DisplayingItemsOption,
+	IndicatorBox,
+	IndicatorBoxOption,
+	IndicatorPosition,
+	IndicatorPositionOption,
+} from './types'
 
 
 export const displayingItemsOptions = {
@@ -15,6 +23,33 @@ export const enumToDisplayingItems: Record<DisplayingItemsOption, DisplayingItem
 	[displayingItemsOptions.CHARACTER_ONLY]: { character: true, percentage: false },
 }
 
+
+export const indicatorPositionOptions = {
+	START: 0,
+	END: 1,
+} as const
+
+export const enumToIndicatorPositions: Record<IndicatorPositionOption, IndicatorPosition> = {
+	[indicatorPositionOptions.START]: 0,
+	[indicatorPositionOptions.END]: -1,
+}
+
+export const DEFAULT_INDICATOR_POSITION = enumToIndicatorPositions[indicatorPositionOptions.START]
+
+export const indicatorBoxOptions = {
+	LEFT: 0,
+	CENTER: 1,
+	RIGHT: 2,
+} as const
+
+export const enumToIndicatorBoxes: Record<IndicatorBoxOption, IndicatorBox> = {
+	[indicatorBoxOptions.LEFT]: 'left',
+	[indicatorBoxOptions.CENTER]: 'center',
+	[indicatorBoxOptions.RIGHT]: 'right',
+} as const
+
+export const DEFAULT_INDICATOR_BOX = enumToIndicatorBoxes[indicatorBoxOptions.RIGHT]
+
 export const gioSettingsKeys = {
 	IDLE_THRESHOLD: 'idle-threshold',
 	DISPLAYING_ITEMS: 'displaying-items',
@@ -23,12 +58,16 @@ export const gioSettingsKeys = {
 		ENABLED: 'custom-system-monitor-enabled',
 		COMMAND: 'custom-system-monitor-command',
 	},
+	indicator: {
+		POSITION: 'indicator-position',
+		BOX: 'indicator-box',
+	},
 } as const
 
 export const SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r'
 
 
-export const gObjectPropertyNames = {
+export const indicatorGObjectPropertyNames = {
 	currentText: 'currentText',
 	currentIcon: 'currentIcon',
 	displayingItems: 'displayingItems',
@@ -38,7 +77,7 @@ export const gObjectPropertyNames = {
 	customSystemMonitorCommand: 'customSystemMonitorCommand',
 } as const
 
-export const gObjectProperties: Record<keyof typeof gObjectPropertyNames, GObject.ParamSpec> = {
+export const indicatorGObjectProperties: Record<keyof typeof indicatorGObjectPropertyNames, GObject.ParamSpec> = {
 	currentText: GObject.ParamSpec.string(
 		'currentText', '', '',
 		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, '...',

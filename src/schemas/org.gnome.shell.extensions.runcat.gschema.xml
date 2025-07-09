@@ -6,6 +6,17 @@
 		<value value="2" nick="character-only" />
 	</enum>
 
+	<enum id="org.gnome.shell.extensions.runcat.IndicatorPosition">
+		<value value="0" nick="start" />
+		<value value="1" nick="end" />
+	</enum>
+
+	<enum id="org.gnome.shell.extensions.runcat.IndicatorBox">
+		<value value="0" nick="left" />
+		<value value="1" nick="center" />
+		<value value="2" nick="right" />
+	</enum>
+
 	<schema
 		id="org.gnome.shell.extensions.runcat"
 		path="/org/gnome/shell/extensions/runcat/"
@@ -34,6 +45,16 @@
 		<key name="custom-system-monitor-command" type="s">
 			<default>'gnome-system-monitor -r'</default>
 			<summary>Custom system monitor command</summary>
+		</key>
+
+		<key name="indicator-position" enum="org.gnome.shell.extensions.runcat.IndicatorPosition">
+			<default>'start'</default>
+			<summary>Position of indicator inside box</summary>
+		</key>
+
+		<key name="indicator-box" enum="org.gnome.shell.extensions.runcat.IndicatorBox">
+			<default>'right'</default>
+			<summary>Position of indicator on panel</summary>
 		</key>
 	</schema>
 </schemalist>
