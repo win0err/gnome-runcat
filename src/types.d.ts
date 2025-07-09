@@ -1,12 +1,14 @@
 import type Gio from 'gi://Gio'
 import type GObject from 'gi://GObject'
 
-import { displayingItemsOptions, indicatorPositions, indicatorBoxes } from './constants'
+import { displayingItemsOptions, indicatorBoxOptions, indicatorPositionOptions } from './constants'
 
 
-export type DisplayingItems = { character: boolean; percentage: boolean}
+export type DictValues<T extends object> = T[keyof T]
 
-export type DisplayingItemsOption = (typeof displayingItemsOptions)[keyof typeof displayingItemsOptions]
+export type DisplayingItems = { character: boolean; percentage: boolean }
+
+export type DisplayingItemsOption = DictValues<typeof displayingItemsOptions>
 
 export type CharacterState = 'idle' | 'active'
 
@@ -16,6 +18,10 @@ export type WithInheritedGObjectParams<T extends Record<string, GObject.ParamSpe
     [K in keyof T]: T[K] extends GObject.ParamSpec<infer U> ? U : never
 }
 
-export type IndicatorPosition = (typeof indicatorPositions)[keyof typeof indicatorPositions]
+export type IndicatorPositionOption = DictValues<typeof indicatorPositionOptions>
 
-export type IndicatorBox = (typeof indicatorBoxes)[keyof typeof indicatorBoxes]
+export type IndicatorPosition = 0 | -1
+
+export type IndicatorBoxOption = DictValues<typeof indicatorBoxOptions>
+
+export type IndicatorBox = 'left' | 'center' | 'right'

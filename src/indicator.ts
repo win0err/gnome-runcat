@@ -14,8 +14,8 @@ import {
 	SYSTEM_MONITOR_COMMAND,
 	enumToDisplayingItems,
 	gioSettingsKeys,
-	gObjectProperties,
-	gObjectPropertyNames,
+	indicatorGObjectProperties,
+	indicatorGObjectPropertyNames,
 } from './constants.js'
 
 import { getAnimationInterval, spritesGenerator } from './utils.js'
@@ -25,7 +25,7 @@ import type { DisplayingItems, DisplayingItemsOption, CharacterState, WithInheri
 
 
 export default class RunCatIndicator extends PanelMenu.Button
-	implements WithInheritedGObjectParams<typeof gObjectProperties> {
+	implements WithInheritedGObjectParams<typeof indicatorGObjectProperties> {
 
 	declare menu: PopupMenu
 	declare idleThreshold: number
@@ -37,7 +37,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 	declare currentIcon: Gio.Icon
 
 	static {
-		GObject.registerClass({ Properties: gObjectProperties }, this)
+		GObject.registerClass({ Properties: indicatorGObjectProperties }, this)
 	}
 
 	#extension: Extension
@@ -116,13 +116,13 @@ export default class RunCatIndicator extends PanelMenu.Button
 		const label = builder.get_object<St.Label>('label')
 
 		this.bind_property(
-			gObjectPropertyNames.currentText,
+			indicatorGObjectPropertyNames.currentText,
 			label, 'text',
 			GObject.BindingFlags.DEFAULT,
 		)
 
 		this.bind_property_full(
-			gObjectPropertyNames.displayingItems,
+			indicatorGObjectPropertyNames.displayingItems,
 			label, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
 			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
@@ -134,13 +134,13 @@ export default class RunCatIndicator extends PanelMenu.Button
 		const icon = builder.get_object<St.Icon>('icon')
 
 		this.bind_property(
-			gObjectPropertyNames.currentIcon,
+			indicatorGObjectPropertyNames.currentIcon,
 			icon, 'gicon',
 			GObject.BindingFlags.DEFAULT,
 		)
 
 		this.bind_property_full(
-			gObjectPropertyNames.displayingItems,
+			indicatorGObjectPropertyNames.displayingItems,
 			icon, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
 			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
@@ -195,25 +195,25 @@ export default class RunCatIndicator extends PanelMenu.Button
 
 		settings.bind(
 			gioSettingsKeys.INVERT_SPEED,
-			this, gObjectPropertyNames.isSpeedInverted,
+			this, indicatorGObjectPropertyNames.isSpeedInverted,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		settings.bind(
 			gioSettingsKeys.IDLE_THRESHOLD,
-			this, gObjectPropertyNames.idleThreshold,
+			this, indicatorGObjectPropertyNames.idleThreshold,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		settings.bind(
 			gioSettingsKeys.customSystemMonitor.ENABLED,
-			this, gObjectPropertyNames.useCustomSystemMonitor,
+			this, indicatorGObjectPropertyNames.useCustomSystemMonitor,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		settings.bind(
 			gioSettingsKeys.customSystemMonitor.COMMAND,
-			this, gObjectPropertyNames.customSystemMonitorCommand,
+			this, indicatorGObjectPropertyNames.customSystemMonitorCommand,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
