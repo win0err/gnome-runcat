@@ -33,7 +33,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		return null
 	}
 
-	fillPreferencesWindow(window: Adw.PreferencesWindow): void {
+	async fillPreferencesWindow(window: Adw.PreferencesWindow) {
 		this.#window = window
 		this.#settings = this.getSettings()
 

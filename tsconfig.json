@@ -19,6 +19,7 @@
 		"paths": {
 			"@/*": ["src/*"]
 		},
+		"skipLibCheck": true
 	},
 	"include": ["typings/ambient.d.ts", "typings/gnome-shell-extensions.d.ts"],
 	"files": ["src/extension.ts", "src/prefs.ts"]
