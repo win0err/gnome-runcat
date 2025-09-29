@@ -3,6 +3,8 @@ import GObject from 'gi://GObject'
 import type { DisplayingItems, DisplayingItemsOption } from './types'
 
 
+export const LOG_PREFIX = 'RuncatExtension'
+
 export const displayingItemsOptions = {
 	CHARACTER_AND_PERCENTAGE: 0,
 	PERCENTAGE_ONLY: 1,
@@ -45,7 +47,6 @@ export const gObjectProperties: Record<keyof typeof gObjectPropertyNames, GObjec
 	),
 	currentIcon: GObject.ParamSpec.object<Gio.Icon>(
 		'currentIcon', '', '',
-		// @ts-expect-error: Wrong GObject.ParamSpec.object definition
 		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
 		Gio.Icon.$gtype,
 	),

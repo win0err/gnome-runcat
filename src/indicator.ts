@@ -42,7 +42,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 
 	#extension: Extension
 	#sourceIds: Record<string, number> = {}
-	#dataProviders: Record<string, Generator> = { cpu: createCpuGenerator() }
+	#dataProviders: Record<string, AsyncGenerator> = { cpu: createCpuGenerator() }
 	#data: { cpu: number } = { cpu: 0 }
 	#icons!: Record<CharacterState, ReturnType<typeof spritesGenerator>>
 	#formatter = new Intl.NumberFormat(undefined, {
@@ -58,15 +58,13 @@ export default class RunCatIndicator extends PanelMenu.Button
 		this.#initSettingsListeners()
 		this.#initUi()
 		this.#initIcons()
-		this.#initSources()
+		this.#initSources() // async
 	}
 
-	refreshData() {
-		const { value: cpuValue } = this.#dataProviders.cpu.next()
+	async refreshData() {
+		const { value: cpuValue } = await this.#dataProviders.cpu.next()
 
 		this.#data.cpu = cpuValue
-
-		return GLib.SOURCE_CONTINUE
 	}
 
 
@@ -228,10 +226,19 @@ export default class RunCatIndicator extends PanelMenu.Button
 		settings.connect(`changed::${gioSettingsKeys.DISPLAYING_ITEMS}`, updateDisplayingItems)
 	}
 
-	#initSources() {
-		this.refreshData()
+	async #initSources() {
+		await this.refreshData()
 
-		this.#sourceIds.refreshData = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3_000, () => this.refreshData())
+		this.#sourceIds.refreshData = GLib.timeout_add(
+			GLib.PRIORITY_DEFAULT,
+			3_000,
+			() => {
+				this.refreshData()
+
+				return GLib.SOURCE_CONTINUE
+			},
+		)
+
 		this.#sourceIds.repaintUi = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 0, () => this.repaintUi())
 	}
 
