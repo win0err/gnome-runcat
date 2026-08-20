@@ -17,17 +17,21 @@ export default class RunCatPreferences extends ExtensionPreferences {
 	#window: Adw.PreferencesWindow | null = null
 
 	get #headerBar(): Adw.HeaderBar | null {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const queue: any[] = [this.#window?.get_content()]
+		const stack: Array<Gtk.Widget | null> = [this.#window]
 
-		while (queue.length > 0) {
-			const child = queue.pop()
+		while (stack.length > 0) {
+			const widget = stack.pop()
 
-			if (child instanceof Adw.HeaderBar) {
-				return child
+			if (!widget) continue
+
+			if (widget instanceof Adw.HeaderBar) {
+				return widget
 			}
 
-			queue.push(...child)
+			stack.push(
+				widget.get_next_sibling(),
+				widget.get_first_child(),
+			)
 		}
 
 		return null

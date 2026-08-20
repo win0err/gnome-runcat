@@ -123,9 +123,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 			gObjectPropertyNames.displayingItems,
 			label, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
-			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(_, { percentage }: DisplayingItems) => [true, percentage] as any,
+			(_, { percentage }: DisplayingItems) => [true, percentage],
 			null,
 		)
 
@@ -141,9 +139,7 @@ export default class RunCatIndicator extends PanelMenu.Button
 			gObjectPropertyNames.displayingItems,
 			icon, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
-			// Types are broken, see https://github.com/gjsify/ts-for-gir/issues/154
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(_, { character }: DisplayingItems) => [true, character] as any,
+			(_, { character }: DisplayingItems) => [true, character],
 			null,
 		)
 

@@ -13,15 +13,15 @@
   "author": "Sergei Kolesnikov <sergei@kolesnikov.se>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@girs/gdk-4.0": "4.0.0-4.0.0-beta.38",
-    "@girs/gjs": "4.0.0-beta.38",
-    "@girs/gnome-shell": "49.0.1",
-    "@girs/gtop-2.0": "2.0.0-4.0.0-beta.38",
-    "@typescript-eslint/eslint-plugin": "^8.32.0",
-    "@typescript-eslint/parser": "^8.32.0",
+    "@girs/gdk-4.0": "4.1.0",
+    "@girs/gjs": "4.1.0",
+    "@girs/gnome-shell": "50.0.1",
+    "@girs/gtop-2.0": "4.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/parser": "^8.67.0",
     "eslint": "^8.47.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.31.0",
-    "typescript": "^5.8.3"
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "typescript": "~6.0.3"
   }
 }

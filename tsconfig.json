@@ -10,14 +10,13 @@
 		"noEmitOnError": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"baseUrl": ".",
-		"rootDirs": ["src"],
+		"rootDir": "src",
 		"noImplicitAny": true,
 		"pretty": true,
 		"removeComments": true,
 		"outDir": ".build",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["./src/*"]
 		},
 		"skipLibCheck": true
 	},
