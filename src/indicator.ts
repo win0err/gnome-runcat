@@ -236,13 +236,13 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			this.currentSpriteFrame = this.frames[index]
 		})
 
-		const updateAnimationState = () => {
+		const updateAnimationState = (immediate = false) => {
 			const utilization = this.isSpeedInverted
 				? MAX_CPU_UTILIZATION - this.cpuUsage
 				: this.cpuUsage
 
 			const duration = getAnimationCycleDurationMs(utilization)
-			ticker.setTargetDuration(duration)
+			ticker.setTargetDuration(duration, immediate)
 
 			const shouldAnimate = this.displayingItems.character && this.frames.length > 1
 
@@ -259,7 +259,10 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			ReactiveProperties.IS_SPEED_INVERTED,
 			ReactiveProperties.IDLE_THRESHOLD,
 			ReactiveProperties.DISPLAYING_ITEMS,
-		].map(prop => this.connect(`notify::${prop}`, updateAnimationState))
+		].map(prop => this.connect(
+			`notify::${prop}`,
+			() => updateAnimationState(prop === ReactiveProperties.IS_SPEED_INVERTED),
+		))
 
 		updateAnimationState()
 	}

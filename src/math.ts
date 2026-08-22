@@ -1,5 +1,5 @@
 // Default EMA time constant for the animation cycle duration, ms
-export const ANIMATION_SMOOTHING_TAU_MS = 700
+export const ANIMATION_SMOOTHING_TAU_MS = 500
 
 // Frame gaps over this are treated as a stall (pause, sleep) and don't advance the animation
 export const MAX_FRAME_DELTA_MS = 250
@@ -21,7 +21,7 @@ export const getAnimationCycleDurationMs = (cpuUtilization: number): number =>
 
 /**
  * Create an animation ticker: turns monotonic-time ticks into sprite frame indices,
- * with EMA-smoothed cycle duration.
+ * with EMA-smoothed cycle duration (an `immediate` target update skips the smoothing).
  * Stall-safe (time gaps over `MAX_FRAME_DELTA_MS` don't advance the phase);
  * `framesCount` is a `tick` argument, not construction state.
  **/
@@ -36,15 +36,15 @@ export const createAnimationTicker = (tauMs = ANIMATION_SMOOTHING_TAU_MS) => {
 		: 0
 
 	return {
-		setTargetDuration: (durationMs: number): void => {
+		setTargetDuration: (durationMs: number, immediate = false): void => {
 			if (!Number.isFinite(durationMs) || durationMs <= 0) {
 				return
 			}
 
 			targetDurationMs = durationMs
 
-			// first call
-			if (smoothedDurationMs <= 0) {
+			// first call or an immediate update, skip EMA smoothing
+			if (immediate || smoothedDurationMs <= 0) {
 				smoothedDurationMs = durationMs
 			}
 		},
@@ -53,7 +53,7 @@ export const createAnimationTicker = (tauMs = ANIMATION_SMOOTHING_TAU_MS) => {
 			const dt = nowMs - lastTickMs
 			lastTickMs = nowMs
 
-			// no previous tick / non-monotonic clock / stall — don't advance
+			// no previous tick / non-monotonic clock / stall
 			if (!Number.isFinite(dt) || dt <= 0 || dt > MAX_FRAME_DELTA_MS || smoothedDurationMs <= 0) {
 				return getSpriteIndex(phase, framesCount)
 			}
