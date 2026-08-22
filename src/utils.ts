@@ -6,15 +6,16 @@ import type { CharacterState } from './types'
 /**
  * Get the duration of a full animation cycle in milliseconds.
  *
- * `f(x)` is the duration of a full animation cycle (for all sprite frames, any count) for the CPU utilization(`x`) \
- * `f(x) = 25 / sqrt(100x + 30) - 2` seconds, `x` in `[0; 1]`
+ * `f(x)` is the duration of a full animation cycle (for all sprite frames, any count) for the CPU utilization(`x`)
+ * `f(x) = d_min + (d_max - d_min)·(1 − x)^k` ms, `x` in `[0; 1]`
+ * `f(x) = 175 + 825·(1 − x)^3` ms, with `d_min = 175`, `d_max = 1000`, `k = 3`
  *
  * @param {number} cpuUtilization - CPU utilization in `[0; 1]`
  *
  * @returns {number} duration of a full animation cycle in milliseconds
  **/
 export const getAnimationCycleDurationMs = (cpuUtilization: number): number =>
-	Math.ceil((25 / Math.sqrt(cpuUtilization * 100 + 30) - 2) * 1_000)
+	Math.ceil(175 + 825 * (1 - cpuUtilization) ** 3)
 
 const formatter = new Intl.NumberFormat(undefined, {
 	maximumFractionDigits: 0,
@@ -28,7 +29,7 @@ const formatter = new Intl.NumberFormat(undefined, {
  *
  * @returns {string} localized percentage string
  **/
-export const formatNumber = (value: number) => formatter.format(value)
+export const formatNumber = (value: number): string => formatter.format(value)
 
 /**
  * Load sprite icons per character state, auto-discovering `sprite-<i>-symbolic.svg` files.
