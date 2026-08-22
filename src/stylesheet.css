@@ -4,6 +4,10 @@
     -st-icon-style: symbolic;
 }
 
+.runcat-menu--only-icon .runcat-menu__icon {
+    padding: 0;
+}
+
 .runcat-menu__label {
     font-size: .9em;
     line-height: 1;

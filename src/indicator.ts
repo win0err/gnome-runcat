@@ -19,7 +19,7 @@ import {
 } from './constants.js'
 
 import { getAnimationCycleDurationMs, createAnimationTicker } from './math.js'
-import { formatNumber, getSpritesPack } from './utils.js'
+import { cls, formatNumber, getSpritesPack } from './utils.js'
 
 import createCpuGenerator, { MAX_CPU_UTILIZATION } from './dataProviders/cpu.js'
 
@@ -91,7 +91,6 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	frameLoop!: Clutter.Timeline
 	refreshDataTimeoutId!: number
 	displayingItemsHandlerId!: number
-	animationUpdaterHandlerIds!: number[]
 	sprites: Record<CharacterState, Gio.Icon[]>
 
 	constructor(extension: Extension) {
@@ -144,12 +143,21 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	initUi() {
+		const ONLY_ICON_CLASS_NAME = 'runcat-menu--only-icon'
+
 		const box = new St.BoxLayout({
-			styleClass: 'panel-status-menu-box runcat-menu',
+			styleClass: cls(
+				'panel-status-menu-box',
+				'runcat-menu',
+				!this.displayingItems.percentage && ONLY_ICON_CLASS_NAME,
+			),
 		})
 
 		const icon = new St.Icon({
-			styleClass: 'system-status-icon runcat-menu__icon',
+			styleClass: cls(
+				'system-status-icon',
+				'runcat-menu__icon',
+			),
 		})
 
 		const label = new St.Label({
@@ -159,6 +167,14 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			yExpand: true,
 			xAlign: Clutter.ActorAlign.FILL,
 			yAlign: Clutter.ActorAlign.CENTER,
+		})
+
+		this.connect(`notify::${ReactiveProperties.DISPLAYING_ITEMS}`, () => {
+			if (!this.displayingItems.percentage) {
+				box.add_style_class_name(ONLY_ICON_CLASS_NAME)
+			} else {
+				box.remove_style_class_name(ONLY_ICON_CLASS_NAME)
+			}
 		})
 
 		this.bind_property_full(
@@ -256,15 +272,17 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			}
 		}
 
-		this.animationUpdaterHandlerIds = [
+		for (const prop of [
 			ReactiveProperties.CPU_USAGE,
 			ReactiveProperties.IS_SPEED_INVERTED,
 			ReactiveProperties.IDLE_THRESHOLD,
 			ReactiveProperties.DISPLAYING_ITEMS,
-		].map(prop => this.connect(
-			`notify::${prop}`,
-			() => updateAnimationState(prop === ReactiveProperties.IS_SPEED_INVERTED),
-		))
+		]) {
+			this.connect(
+				`notify::${prop}`,
+				() => updateAnimationState(prop === ReactiveProperties.IS_SPEED_INVERTED),
+			)
+		}
 
 		updateAnimationState()
 	}
@@ -314,7 +332,6 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		GLib.source_remove(this.refreshDataTimeoutId)
 
 		this.settings.disconnect(this.displayingItemsHandlerId)
-		this.animationUpdaterHandlerIds.forEach(id => this.disconnect(id))
 
 		this.frameLoop.stop()
 		this.frameLoop.run_dispose()

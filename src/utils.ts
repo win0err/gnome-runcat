@@ -3,20 +3,6 @@ import { LOG_PREFIX } from './constants.js'
 import type { CharacterState } from './types'
 
 
-const formatter = new Intl.NumberFormat(undefined, {
-	maximumFractionDigits: 0,
-	style: 'percent',
-})
-
-/**
- * Format a fraction as a localized percentage without decimals.
- *
- * @param {number} value - value in `[0; 1]`
- *
- * @returns {string} localized percentage string
- **/
-export const formatNumber = (value: number): string => formatter.format(value)
-
 /**
  * Load sprite icons per character state, auto-discovering `sprite-<i>-symbolic.svg` files.
  *
@@ -52,3 +38,12 @@ export const getSpritesPack = (root: string): Record<CharacterState, Gio.Icon[]>
 		idle: loadState('idle'),
 	}
 }
+
+export const cls = (...classes: Array<string | false | undefined>) => classes.filter(Boolean).join(' ')
+
+const formatter = new Intl.NumberFormat(undefined, {
+	maximumFractionDigits: 0,
+	style: 'percent',
+})
+
+export const formatNumber = (value: number): string => formatter.format(value)
