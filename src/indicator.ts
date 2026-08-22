@@ -86,6 +86,8 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	extension: Extension
+	settings: Gio.Settings
+
 	frameLoop!: Clutter.Timeline
 	refreshDataTimeoutId!: number
 	displayingItemsHandlerId!: number
@@ -96,6 +98,8 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		super(0.5, 'RunCat', false)
 
 		this.extension = extension
+		this.settings = extension.getSettings()
+
 		this.sprites = getSpritesPack(this.extension.path)
 
 		this.initSettingsListeners()
@@ -116,10 +120,8 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	get systemMonitorCommand() {
-		const settings = this.extension.getSettings()
-
-		const useCustomSystemMonitor = settings.get_boolean(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED)
-		const customSystemMonitorCommand = settings.get_string(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND)
+		const useCustomSystemMonitor = this.settings.get_boolean(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED)
+		const customSystemMonitorCommand = this.settings.get_string(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND)
 
 		return useCustomSystemMonitor ? customSystemMonitorCommand : SYSTEM_MONITOR_COMMAND
 	}
@@ -268,16 +270,14 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	initSettingsListeners() {
-		const settings = this.extension.getSettings()
-
-		settings.bind(
+		this.settings.bind(
 			SettingsSchemaKeys.INVERT_SPEED,
 			this,
 			ReactiveProperties.IS_SPEED_INVERTED,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
-		settings.bind(
+		this.settings.bind(
 			SettingsSchemaKeys.IDLE_THRESHOLD,
 			this,
 			ReactiveProperties.IDLE_THRESHOLD,
@@ -288,7 +288,7 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		// https://gitlab.gnome.org/GNOME/gjs/-/work_items/397
 		// https://gitlab.gnome.org/fmuellner/gjs/-/commit/ce24aba9aa969b874533b4112bdda34dce2d6ea7
 		//
-		// settings.bind_with_mapping(
+		// this.settings.bind_with_mapping(
 		//   gioSettingsKeys.DISPLAYING_ITEMS,
 		//   this, gObjectPropertyNames.displayingItems,
 		//   Gio.SettingsBindFlags.DEFAULT,
@@ -297,12 +297,12 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		// )
 
 		const updateDisplayingItems = () => {
-			const nick = settings.get_string(SettingsSchemaKeys.DISPLAYING_ITEMS) as DisplayingItemNick
+			const nick = this.settings.get_string(SettingsSchemaKeys.DISPLAYING_ITEMS) as DisplayingItemNick
 
 			this.displayingItems = displayingItemNickToValue[nick]
 		}
 
-		this.displayingItemsHandlerId = settings.connect(
+		this.displayingItemsHandlerId = this.settings.connect(
 			`changed::${SettingsSchemaKeys.DISPLAYING_ITEMS}`,
 			updateDisplayingItems,
 		)
@@ -313,10 +313,11 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	destroy() {
 		GLib.source_remove(this.refreshDataTimeoutId)
 
-		this.extension.getSettings().disconnect(this.displayingItemsHandlerId)
+		this.settings.disconnect(this.displayingItemsHandlerId)
 		this.animationUpdaterHandlerIds.forEach(id => this.disconnect(id))
 
-		this.frameLoop?.stop()
+		this.frameLoop.stop()
+		this.frameLoop.run_dispose()
 
 		super.destroy()
 	}
