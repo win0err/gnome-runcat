@@ -1,5 +1,5 @@
+import Clutter from 'gi://Clutter'
 import Gio from 'gi://Gio'
-import Gtk from 'gi://Gtk'
 import GObject from 'gi://GObject'
 import GLib from 'gi://GLib'
 import St from 'gi://St'
@@ -11,132 +11,177 @@ import { type PopupMenu, PopupSeparatorMenuItem } from 'resource:///org/gnome/sh
 import { type Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import {
+	LOG_PREFIX,
 	SYSTEM_MONITOR_COMMAND,
-	enumToDisplayingItems,
-	gioSettingsKeys,
-	gObjectProperties,
-	gObjectPropertyNames,
+	displayingItemNickToValue,
+	SettingsSchemaKeys,
+	ReactiveProperties,
 } from './constants.js'
 
-import { getAnimationInterval, spritesGenerator } from './utils.js'
+import {
+	getAnimationCycleDurationMs,
+	formatNumber,
+	getSpritesPack,
+} from './utils.js'
+
 import createCpuGenerator, { MAX_CPU_UTILIZATION } from './dataProviders/cpu.js'
-import type { DisplayingItems, DisplayingItemsOption, CharacterState, WithInheritedGObjectParams } from './types'
+
+import type {
+	DisplayingItems,
+	CharacterState,
+	RunCatIndicatorReactiveProperties,
+	DisplayingItemNick,
+	GObjectProperties,
+} from './types'
 
 
-
-export default class RunCatIndicator extends PanelMenu.Button
-	implements WithInheritedGObjectParams<typeof gObjectProperties> {
-
+// eslint-disable-next-line max-len
+export default class RunCatIndicator extends PanelMenu.Button implements RunCatIndicatorReactiveProperties {
 	declare menu: PopupMenu
+
 	declare idleThreshold: number
 	declare displayingItems: DisplayingItems
 	declare isSpeedInverted: boolean
-	declare useCustomSystemMonitor: boolean
-	declare customSystemMonitorCommand: string
-	declare currentText: string
-	declare currentIcon: Gio.Icon
+
+	declare cpuUsage: number
+	declare currentSpriteFrame: Gio.Icon
 
 	static {
-		GObject.registerClass({ Properties: gObjectProperties }, this)
+		GObject.registerClass({
+			Properties: {
+				cpuUsage: GObject.ParamSpec.float(
+					'cpuUsage',
+					'CPU usage',
+					'Latest CPU utilization in [0, 1], sampled every 3 seconds',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, 0, 1, 0,
+				),
+
+				currentSpriteFrame: GObject.ParamSpec.object<Gio.Icon>(
+					'currentSpriteFrame',
+					'Current sprite frame',
+					'Sprite currently displayed for the character state',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, Gio.Icon,
+				),
+
+				displayingItems: GObject.ParamSpec.jsobject<DisplayingItems>(
+					'displayingItems',
+					'Displaying items',
+					'Which elements to show: the character and/or the CPU percentage',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
+				),
+
+				isSpeedInverted: GObject.ParamSpec.boolean(
+					'isSpeedInverted',
+					'Invert speed',
+					'When true, the animation speed is inverted and the character is always active',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
+					false,
+				),
+
+				idleThreshold: GObject.ParamSpec.int(
+					'idleThreshold',
+					'Idle threshold',
+					'CPU percentage below which the character is considered idle (0-100)',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, 0, 100, 0,
+				),
+			} satisfies GObjectProperties<RunCatIndicatorReactiveProperties>,
+		}, this)
 	}
 
-	#extension: Extension
-	#sourceIds: Record<string, number> = {}
-	#dataProviders: Record<string, AsyncGenerator> = { cpu: createCpuGenerator() }
-	#data: { cpu: number } = { cpu: 0 }
-	#icons!: Record<CharacterState, ReturnType<typeof spritesGenerator>>
-	#formatter = new Intl.NumberFormat(undefined, {
-		maximumFractionDigits: 0,
-		style: 'percent',
-	})
+	extension: Extension
+	timeline!: Clutter.Timeline
+	refreshDataTimeoutId!: number
+	displayingItemsHandlerId!: number
+	animationUpdaterHandlerId!: number
+	sprites: Record<CharacterState, Gio.Icon[]>
 
 	constructor(extension: Extension) {
 		super(0.5, 'RunCat', false)
 
-		this.#extension = extension
+		this.extension = extension
+		this.sprites = getSpritesPack(this.extension.path)
 
-		this.#initSettingsListeners()
-		this.#initUi()
-		this.#initIcons()
-		this.#initSources() // async
+		this.initSettingsListeners()
+		this.initDataRefreshSource()
+		this.initUi()
 	}
 
-	async refreshData() {
-		const { value: cpuValue } = await this.#dataProviders.cpu.next()
-
-		this.#data.cpu = cpuValue
-	}
-
-
-	repaintUi() {
-		let utilization = this.#data?.cpu
-		let isActive = utilization > this.idleThreshold / 100
-
+	get characterState(): CharacterState {
 		if (this.isSpeedInverted) {
-			utilization = MAX_CPU_UTILIZATION - utilization
-			isActive = true  // always active when speed is inverted
+			return 'active'
 		}
 
-		const characterState: CharacterState = isActive ? 'active' : 'idle'
-		const [sprite, spritesCount] = this.#icons[characterState].next().value
-
-		this.currentIcon = sprite
-		this.currentText = this.#formatter.format(this.#data.cpu)
-
-		const animationInterval = getAnimationInterval(utilization, spritesCount)
-
-		this.#sourceIds.repaintUi = GLib.timeout_add(
-			GLib.PRIORITY_DEFAULT,
-			animationInterval,
-			() => this.repaintUi(),
-		)
-
-		return GLib.SOURCE_REMOVE
+		return this.cpuUsage > this.idleThreshold / 100 ? 'active' : 'idle'
 	}
 
-	#initIcons() {
-		this.#icons = {
-			idle: spritesGenerator(this.#extension.path, 'idle'),
-			active: spritesGenerator(this.#extension.path, 'active'),
+	get frames(): Gio.Icon[] {
+		return this.sprites[this.characterState]
+	}
+
+	get systemMonitorCommand() {
+		const settings = this.extension.getSettings()
+
+		const useCustomSystemMonitor = settings.get_boolean(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED)
+		const customSystemMonitorCommand = settings.get_string(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND)
+
+		return useCustomSystemMonitor ? customSystemMonitorCommand : SYSTEM_MONITOR_COMMAND
+	}
+
+	initDataRefreshSource() {
+		const cpuDataProvider = createCpuGenerator()
+
+		const refresh = () => {
+			cpuDataProvider.next().then(
+				({ value }) => { this.cpuUsage = value },
+				(e: unknown) => console.error(`${LOG_PREFIX}: ${e}`),
+			)
+
+			return GLib.SOURCE_CONTINUE
 		}
 
-		const [sprite] = this.#icons.idle.next().value
+		this.refreshDataTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3_000, refresh)
 
-		this.currentIcon = sprite
+		refresh()
 	}
 
-	#initUi() {
-		const builder = new Gtk.Builder({ translationDomain: this.#extension.uuid })
+	initUi() {
+		const box = new St.BoxLayout({
+			styleClass: 'panel-status-menu-box runcat-menu',
+		})
 
-		builder.add_from_file(`${this.#extension.path}/resources/ui/extension.ui`)
+		const icon = new St.Icon({
+			styleClass: 'system-status-icon runcat-menu__icon',
+		})
 
-		const box = builder.get_object<St.BoxLayout>('box')
-		const label = builder.get_object<St.Label>('label')
+		const label = new St.Label({
+			text: '...',
+			styleClass: 'runcat-menu__label',
+			xExpand: true,
+			yExpand: true,
+			xAlign: Clutter.ActorAlign.FILL,
+			yAlign: Clutter.ActorAlign.CENTER,
+		})
 
-		this.bind_property(
-			gObjectPropertyNames.currentText,
+		this.bind_property_full(
+			ReactiveProperties.CPU_USAGE,
 			label, 'text',
-			GObject.BindingFlags.DEFAULT,
+			GObject.BindingFlags.SYNC_CREATE,
+			(_, usage: number) => [true, formatNumber(usage)],
+			null,
 		)
 
 		this.bind_property_full(
-			gObjectPropertyNames.displayingItems,
+			ReactiveProperties.DISPLAYING_ITEMS,
 			label, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
 			(_, { percentage }: DisplayingItems) => [true, percentage],
 			null,
 		)
 
-		const icon = builder.get_object<St.Icon>('icon')
-
-		this.bind_property(
-			gObjectPropertyNames.currentIcon,
-			icon, 'gicon',
-			GObject.BindingFlags.DEFAULT,
-		)
+		this.bind_property(ReactiveProperties.CURRENT_SPRITE_FRAME, icon, 'gicon', GObject.BindingFlags.DEFAULT)
 
 		this.bind_property_full(
-			gObjectPropertyNames.displayingItems,
+			ReactiveProperties.DISPLAYING_ITEMS,
 			icon, 'visible',
 			GObject.BindingFlags.SYNC_CREATE,
 			(_, { character }: DisplayingItems) => [true, character],
@@ -148,32 +193,24 @@ export default class RunCatIndicator extends PanelMenu.Button
 
 		this.add_child(box)
 
-		this.menu.addAction(
-			_('Open System Monitor'),
-			() => {
-				const command = this.useCustomSystemMonitor
-					? this.customSystemMonitorCommand
-					: SYSTEM_MONITOR_COMMAND
+		this.initAnimation(icon)
 
-				try {
-					trySpawnCommandLine(command)
-				} catch (e: unknown) {
-					if (e instanceof Error) {
-						Main.notifyError(
-							_('Execution of “%s” failed').format(command),
-							e.message,
-						)
-					}
-
-					console.error(e)
+		this.menu.addAction(_('Open System Monitor'), () => {
+			try {
+				trySpawnCommandLine(this.systemMonitorCommand)
+			} catch (e: unknown) {
+				if (e instanceof Error) {
+					Main.notifyError(_('Execution of “%s” failed').format(this.systemMonitorCommand), e.message)
 				}
-			},
-		)
+
+				console.error(e)
+			}
+		})
 
 		this.menu.addMenuItem(new PopupSeparatorMenuItem())
 		this.menu.addAction(_('Settings'), () => {
 			try {
-				this.#extension.openPreferences()
+				this.extension.openPreferences()
 			} catch (e: unknown) {
 				if (e instanceof Error) {
 					Main.notifyError(_('Failed to open extension settings'), e.message)
@@ -184,64 +221,105 @@ export default class RunCatIndicator extends PanelMenu.Button
 		})
 	}
 
-	#initSettingsListeners() {
-		const settings = this.#extension.getSettings()
+	initAnimation(actor: Clutter.Actor) {
+		this.timeline = new Clutter.Timeline({
+			actor,
+			duration: 1_000,
+			repeatCount: -1,
+		})
 
-		settings.bind(
-			gioSettingsKeys.INVERT_SPEED,
-			this, gObjectPropertyNames.isSpeedInverted,
-			Gio.SettingsBindFlags.DEFAULT,
-		)
+		// Keep this handler free of writes to registered properties other than
+		// currentSpriteFrame — the global 'notify' filter in this method depends on it
+		// (set_duration inside the completion window freezes the animation).
+		this.timeline.connect('new-frame', () => {
+			const progress = this.timeline.get_progress()
+			const rawIndex = Math.floor(progress * this.frames.length) % this.frames.length
+			const index = Math.max(0, rawIndex) // clamp: JS % keeps the sign, negative progress → negative index
 
-		settings.bind(
-			gioSettingsKeys.IDLE_THRESHOLD,
-			this, gObjectPropertyNames.idleThreshold,
-			Gio.SettingsBindFlags.DEFAULT,
-		)
+			this.currentSpriteFrame = this.frames[index]
+		})
 
-		settings.bind(
-			gioSettingsKeys.customSystemMonitor.ENABLED,
-			this, gObjectPropertyNames.useCustomSystemMonitor,
-			Gio.SettingsBindFlags.DEFAULT,
-		)
+		const updateAnimationState = () => {
+			const utilization = this.isSpeedInverted
+				? MAX_CPU_UTILIZATION - this.cpuUsage
+				: this.cpuUsage
 
-		settings.bind(
-			gioSettingsKeys.customSystemMonitor.COMMAND,
-			this, gObjectPropertyNames.customSystemMonitorCommand,
-			Gio.SettingsBindFlags.DEFAULT,
-		)
+			this.timeline.set_duration(getAnimationCycleDurationMs(utilization))
 
-		// sync enum that cannot be binded
-		const updateDisplayingItems = () => {
-			const option = settings.get_enum(gioSettingsKeys.DISPLAYING_ITEMS) as DisplayingItemsOption
+			const shouldAnimate = this.displayingItems.character && this.frames.length > 1
 
-			this.displayingItems = enumToDisplayingItems[option]
+			if (shouldAnimate) {
+				this.timeline.start()
+			} else {
+				this.currentSpriteFrame = this.frames[0]
+
+				this.timeline.pause()
+			}
 		}
 
-		updateDisplayingItems()
-		settings.connect(`changed::${gioSettingsKeys.DISPLAYING_ITEMS}`, updateDisplayingItems)
+		this.animationUpdaterHandlerId = this.connect('notify', (_, pspec: GObject.ParamSpec) => {
+			// currentSpriteFrame is set from inside the 'new-frame' handler; letting this
+			// notify through would run set_duration() in mutter's completion path and
+			// poison the timeline's elapsed time (frozen/blank animation). See the
+			// 'new-frame' handler in this method before writing any other property there.
+			if (pspec.get_name() === ReactiveProperties.CURRENT_SPRITE_FRAME) return
+
+			updateAnimationState()
+		})
+
+		updateAnimationState()
 	}
 
-	async #initSources() {
-		await this.refreshData()
+	initSettingsListeners() {
+		const settings = this.extension.getSettings()
 
-		this.#sourceIds.refreshData = GLib.timeout_add(
-			GLib.PRIORITY_DEFAULT,
-			3_000,
-			() => {
-				this.refreshData()
-
-				return GLib.SOURCE_CONTINUE
-			},
+		settings.bind(
+			SettingsSchemaKeys.INVERT_SPEED,
+			this,
+			ReactiveProperties.IS_SPEED_INVERTED,
+			Gio.SettingsBindFlags.DEFAULT,
 		)
 
-		this.#sourceIds.repaintUi = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 0, () => this.repaintUi())
+		settings.bind(
+			SettingsSchemaKeys.IDLE_THRESHOLD,
+			this,
+			ReactiveProperties.IDLE_THRESHOLD,
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
+		// TODO(gjs#397): replace the manual sync below with settings.bind_with_mapping
+		// https://gitlab.gnome.org/GNOME/gjs/-/work_items/397
+		// https://gitlab.gnome.org/fmuellner/gjs/-/commit/ce24aba9aa969b874533b4112bdda34dce2d6ea7
+		//
+		// settings.bind_with_mapping(
+		//   gioSettingsKeys.DISPLAYING_ITEMS,
+		//   this, gObjectPropertyNames.displayingItems,
+		//   Gio.SettingsBindFlags.DEFAULT,
+		//   (variant: GLib.Variant) => [true, displayingItemNickToValue[variant.unpack<DisplayingItemNick>()]],
+		//   null
+		// )
+
+		const updateDisplayingItems = () => {
+			const nick = settings.get_string(SettingsSchemaKeys.DISPLAYING_ITEMS) as DisplayingItemNick
+
+			this.displayingItems = displayingItemNickToValue[nick]
+		}
+
+		this.displayingItemsHandlerId = settings.connect(
+			`changed::${SettingsSchemaKeys.DISPLAYING_ITEMS}`,
+			updateDisplayingItems,
+		)
+
+		updateDisplayingItems()
 	}
 
 	destroy() {
-		// destroy sources
-		GLib.source_remove(this.#sourceIds.refreshData)
-		GLib.source_remove(this.#sourceIds.repaintUi)
+		GLib.source_remove(this.refreshDataTimeoutId)
+
+		this.extension.getSettings().disconnect(this.displayingItemsHandlerId)
+		this.disconnect(this.animationUpdaterHandlerId)
+
+		this.timeline?.stop()
 
 		super.destroy()
 	}

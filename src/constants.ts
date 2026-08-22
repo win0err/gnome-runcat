@@ -1,76 +1,34 @@
-import Gio from 'gi://Gio'
-import GObject from 'gi://GObject'
-import type { DisplayingItems, DisplayingItemsOption } from './types'
+import type {
+	DisplayingItemNick,
+	DisplayingItems,
+	RunCatIndicatorReactiveProperties,
+} from './types'
 
 
 export const LOG_PREFIX = 'RuncatExtension'
 
-export const displayingItemsOptions = {
-	CHARACTER_AND_PERCENTAGE: 0,
-	PERCENTAGE_ONLY: 1,
-	CHARACTER_ONLY: 2,
+export const SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r'
+
+export const displayingItemNickToValue: Record<DisplayingItemNick, DisplayingItems> = {
+	'character-and-percentage': { character: true, percentage: true },
+	'percentage-only': { character: false, percentage: true },
+	'character-only': { character: true, percentage: false },
 } as const
 
-export const enumToDisplayingItems: Record<DisplayingItemsOption, DisplayingItems> = {
-	[displayingItemsOptions.CHARACTER_AND_PERCENTAGE]: { character: true, percentage: true },
-	[displayingItemsOptions.PERCENTAGE_ONLY]: { character: false, percentage: true },
-	[displayingItemsOptions.CHARACTER_ONLY]: { character: true, percentage: false },
-}
-
-export const gioSettingsKeys = {
+export const SettingsSchemaKeys = {
 	IDLE_THRESHOLD: 'idle-threshold',
 	DISPLAYING_ITEMS: 'displaying-items',
 	INVERT_SPEED: 'invert-speed',
-	customSystemMonitor: {
+	CUSTOM_SYSTEM_MONITOR: {
 		ENABLED: 'custom-system-monitor-enabled',
 		COMMAND: 'custom-system-monitor-command',
 	},
 } as const
 
-export const SYSTEM_MONITOR_COMMAND = 'gnome-system-monitor -r'
-
-
-export const gObjectPropertyNames = {
-	currentText: 'currentText',
-	currentIcon: 'currentIcon',
-	displayingItems: 'displayingItems',
-	isSpeedInverted: 'isSpeedInverted',
-	idleThreshold: 'idleThreshold',
-	useCustomSystemMonitor: 'useCustomSystemMonitor',
-	customSystemMonitorCommand: 'customSystemMonitorCommand',
-} as const
-
-export const gObjectProperties: Record<keyof typeof gObjectPropertyNames, GObject.ParamSpec> = {
-	currentText: GObject.ParamSpec.string(
-		'currentText', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, '...',
-	),
-	currentIcon: GObject.ParamSpec.object<Gio.Icon>(
-		'currentIcon', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
-		Gio.Icon.$gtype,
-	),
-
-	displayingItems: GObject.ParamSpec.jsobject<DisplayingItems>(
-		'displayingItems', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
-	),
-
-	isSpeedInverted: GObject.ParamSpec.boolean(
-		'isSpeedInverted', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, false,
-	),
-	idleThreshold: GObject.ParamSpec.int(
-		'idleThreshold', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, 0, 100, 0,
-	),
-
-	useCustomSystemMonitor: GObject.ParamSpec.boolean(
-		'useCustomSystemMonitor', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, false,
-	),
-	customSystemMonitorCommand: GObject.ParamSpec.string(
-		'customSystemMonitorCommand', '', '',
-		GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, SYSTEM_MONITOR_COMMAND,
-	),
-}
+export const ReactiveProperties = {
+	CPU_USAGE: 'cpuUsage',
+	CURRENT_SPRITE_FRAME: 'currentSpriteFrame',
+	DISPLAYING_ITEMS: 'displayingItems',
+	IS_SPEED_INVERTED: 'isSpeedInverted',
+	IDLE_THRESHOLD: 'idleThreshold',
+} as const satisfies Record<string, keyof RunCatIndicatorReactiveProperties>

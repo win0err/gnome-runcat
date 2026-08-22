@@ -14,6 +14,7 @@
                         <property name="title" translatable="yes">Displaying items</property>
                         <property name="model">
                             <object class="GtkStringList">
+                            	<!-- MUST USE THE SAME ORDER AS org.gnome.shell.extensions.runcat.DisplayingItems -->
                                 <items>
                                     <item translatable="yes">Character and percentage</item>
                                     <item translatable="yes">Percentage only</item>

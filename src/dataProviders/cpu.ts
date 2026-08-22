@@ -49,7 +49,9 @@ export default async function* (): AsyncGenerator<number, number, void> {
 async function getCpuStats(): Promise<CpuStats> {
 	try {
 		if (!GTop) {
-			return getCpuStatsFallback()
+			const cpuStats = await getCpuStatsFallback()
+
+			return cpuStats
 		}
 
 		const cpu = new GTop.glibtop_cpu()
