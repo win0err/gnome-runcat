@@ -1,7 +1,6 @@
 import Adw from 'gi://Adw'
 import Gio from 'gi://Gio'
 import Gtk from 'gi://Gtk'
-import Gdk from 'gi://Gdk'
 
 import {
 	ExtensionPreferences,
@@ -10,6 +9,9 @@ import {
 
 import { SettingsSchemaKeys } from './constants.js'
 
+
+// eslint-disable-next-line no-underscore-dangle
+Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
 
 export default class RunCatPreferences extends ExtensionPreferences {
 	#settings: Gio.Settings | null = null
@@ -130,7 +132,9 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 		homepageAction.connect(
 			'activate',
-			() => Gtk.show_uri(this.#window, this.metadata.url!, Gdk.CURRENT_TIME),
+			() => new Gtk.UriLauncher({ uri: this.metadata.url! })
+				.launch(this.#window, null)
+				.catch(console.error),
 		)
 
 		const aboutAction = Gio.SimpleAction.new('about', null)
@@ -138,7 +142,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		aboutAction.connect('activate', () => {
 			const logo = Gtk.Image.new_from_file(`${this.path}/resources/se.kolesnikov.runcat.svg`)
 
-			const aboutDialog = this.#builder!.get_object<Adw.AboutWindow>('about-dialog')
+			const aboutDialog = this.#builder!.get_object<Gtk.AboutDialog>('about-dialog')
 
 			aboutDialog.set_property('logo', logo.get_paintable())
 			aboutDialog.set_property('version', `${_('Version')} ${this.metadata.version}`)
