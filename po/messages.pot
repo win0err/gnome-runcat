@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 12:49+0300\n"
+"POT-Creation-Date: 2026-08-22 16:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.ts:198
+#: src/indicator.ts:195
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.ts:203
+#: src/indicator.ts:200
 #, javascript-format
 msgid "Execution of “%s” failed"
 msgstr ""
 
-#: src/indicator.ts:211
+#: src/indicator.ts:208
 msgid "Settings"
 msgstr ""
 
-#: src/indicator.ts:216
+#: src/indicator.ts:213
 msgid "Failed to open extension settings"
 msgstr ""
 

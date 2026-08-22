@@ -18,11 +18,8 @@ import {
 	ReactiveProperties,
 } from './constants.js'
 
-import {
-	getAnimationCycleDurationMs,
-	formatNumber,
-	getSpritesPack,
-} from './utils.js'
+import { getAnimationCycleDurationMs, createAnimationTicker } from './math.js'
+import { formatNumber, getSpritesPack } from './utils.js'
 
 import createCpuGenerator, { MAX_CPU_UTILIZATION } from './dataProviders/cpu.js'
 
@@ -89,10 +86,10 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	extension: Extension
-	timeline!: Clutter.Timeline
+	frameLoop!: Clutter.Timeline
 	refreshDataTimeoutId!: number
 	displayingItemsHandlerId!: number
-	animationUpdaterHandlerId!: number
+	animationUpdaterHandlerIds!: number[]
 	sprites: Record<CharacterState, Gio.Icon[]>
 
 	constructor(extension: Extension) {
@@ -222,19 +219,19 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	initAnimation(actor: Clutter.Actor) {
-		this.timeline = new Clutter.Timeline({
+		const ticker = createAnimationTicker()
+
+		// The vsync-rate heartbeat (a requestAnimationFrame analog): ticks every
+		// compositor frame, the real cycle timing is driven by the ticker above
+		this.frameLoop = new Clutter.Timeline({
 			actor,
-			duration: 1_000,
+			duration: 60_000, // ms, any value, endless loop
 			repeatCount: -1,
 		})
 
-		// Keep this handler free of writes to registered properties other than
-		// currentSpriteFrame — the global 'notify' filter in this method depends on it
-		// (set_duration inside the completion window freezes the animation).
-		this.timeline.connect('new-frame', () => {
-			const progress = this.timeline.get_progress()
-			const rawIndex = Math.floor(progress * this.frames.length) % this.frames.length
-			const index = Math.max(0, rawIndex) // clamp: JS % keeps the sign, negative progress → negative index
+		this.frameLoop.connect('new-frame', () => {
+			const nowMs = GLib.get_monotonic_time() / 1_000
+			const index = ticker.tick(nowMs, this.frames.length)
 
 			this.currentSpriteFrame = this.frames[index]
 		})
@@ -244,28 +241,25 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 				? MAX_CPU_UTILIZATION - this.cpuUsage
 				: this.cpuUsage
 
-			this.timeline.set_duration(getAnimationCycleDurationMs(utilization))
+			const duration = getAnimationCycleDurationMs(utilization)
+			ticker.setTargetDuration(duration)
 
 			const shouldAnimate = this.displayingItems.character && this.frames.length > 1
 
 			if (shouldAnimate) {
-				this.timeline.start()
+				this.frameLoop.start()
 			} else {
 				this.currentSpriteFrame = this.frames[0]
-
-				this.timeline.pause()
+				this.frameLoop.pause()
 			}
 		}
 
-		this.animationUpdaterHandlerId = this.connect('notify', (_, pspec: GObject.ParamSpec) => {
-			// currentSpriteFrame is set from inside the 'new-frame' handler; letting this
-			// notify through would run set_duration() in mutter's completion path and
-			// poison the timeline's elapsed time (frozen/blank animation). See the
-			// 'new-frame' handler in this method before writing any other property there.
-			if (pspec.get_name() === ReactiveProperties.CURRENT_SPRITE_FRAME) return
-
-			updateAnimationState()
-		})
+		this.animationUpdaterHandlerIds = [
+			ReactiveProperties.CPU_USAGE,
+			ReactiveProperties.IS_SPEED_INVERTED,
+			ReactiveProperties.IDLE_THRESHOLD,
+			ReactiveProperties.DISPLAYING_ITEMS,
+		].map(prop => this.connect(`notify::${prop}`, updateAnimationState))
 
 		updateAnimationState()
 	}
@@ -317,9 +311,9 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		GLib.source_remove(this.refreshDataTimeoutId)
 
 		this.extension.getSettings().disconnect(this.displayingItemsHandlerId)
-		this.disconnect(this.animationUpdaterHandlerId)
+		this.animationUpdaterHandlerIds.forEach(id => this.disconnect(id))
 
-		this.timeline?.stop()
+		this.frameLoop?.stop()
 
 		super.destroy()
 	}

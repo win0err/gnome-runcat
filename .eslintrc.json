@@ -84,6 +84,11 @@
 				"blankLine": "any",
 				"prev": ["singleline-const", "singleline-let", "singleline-var"],
 				"next": ["singleline-const", "singleline-let", "singleline-var"]
+			},
+			{
+				"blankLine": "any",
+				"prev": ["singleline-const", "singleline-let", "singleline-var"],
+				"next": ["expression"]
 			}
 		]
 	},
