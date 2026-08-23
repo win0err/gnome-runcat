@@ -19,7 +19,7 @@ import {
 } from './constants.js'
 
 import { getAnimationCycleDurationMs, createAnimationTicker } from './math.js'
-import { cls, formatNumber, getSpritesPack } from './utils.js'
+import { formatNumber, getSpritesPack } from './utils.js'
 
 import createCpuGenerator, { MAX_CPU_UTILIZATION } from './dataProviders/cpu.js'
 
@@ -143,21 +143,12 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	}
 
 	initUi() {
-		const ONLY_ICON_CLASS_NAME = 'runcat-menu--only-icon'
-
 		const box = new St.BoxLayout({
-			styleClass: cls(
-				'panel-status-menu-box',
-				'runcat-menu',
-				!this.displayingItems.percentage && ONLY_ICON_CLASS_NAME,
-			),
+			styleClass: 'panel-status-menu-box runcat-menu',
 		})
 
 		const icon = new St.Icon({
-			styleClass: cls(
-				'system-status-icon',
-				'runcat-menu__icon',
-			),
+			styleClass: 'system-status-icon runcat-menu__icon',
 		})
 
 		const label = new St.Label({
@@ -167,14 +158,6 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			yExpand: true,
 			xAlign: Clutter.ActorAlign.FILL,
 			yAlign: Clutter.ActorAlign.CENTER,
-		})
-
-		this.connect(`notify::${ReactiveProperties.DISPLAYING_ITEMS}`, () => {
-			if (!this.displayingItems.percentage) {
-				box.add_style_class_name(ONLY_ICON_CLASS_NAME)
-			} else {
-				box.remove_style_class_name(ONLY_ICON_CLASS_NAME)
-			}
 		})
 
 		this.bind_property_full(

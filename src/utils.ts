@@ -39,8 +39,6 @@ export const getSpritesPack = (root: string): Record<CharacterState, Gio.Icon[]>
 	}
 }
 
-export const cls = (...classes: Array<string | false | undefined>) => classes.filter(Boolean).join(' ')
-
 const formatter = new Intl.NumberFormat(undefined, {
 	maximumFractionDigits: 0,
 	style: 'percent',

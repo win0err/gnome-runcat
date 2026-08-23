@@ -1,11 +1,11 @@
-.runcat-menu__icon {
-    padding: 0 .5em 0 0;
-    icon-size: 2em;
-    -st-icon-style: symbolic;
+.runcat-menu {
+    spacing: .5em;
 }
 
-.runcat-menu--only-icon .runcat-menu__icon {
-    padding: 0;
+.runcat-menu__icon {
+	padding: 0;
+    icon-size: 2em;
+    -st-icon-style: symbolic;
 }
 
 .runcat-menu__label {
