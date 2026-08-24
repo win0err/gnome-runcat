@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-runcat-extension 33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 12:57+0300\n"
+"POT-Creation-Date: 2026-08-24 12:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.ts:196
+#: src/indicator.ts:205
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.ts:201
+#: src/indicator.ts:210
 #, javascript-format
 msgid "Execution of “%s” failed"
 msgstr ""
 
-#: src/indicator.ts:209
+#: src/indicator.ts:218
 msgid "Settings"
 msgstr ""
 
-#: src/indicator.ts:214
+#: src/indicator.ts:223
 msgid "Failed to open extension settings"
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr ""
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.ts:148
+#: src/prefs.ts:159
 msgid "Version"
 msgstr ""
 
@@ -86,30 +86,38 @@ msgstr ""
 msgid "Available when speed is not inverted"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:75
+#: src/resources/ui/preferences.ui:73
+msgid "Smooth speed changes"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:74
+msgid "Running speed adapts to CPU load gradually"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:82
 msgid "Reset preferences"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:76
+#: src/resources/ui/preferences.ui:83
 msgid "Reset RunCat preferences to defaults"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:89
+#: src/resources/ui/preferences.ui:96
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:108
+#: src/resources/ui/preferences.ui:115
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:112
+#: src/resources/ui/preferences.ui:119
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:122
+#: src/resources/ui/preferences.ui:129
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:126
+#: src/resources/ui/preferences.ui:133
 msgid "About RunCat"
 msgstr ""

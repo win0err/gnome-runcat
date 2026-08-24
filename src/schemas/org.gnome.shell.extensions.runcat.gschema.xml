@@ -26,6 +26,11 @@
 			<summary>Invert speed</summary>
 		</key>
 
+		<key name="smooth-speed-changes" type="b">
+			<default>true</default>
+			<summary>Smooth speed changes</summary>
+		</key>
+
 		<key name="custom-system-monitor-enabled" type="b">
 			<default>false</default>
 			<summary>Enable custom system monitor</summary>

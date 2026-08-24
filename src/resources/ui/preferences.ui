@@ -67,6 +67,13 @@
                                   bind-property="active" bind-flags="sync-create|invert-boolean" />
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwSwitchRow" id="smooth-speed-changes">
+                        <property name="title" translatable="yes">Smooth speed changes</property>
+                        <property name="subtitle" translatable="yes">Running speed adapts to CPU load gradually</property>
+                    </object>
+                </child>
             </object>
         </child>
 

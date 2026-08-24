@@ -80,6 +80,14 @@ export default class RunCatPreferences extends ExtensionPreferences {
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
+		// Smooth Speed Changes
+		this.#settings!.bind(
+			SettingsSchemaKeys.SMOOTH_SPEED_CHANGES,
+			this.#builder!.get_object<Adw.SwitchRow>(SettingsSchemaKeys.SMOOTH_SPEED_CHANGES),
+			'active',
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
 		// Displaying Items
 		const combo = this.#builder!.get_object<Adw.ComboRow>(SettingsSchemaKeys.DISPLAYING_ITEMS)
 
@@ -112,6 +120,9 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 			// Invert Speed
 			this.#settings!.reset(SettingsSchemaKeys.INVERT_SPEED)
+
+			// Smooth Speed Changes
+			this.#settings!.reset(SettingsSchemaKeys.SMOOTH_SPEED_CHANGES)
 
 			// Enable custom system monitor
 			this.#settings!.reset(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED)

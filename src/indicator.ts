@@ -39,6 +39,7 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	declare idleThreshold: number
 	declare displayingItems: DisplayingItems
 	declare isSpeedInverted: boolean
+	declare isAnimationSmoothingEnabled: boolean
 
 	declare cpuUsage: number
 	declare currentSpriteFrame: Gio.Icon
@@ -80,6 +81,14 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 					'Idle threshold',
 					'CPU percentage below which the character is considered idle (0-100)',
 					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT, 0, 100, 0,
+				),
+
+				isAnimationSmoothingEnabled: GObject.ParamSpec.boolean(
+					'isAnimationSmoothingEnabled',
+					'Smooth speed changes',
+					'When true, running speed adapts to CPU load gradually',
+					GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT,
+					true,
 				),
 			} satisfies GObjectProperties<RunCatIndicatorReactiveProperties>,
 		}, this)
@@ -260,10 +269,13 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			ReactiveProperties.IS_SPEED_INVERTED,
 			ReactiveProperties.IDLE_THRESHOLD,
 			ReactiveProperties.DISPLAYING_ITEMS,
+			ReactiveProperties.IS_ANIMATION_SMOOTHING_ENABLED,
 		]) {
 			this.connect(
 				`notify::${prop}`,
-				() => updateAnimationState(prop === ReactiveProperties.IS_SPEED_INVERTED),
+				() => updateAnimationState(
+					!this.isAnimationSmoothingEnabled || prop === ReactiveProperties.IS_SPEED_INVERTED,
+				),
 			)
 		}
 
@@ -282,6 +294,13 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			SettingsSchemaKeys.IDLE_THRESHOLD,
 			this,
 			ReactiveProperties.IDLE_THRESHOLD,
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
+		this.settings.bind(
+			SettingsSchemaKeys.SMOOTH_SPEED_CHANGES,
+			this,
+			ReactiveProperties.IS_ANIMATION_SMOOTHING_ENABLED,
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 

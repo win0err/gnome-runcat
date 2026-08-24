@@ -19,6 +19,7 @@ export const SettingsSchemaKeys = {
 	IDLE_THRESHOLD: 'idle-threshold',
 	DISPLAYING_ITEMS: 'displaying-items',
 	INVERT_SPEED: 'invert-speed',
+	SMOOTH_SPEED_CHANGES: 'smooth-speed-changes',
 	CUSTOM_SYSTEM_MONITOR: {
 		ENABLED: 'custom-system-monitor-enabled',
 		COMMAND: 'custom-system-monitor-command',
@@ -31,4 +32,5 @@ export const ReactiveProperties = {
 	DISPLAYING_ITEMS: 'displayingItems',
 	IS_SPEED_INVERTED: 'isSpeedInverted',
 	IDLE_THRESHOLD: 'idleThreshold',
+	IS_ANIMATION_SMOOTHING_ENABLED: 'isAnimationSmoothingEnabled',
 } as const satisfies Record<string, keyof RunCatIndicatorReactiveProperties>
