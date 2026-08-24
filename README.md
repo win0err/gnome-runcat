@@ -9,6 +9,17 @@ Animation speed changes depending on CPU usage.
 
 ![RunCat for GNOME Shell](assets/runcat-header.gif)
 
+## Philosophy
+
+**RunCat is intentionally minimalistic** — a running cat in the top bar and a
+CPU percentage next to it, nothing more. The extension is not meant to be a
+system monitor, and it will never grow dozens of settings, graphs, sensors, or
+extra indicators — there are plenty of other extensions for that. And if you
+already use a full-featured monitoring tool, that's great: the cat will happily
+run alongside it in your top bar.
+
+Before opening a pull request, please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Installation
 
 This is the recommended method for installation, as it doesn't require the build dependencies for installation. You can install this extension by visiting [the GNOME Shell Extensions page](https://extensions.gnome.org/extension/2986/runcat/) for this extension.
@@ -32,9 +43,7 @@ $ gnome-extensions install path/to/runcat@kolesnikov.se.shell-extension.zip --fo
 ```
 
 #### After installation:
-1. Restart the GNOME Shell:
-    - <kbd>ALT</kbd>+<kbd>F2</kbd> to open the command prompt, and enter <kbd>r</kbd> to restart the GNOME Shell (available on Xorg only);
-    - or Log Out, then Log In, if GNOME Shell won't restart;
+1. Restart the GNOME Shell: Log Out, then Log In;
 2. Enable the extension:
     - Open GNOME Extensions → RunCat → On;
     - or Run in terminal: `gnome-extensions enable runcat@kolesnikov.se`.
@@ -61,6 +70,9 @@ Make sure that you've run this command before pushing changes.
 To create a new translation file, use the following command: \
 `msginit -i po/messages.pot -l <locale> --no-translator -o po/<locale>.po`.
 
+Please be prepared to maintain your translation in future versions of the
+extension (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+
 #### Examples
 **Spanish** locale: `msginit -i po/messages.pot -l es --no-translator -o po/es.po`. \
 **Spanish (Argentina)** locale: `msginit -i po/messages.pot -l es_AR --no-translator -o po/es_AR.po`.
@@ -71,7 +83,10 @@ You need to install project JS dependencies first: `npm i`
 
 - `npm run test` — run all available tests;
 - `npm run test:typecheck` — check types;
-- `npm run test:lint` — lint project files.
+- `npm run test:lint` — lint project files;
+- `make spawn-gnome-shell` — spawn a nested GNOME Shell session to test the
+  extension interactively (GNOME 49+); requires the `mutter-devkit` system
+  package to be installed.
 
 ## macOS version
 Thanks to [Takuto Nakamura](https://github.com/Kyome22/menubar_runcat) for [the macOS version](https://kyome.io/runcat/index.html) and cat images.

@@ -1,15 +1,17 @@
 import Adw from 'gi://Adw'
 import Gio from 'gi://Gio'
 import Gtk from 'gi://Gtk'
-import Gdk from 'gi://Gdk'
 
 import {
 	ExtensionPreferences,
 	gettext as _,
 } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
-import { gioSettingsKeys } from './constants.js'
+import { SettingsSchemaKeys } from './constants.js'
 
+
+// eslint-disable-next-line no-underscore-dangle
+Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
 
 export default class RunCatPreferences extends ExtensionPreferences {
 	#settings: Gio.Settings | null = null
@@ -17,17 +19,21 @@ export default class RunCatPreferences extends ExtensionPreferences {
 	#window: Adw.PreferencesWindow | null = null
 
 	get #headerBar(): Adw.HeaderBar | null {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const queue: any[] = [this.#window?.get_content()]
+		const stack: Array<Gtk.Widget | null> = [this.#window]
 
-		while (queue.length > 0) {
-			const child = queue.pop()
+		let widget
 
-			if (child instanceof Adw.HeaderBar) {
-				return child
+		while (stack.length > 0) {
+			if (!(widget = stack.pop())) continue
+
+			if (widget instanceof Adw.HeaderBar) {
+				return widget
 			}
 
-			queue.push(...child)
+			stack.push(
+				widget.get_next_sibling(),
+				widget.get_first_child(),
+			)
 		}
 
 		return null
@@ -60,41 +66,49 @@ export default class RunCatPreferences extends ExtensionPreferences {
 	#setupPage() {
 		// Idle Threshold
 		this.#settings!.bind(
-			gioSettingsKeys.IDLE_THRESHOLD,
-			this.#builder!.get_object<Adw.SpinRow>(gioSettingsKeys.IDLE_THRESHOLD),
+			SettingsSchemaKeys.IDLE_THRESHOLD,
+			this.#builder!.get_object<Adw.SpinRow>(SettingsSchemaKeys.IDLE_THRESHOLD),
 			'value',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		// Invert Speed
 		this.#settings!.bind(
-			gioSettingsKeys.INVERT_SPEED,
-			this.#builder!.get_object<Adw.SwitchRow>(gioSettingsKeys.INVERT_SPEED),
+			SettingsSchemaKeys.INVERT_SPEED,
+			this.#builder!.get_object<Adw.SwitchRow>(SettingsSchemaKeys.INVERT_SPEED),
+			'active',
+			Gio.SettingsBindFlags.DEFAULT,
+		)
+
+		// Smooth Speed Changes
+		this.#settings!.bind(
+			SettingsSchemaKeys.SMOOTH_SPEED_CHANGES,
+			this.#builder!.get_object<Adw.SwitchRow>(SettingsSchemaKeys.SMOOTH_SPEED_CHANGES),
 			'active',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		// Displaying Items
-		const combo = this.#builder!.get_object<Adw.ComboRow>(gioSettingsKeys.DISPLAYING_ITEMS)
+		const combo = this.#builder!.get_object<Adw.ComboRow>(SettingsSchemaKeys.DISPLAYING_ITEMS)
 
 		// `Gio.Settings.bind_with_mapping` is missing in GJS: https://gitlab.gnome.org/GNOME/gjs/-/issues/397
-		combo.set_selected(this.#settings!.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
+		combo.set_selected(this.#settings!.get_enum(SettingsSchemaKeys.DISPLAYING_ITEMS))
 		combo.connect('notify::selected', (/** @type {Adw.ComboRow} */ { selected }: Adw.ComboRow) => {
-			this.#settings!.set_enum(gioSettingsKeys.DISPLAYING_ITEMS, selected)
+			this.#settings!.set_enum(SettingsSchemaKeys.DISPLAYING_ITEMS, selected)
 		})
 
 		// Enable custom system monitor
 		this.#settings!.bind(
-			gioSettingsKeys.customSystemMonitor.ENABLED,
-			this.#builder!.get_object<Adw.ExpanderRow>(gioSettingsKeys.customSystemMonitor.ENABLED),
+			SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED,
+			this.#builder!.get_object<Adw.ExpanderRow>(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED),
 			'enable-expansion',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
 
 		// Custom system monitor command
 		this.#settings!.bind(
-			gioSettingsKeys.customSystemMonitor.COMMAND,
-			this.#builder!.get_object<Adw.EntryRow>(gioSettingsKeys.customSystemMonitor.COMMAND),
+			SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND,
+			this.#builder!.get_object<Adw.EntryRow>(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND),
 			'text',
 			Gio.SettingsBindFlags.DEFAULT,
 		)
@@ -102,20 +116,23 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		// Reset
 		this.#builder!.get_object<Gtk.Button>('reset').connect('clicked', () => {
 			// Idle Threshold
-			this.#settings!.reset(gioSettingsKeys.IDLE_THRESHOLD)
+			this.#settings!.reset(SettingsSchemaKeys.IDLE_THRESHOLD)
 
 			// Invert Speed
-			this.#settings!.reset(gioSettingsKeys.INVERT_SPEED)
+			this.#settings!.reset(SettingsSchemaKeys.INVERT_SPEED)
+
+			// Smooth Speed Changes
+			this.#settings!.reset(SettingsSchemaKeys.SMOOTH_SPEED_CHANGES)
 
 			// Enable custom system monitor
-			this.#settings!.reset(gioSettingsKeys.customSystemMonitor.ENABLED)
+			this.#settings!.reset(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.ENABLED)
 
 			// Custom system monitor command
-			this.#settings!.reset(gioSettingsKeys.customSystemMonitor.COMMAND)
+			this.#settings!.reset(SettingsSchemaKeys.CUSTOM_SYSTEM_MONITOR.COMMAND)
 
 			// Displaying Items
-			this.#settings!.reset(gioSettingsKeys.DISPLAYING_ITEMS)
-			combo.set_selected(this.#settings!.get_enum(gioSettingsKeys.DISPLAYING_ITEMS))
+			this.#settings!.reset(SettingsSchemaKeys.DISPLAYING_ITEMS)
+			combo.set_selected(this.#settings!.get_enum(SettingsSchemaKeys.DISPLAYING_ITEMS))
 		})
 	}
 
@@ -126,7 +143,9 @@ export default class RunCatPreferences extends ExtensionPreferences {
 
 		homepageAction.connect(
 			'activate',
-			() => Gtk.show_uri(this.#window, this.metadata.url!, Gdk.CURRENT_TIME),
+			() => new Gtk.UriLauncher({ uri: this.metadata.url! })
+				.launch(this.#window, null)
+				.catch(console.error),
 		)
 
 		const aboutAction = Gio.SimpleAction.new('about', null)
@@ -134,7 +153,7 @@ export default class RunCatPreferences extends ExtensionPreferences {
 		aboutAction.connect('activate', () => {
 			const logo = Gtk.Image.new_from_file(`${this.path}/resources/se.kolesnikov.runcat.svg`)
 
-			const aboutDialog = this.#builder!.get_object<Adw.AboutWindow>('about-dialog')
+			const aboutDialog = this.#builder!.get_object<Gtk.AboutDialog>('about-dialog')
 
 			aboutDialog.set_property('logo', logo.get_paintable())
 			aboutDialog.set_property('version', `${_('Version')} ${this.metadata.version}`)

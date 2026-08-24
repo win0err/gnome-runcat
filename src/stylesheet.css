@@ -1,5 +1,9 @@
+.runcat-menu {
+    spacing: .5em;
+}
+
 .runcat-menu__icon {
-    padding: 0 .5em 0 0;
+	padding: 0;
     icon-size: 2em;
     -st-icon-style: symbolic;
 }

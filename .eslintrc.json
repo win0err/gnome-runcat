@@ -19,6 +19,7 @@
 	"rules": {
 		"quotes": ["error", "single"],
 		"no-tabs": "off",
+		"no-constant-condition": "off",
 		"indent": ["error", "tab"],
 		"semi": ["error", "never"],
 		"arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
@@ -38,10 +39,7 @@
 		"lines-between-class-members": [
 			"error",
 			{
-				"enforce": [
-					{ "blankLine": "always", "prev": "*", "next": "method" },
-					{ "blankLine": "never", "prev": "field", "next": "field" }
-				]
+				"enforce": [{ "blankLine": "always", "prev": "*", "next": "method" }]
 			}
 		],
 		"padding-line-between-statements": [
@@ -86,6 +84,11 @@
 				"blankLine": "any",
 				"prev": ["singleline-const", "singleline-let", "singleline-var"],
 				"next": ["singleline-const", "singleline-let", "singleline-var"]
+			},
+			{
+				"blankLine": "any",
+				"prev": ["singleline-const", "singleline-let", "singleline-var"],
+				"next": ["expression"]
 			}
 		]
 	},

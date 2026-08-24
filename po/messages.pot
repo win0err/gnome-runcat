@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-runcat-extension 31\n"
+"Project-Id-Version: gnome-runcat-extension 33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 18:51+0300\n"
+"POT-Creation-Date: 2026-08-24 12:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,28 +17,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/indicator.ts:156
+#: src/indicator.ts:205
 msgid "Open System Monitor"
 msgstr ""
 
-#: src/indicator.ts:167
+#: src/indicator.ts:210
 #, javascript-format
 msgid "Execution of “%s” failed"
 msgstr ""
 
-#: src/indicator.ts:178
+#: src/indicator.ts:218
 msgid "Settings"
 msgstr ""
 
-#: src/indicator.ts:183
+#: src/indicator.ts:223
 msgid "Failed to open extension settings"
 msgstr ""
 
-#: src/prefs.ts:50
+#: src/prefs.ts:56
 msgid "RunCat Settings"
 msgstr ""
 
-#: src/prefs.ts:140
+#: src/prefs.ts:159
 msgid "Version"
 msgstr ""
 
@@ -50,66 +50,74 @@ msgstr ""
 msgid "Displaying items"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:18
+#: src/resources/ui/preferences.ui:19
 msgid "Character and percentage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:19
+#: src/resources/ui/preferences.ui:20
 msgid "Percentage only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:20
+#: src/resources/ui/preferences.ui:21
 msgid "Character only"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:30
+#: src/resources/ui/preferences.ui:31
 msgid "Use a custom system monitor"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:33
+#: src/resources/ui/preferences.ui:34
 msgid "Command"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:45
+#: src/resources/ui/preferences.ui:46
 msgid "Character"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:49
+#: src/resources/ui/preferences.ui:50
 msgid "Invert speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:55
+#: src/resources/ui/preferences.ui:56
 msgid "Idle threshold"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:56
+#: src/resources/ui/preferences.ui:57
 msgid "Available when speed is not inverted"
 msgstr ""
 
+#: src/resources/ui/preferences.ui:73
+msgid "Smooth speed changes"
+msgstr ""
+
 #: src/resources/ui/preferences.ui:74
+msgid "Running speed adapts to CPU load gradually"
+msgstr ""
+
+#: src/resources/ui/preferences.ui:82
 msgid "Reset preferences"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:75
+#: src/resources/ui/preferences.ui:83
 msgid "Reset RunCat preferences to defaults"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:88
+#: src/resources/ui/preferences.ui:96
 msgid "Reset"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:107
+#: src/resources/ui/preferences.ui:115
 msgid "The cat tells you the CPU usage by running speed"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:111
+#: src/resources/ui/preferences.ui:119
 msgid "Visit RunCat's GitHub page"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:121
+#: src/resources/ui/preferences.ui:129
 msgid "Visit Homepage"
 msgstr ""
 
-#: src/resources/ui/preferences.ui:125
+#: src/resources/ui/preferences.ui:133
 msgid "About RunCat"
 msgstr ""
