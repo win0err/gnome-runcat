@@ -332,11 +332,8 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 
 	destroy() {
 		GLib.source_remove(this.refreshDataTimeoutId)
-
 		this.settings.disconnect(this.displayingItemsHandlerId)
-
 		this.frameLoop.stop()
-		this.frameLoop.run_dispose()
 
 		super.destroy()
 	}
