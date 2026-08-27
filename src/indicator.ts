@@ -97,10 +97,11 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	extension: Extension
 	settings: Gio.Settings
 
-	frameLoop!: Clutter.Timeline
+	sprites: Record<CharacterState, Gio.Icon[]>
+
+	animationTimeoutId: number | null = null
 	refreshDataTimeoutId!: number
 	displayingItemsHandlerId!: number
-	sprites: Record<CharacterState, Gio.Icon[]>
 
 	constructor(extension: Extension) {
 		super(0.5, 'RunCat', false)
@@ -200,7 +201,7 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 
 		this.add_child(box)
 
-		this.initAnimation(icon)
+		this.initAnimation()
 
 		this.menu.addAction(_('Open System Monitor'), () => {
 			try {
@@ -228,39 +229,40 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		})
 	}
 
-	initAnimation(actor: Clutter.Actor) {
+	initAnimation() {
 		const ticker = createAnimationTicker()
 
-		// The vsync-rate heartbeat (a requestAnimationFrame analog): ticks every
-		// compositor frame, the real cycle timing is driven by the ticker above
-		this.frameLoop = new Clutter.Timeline({
-			actor,
-			duration: 60_000, // ms, any value, endless loop
-			repeatCount: -1,
-		})
-
-		this.frameLoop.connect('new-frame', () => {
+		const showNextFrame = (): boolean => {
 			const nowMs = GLib.get_monotonic_time() / 1_000
-			const index = ticker.tick(nowMs, this.frames.length)
+			const { index, nextDelayMs } = ticker.advanceTo(nowMs, this.frames.length)
 
-			this.currentSpriteFrame = this.frames[index]
-		})
+			this.setCurrentSpriteFrame(this.frames[index])
+
+			this.animationTimeoutId = GLib.timeout_add(
+				GLib.PRIORITY_DEFAULT,
+				nextDelayMs,
+				showNextFrame,
+			)
+
+			return GLib.SOURCE_REMOVE
+		}
 
 		const updateAnimationState = (immediate = false) => {
 			const utilization = this.isSpeedInverted
 				? MAX_CPU_UTILIZATION - this.cpuUsage
 				: this.cpuUsage
 
-			const duration = getAnimationCycleDurationMs(utilization)
-			ticker.setTargetDuration(duration, immediate)
+			ticker.setTargetDuration(getAnimationCycleDurationMs(utilization), immediate)
 
 			const shouldAnimate = this.displayingItems.character && this.frames.length > 1
+			const shouldRestart = immediate || this.animationTimeoutId === null
 
-			if (shouldAnimate) {
-				this.frameLoop.start()
-			} else {
-				this.currentSpriteFrame = this.frames[0]
-				this.frameLoop.pause()
+			if (!shouldAnimate) {
+				this.stopAnimation()
+				this.setCurrentSpriteFrame(this.frames[0] ?? null)
+			} else if (shouldRestart) {
+				this.stopAnimation()
+				showNextFrame()
 			}
 		}
 
@@ -280,6 +282,19 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 		}
 
 		updateAnimationState()
+	}
+
+	setCurrentSpriteFrame(sprite: Gio.Icon) {
+		if (sprite !== this.currentSpriteFrame) {
+			this.currentSpriteFrame = sprite
+		}
+	}
+
+	stopAnimation() {
+		if (this.animationTimeoutId !== null) {
+			GLib.source_remove(this.animationTimeoutId)
+			this.animationTimeoutId = null
+		}
 	}
 
 	initSettingsListeners() {
@@ -333,7 +348,7 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 	destroy() {
 		GLib.source_remove(this.refreshDataTimeoutId)
 		this.settings.disconnect(this.displayingItemsHandlerId)
-		this.frameLoop.stop()
+		this.stopAnimation()
 
 		super.destroy()
 	}

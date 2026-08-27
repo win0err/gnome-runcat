@@ -20,10 +20,11 @@ export const getAnimationCycleDurationMs = (cpuUtilization: number): number =>
 	Math.ceil(250 + 850 * (1 - cpuUtilization) ** 2)
 
 /**
- * Create an animation ticker: turns monotonic-time ticks into sprite frame indices,
- * with EMA-smoothed cycle duration (an `immediate` target update skips the smoothing).
- * Stall-safe (time gaps over `MAX_FRAME_DELTA_MS` don't advance the phase);
- * `framesCount` is a `tick` argument, not construction state.
+ * Create an animation ticker: computes the sprite frame to show and the delay
+ * until the next frame boundary, with EMA-smoothed cycle duration (an `immediate`
+ * target update skips the smoothing). Stall-safe (time gaps over
+ * `MAX_FRAME_DELTA_MS` don't advance the phase); `framesCount` is an `advanceTo`
+ * argument, not construction state.
  **/
 export const createAnimationTicker = (tauMs = ANIMATION_SMOOTHING_TAU_MS) => {
 	let targetDurationMs = 0
@@ -49,25 +50,39 @@ export const createAnimationTicker = (tauMs = ANIMATION_SMOOTHING_TAU_MS) => {
 			}
 		},
 
-		tick: (nowMs: number, framesCount: number): number => {
+		// Advance the animation to the frame boundary reached at `nowMs` (call
+		// `setTargetDuration` first): returns the sprite index to show now and
+		// the delay until the next frame boundary, in ms
+		advanceTo: (nowMs: number, framesCount: number): { index: number, nextDelayMs: number } => {
 			const dt = nowMs - lastTickMs
 			lastTickMs = nowMs
 
+			// A gap counts as a stall only when it far exceeds both the expected
+			// frame duration and MAX_FRAME_DELTA_MS (few sprites → long frames)
+			const stallThresholdMs = Math.max(MAX_FRAME_DELTA_MS, smoothedDurationMs / framesCount)
+
 			// no previous tick / non-monotonic clock / stall
-			if (!Number.isFinite(dt) || dt <= 0 || dt > MAX_FRAME_DELTA_MS || smoothedDurationMs <= 0) {
-				return getSpriteIndex(phase, framesCount)
+			if (Number.isFinite(dt) && dt > 0 && dt <= stallThresholdMs && smoothedDurationMs > 0) {
+				// lerp (EMA, frame-rate-independent):
+				//   alpha = 1 - e^(-dt / tauMs)
+				//   smoothed += alpha * (target - smoothed)
+				const alpha = 1 - Math.exp(-dt / tauMs)
+				smoothedDurationMs += alpha * (targetDurationMs - smoothedDurationMs)
+
+				// Phase in [0; 1): += fraction of the cycle elapsed (dt / durationMs), % 1 wraps back to 0
+				phase = (phase + dt / smoothedDurationMs) % 1
 			}
 
-			// lerp (EMA, frame-rate independent):
-			//   alpha = 1 - e^(-dt / tauMs)
-			//   smoothed += alpha * (target - smoothed)
-			const alpha = 1 - Math.exp(-dt / tauMs)
-			smoothedDurationMs += alpha * (targetDurationMs - smoothedDurationMs)
+			const index = getSpriteIndex(phase, framesCount)
 
-			// Phase in [0; 1): += fraction of the cycle elapsed (dt / durationMs), % 1 wraps back to 0
-			phase = (phase + dt / smoothedDurationMs) % 1
+			const nextFramePhase = (Math.floor(phase * framesCount) + 1) / framesCount
 
-			return getSpriteIndex(phase, framesCount)
+			// No duration set yet — retry later instead of busy-looping
+			const nextDelayMs = smoothedDurationMs > 0
+				? Math.max(1, Math.ceil((nextFramePhase - phase) * smoothedDurationMs))
+				: MAX_FRAME_DELTA_MS
+
+			return { index, nextDelayMs }
 		},
 	}
 }
