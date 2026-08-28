@@ -237,6 +237,7 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 			const { index, nextDelayMs } = ticker.advanceTo(nowMs, this.frames.length)
 
 			this.setCurrentSpriteFrame(this.frames[index])
+			this.stopAnimation()
 
 			this.animationTimeoutId = GLib.timeout_add(
 				GLib.PRIORITY_DEFAULT,
@@ -261,7 +262,6 @@ export default class RunCatIndicator extends PanelMenu.Button implements RunCatI
 				this.stopAnimation()
 				this.setCurrentSpriteFrame(this.frames[0] ?? null)
 			} else if (shouldRestart) {
-				this.stopAnimation()
 				showNextFrame()
 			}
 		}
